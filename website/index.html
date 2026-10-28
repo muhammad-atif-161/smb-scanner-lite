@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SMB Scanner Lite — Public Sandbox</title>
+  <meta name="description" content="Educational external security posture demo. Restricted to 5 free-to-use testing domains with mandatory consent." />
+  <style>
+    :root { --bg:#0A0F1E; --panel:#111936; --fg:#EDF2FF; --teal:#3ED6C5; --accent:#6C8CFF; --dim:#A3B1D4; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background:var(--bg); color:var(--fg); line-height:1.6; }
+    header { background:var(--panel); padding:1.5rem 2rem; border-bottom:1px solid #1e2a4a; }
+    h1 { margin:0; font-size:1.6rem; color:var(--teal); }
+    .tag { color:var(--dim); font-size:0.95rem; }
+    main { max-width:820px; margin:2rem auto; padding:0 1.25rem; }
+    .card { background:var(--panel); border-radius:12px; padding:1.5rem; margin-bottom:1.25rem; border:1px solid #1e2a4a; }
+    a { color:var(--accent); }
+    code, .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background:#0d1428; padding:0.15rem 0.4rem; border-radius:4px; }
+    ul { padding-left:1.2rem; }
+    footer { text-align:center; color:var(--dim); padding:2rem; font-size:0.9rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>SMB Scanner Lite</h1>
+    <p class="tag">Public Sandbox Edition · 5-domain locked · Mandatory consent</p>
+  </header>
+  <main>
+    <div class="card">
+      <h2>Educational external security posture demo</h2>
+      <p>This public repository hosts only the sandbox-safe face of the project. The full scanning engine stays private. You can only assess these five free-to-use testing domains:</p>
+      <ul>
+        <li><code>example.com</code></li>
+        <li><code>example.org</code></li>
+        <li><code>example.net</code></li>
+        <li><code>scanme.nmap.org</code></li>
+        <li><code>badssl.com</code></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>Run the sandbox tool</h2>
+      <pre class="mono" style="white-space:pre-wrap;background:#0d1428;padding:1rem;border-radius:8px;">git clone https://github.com/muhammad-atif-161/smb-scanner-lite.git
+cd smb-scanner-lite
+pip install -e .
+smb-scanner --list-domains
+smb-scanner example.com --accept-privacy-policy --consent-user "Your Name"</pre>
+      <p>Read the <a href="https://github.com/muhammad-atif-161/smb-scanner-lite/blob/main/PRIVACY_POLICY.md">Privacy Policy</a> before scanning. Every run produces a cryptographic consent proof.</p>
+    </div>
+    <div class="card">
+      <h2>Source &amp; license</h2>
+      <p>Public repo: <a href="https://github.com/muhammad-atif-161/smb-scanner-lite">muhammad-atif-161/smb-scanner-lite</a><br/>
+      Creator: <a href="https://github.com/muhammad-atif-161">Muhammad Atif</a> · MIT License (does not authorise scanning systems you do not own).</p>
+    </div>
+  </main>
+  <footer>SMB Scanner Lite · Public Sandbox · Full engine private</footer>
+</body>
+</html>
