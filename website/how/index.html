@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>How to run SMB Scanner Lite sandbox — five testing domains only</title>
+  <meta name="description" content="Install the public SMB Scanner Lite sandbox. It accepts only example.com, example.org, example.net, scanme.nmap.org, and badssl.com, and requires consent first." />
+  <link rel="canonical" href="https://smbscannerlite.me/how/" />
+  <meta name="author" content="Muhammad Atif" />
+  <meta property="og:title" content="How to run SMB Scanner Lite sandbox — five testing domains only" />
+  <meta property="og:description" content="Install the public SMB Scanner Lite sandbox. It accepts only example.com, example.org, example.net, scanme.nmap.org, and badssl.com, and requires consent first." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://smbscannerlite.me/how/" />
+  <meta property="og:image" content="https://smbscannerlite.me/logo.jpg" />
+  <meta property="og:image:alt" content="SMB Scanner Lite logo: an amber gem inside a glass seal" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://smbscannerlite.me/logo.jpg" />
+  <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/logo.svg" />
+  <meta name="theme-color" content="#110e0c" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="keywords" content="SMB Scanner Lite, small business security check, SPF, DKIM, DMARC, DNSSEC, TLS headers, exposed SMB, evidence-first scanner" />
+  <meta property="og:site_name" content="SMB Scanner Lite" />
+  <meta property="og:locale" content="en_US" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,460;0,9..144,560;1,9..144,460&family=Outfit:wght@380;500;560&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  
+</head>
+<body>
+  <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+  <header class="nav glass">
+    <a class="brand" href="/">
+      <img src="/logo.svg" width="36" height="36" alt="SMB Scanner Lite logo" />
+      <span>SMB Scanner <em>Lite</em></span>
+    </a>
+    <button class="nav-toggle" data-nav aria-label="Open menu" aria-expanded="false">☰</button>
+    <nav class="links">
+      <a href="/">Home</a>
+      <a href="/about/">About</a>
+      <a href="/checks/">Checks</a>
+      <a href="/how/" aria-current="page">How it works</a>
+      <a href="/ethics/">Ethics</a>
+      <a href="/blog/">Journal</a>
+      <a href="/faq/">FAQ</a>
+    </nav>
+  </header>
+  <main>
+
+    <article class="wrap prose">
+      <p class="kicker"><i></i> How it works</p>
+      <h1>Install the sandbox. It will not scan the open internet.</h1>
+      <p>The copy in this public repository is the sandbox edition. Before any lookup it checks the name against five domains and requires a signed consent.</p>
+      <pre>git clone https://github.com/muhammad-atif-161/smb-scanner-lite.git
+cd smb-scanner-lite
+pip install -e .
+smb-scanner --list-domains
+smb-scanner example.com --accept-privacy-policy --consent-user "Your Name" --html report.html</pre>
+      <h2>The only five names</h2>
+      <ul>
+        <li><span class="mono">example.com</span> — reserved example domain</li>
+        <li><span class="mono">example.org</span> — reserved example domain</li>
+        <li><span class="mono">example.net</span> — reserved example domain</li>
+        <li><span class="mono">scanme.nmap.org</span> — Nmap’s public test host</li>
+        <li><span class="mono">badssl.com</span> — public TLS teaching site</li>
+      </ul>
+      <p>Any other name, including a look-alike subdomain or a raw IP address, is rejected before a network request is made.</p>
+      <h2>What you get back</h2>
+      <p>A short report: a posture score, the evidence string for each conclusive check, and the consent receipt id that proves you agreed first. HTML, JSON, or text. Nothing is uploaded to this website.</p>
+    </article>
+
+  </main>
+  <footer>
+    <div class="wrap foot">
+      <div>Created by <a href="/about/">Muhammad Atif</a> · Rawalpindi, Pakistan</div>
+      <div><a href="/privacy/">Privacy</a> · <a href="/faq/">FAQ</a> · <a href="https://github.com/muhammad-atif-161/smb-scanner-lite">Source</a></div>
+    </div>
+  </footer>
+  <script src="/site.js"></script>
+</body>
+</html>

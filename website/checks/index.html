@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Security checks in SMB Scanner Lite — DNS, email, TLS, headers, SMB</title>
+  <meta name="description" content="The twenty-two external controls behind SMB Scanner Lite, grouped into DNS integrity, email authentication, transport, browser headers, and network exposure." />
+  <link rel="canonical" href="https://smbscannerlite.me/checks/" />
+  <meta name="author" content="Muhammad Atif" />
+  <meta property="og:title" content="Security checks in SMB Scanner Lite — DNS, email, TLS, headers, SMB" />
+  <meta property="og:description" content="The twenty-two external controls behind SMB Scanner Lite, grouped into DNS integrity, email authentication, transport, browser headers, and network exposure." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://smbscannerlite.me/checks/" />
+  <meta property="og:image" content="https://smbscannerlite.me/logo.jpg" />
+  <meta property="og:image:alt" content="SMB Scanner Lite logo: an amber gem inside a glass seal" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://smbscannerlite.me/logo.jpg" />
+  <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/logo.svg" />
+  <meta name="theme-color" content="#110e0c" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="keywords" content="SMB Scanner Lite, small business security check, SPF, DKIM, DMARC, DNSSEC, TLS headers, exposed SMB, evidence-first scanner" />
+  <meta property="og:site_name" content="SMB Scanner Lite" />
+  <meta property="og:locale" content="en_US" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,460;0,9..144,560;1,9..144,460&family=Outfit:wght@380;500;560&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  
+</head>
+<body>
+  <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+  <header class="nav glass">
+    <a class="brand" href="/">
+      <img src="/logo.svg" width="36" height="36" alt="SMB Scanner Lite logo" />
+      <span>SMB Scanner <em>Lite</em></span>
+    </a>
+    <button class="nav-toggle" data-nav aria-label="Open menu" aria-expanded="false">☰</button>
+    <nav class="links">
+      <a href="/">Home</a>
+      <a href="/about/">About</a>
+      <a href="/checks/" aria-current="page">Checks</a>
+      <a href="/how/">How it works</a>
+      <a href="/ethics/">Ethics</a>
+      <a href="/blog/">Journal</a>
+      <a href="/faq/">FAQ</a>
+    </nav>
+  </header>
+  <main>
+
+    <article class="wrap prose">
+      <p class="kicker"><i></i> What is inspected</p>
+      <h1>Twenty-two controls, told as five groups.</h1>
+      <p>The full private engine accounts for every control in a catalog. A report never hides a skipped check: if something was not tested, it says so. The public sandbox demonstrates the same standard on the five allowed domains.</p>
+      <table>
+        <thead><tr><th>Group</th><th>What a visitor can learn</th></tr></thead>
+        <tbody>
+          <tr><td>DNS integrity</td><td>Does the name resolve, is DNSSEC’s chain locally checked, can any certificate authority issue for you, can a stranger copy the whole zone, is an old name pointing at a cloud you no longer own?</td></tr>
+          <tr><td>Email authentication</td><td>Does SPF actually fail unauthorised senders, does DMARC enforce, are DKIM keys long enough, and do your mail servers look intentional — including a domain that has chosen to receive no mail?</td></tr>
+          <tr><td>Transport</td><td>Which TLS versions answer, is the certificate name and expiry sound, and does HTTP redirect to HTTPS?</td></tr>
+          <tr><td>Browser headers</td><td>HSTS, Content-Security-Policy, clickjacking, sniffing, cookies, CORS, referrer, and permissions — the instructions your site gives a browser.</td></tr>
+          <tr><td>Network exposure</td><td>Protocol-checked reachability of high-risk ports, including SMB on 445 and remote desktop, without authentication or exploitation.</td></tr>
+        </tbody>
+      </table>
+      <p><a href="/ethics/">Why a timeout is not a failure →</a></p>
+    </article>
+
+  </main>
+  <footer>
+    <div class="wrap foot">
+      <div>Created by <a href="/about/">Muhammad Atif</a> · Rawalpindi, Pakistan</div>
+      <div><a href="/privacy/">Privacy</a> · <a href="/faq/">FAQ</a> · <a href="https://github.com/muhammad-atif-161/smb-scanner-lite">Source</a></div>
+    </div>
+  </footer>
+  <script src="/site.js"></script>
+</body>
+</html>
