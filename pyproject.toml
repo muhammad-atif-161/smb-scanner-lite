@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "smb-scanner-lite"
+version = "5.2.0"
+description = "SMB Scanner Lite (Public Sandbox Edition) — Restricted to 5 publicly free-to-use testing domains with mandatory pre-scan user consent."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+authors = [{ name = "Muhammad Atif" }]
+keywords = [
+  "cybersecurity",
+  "sandbox",
+  "dns",
+  "tls",
+  "security-headers",
+  "educational",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7.4"]
+
+[project.scripts]
+smb-scanner = "smb_scanner.cli:main"
+smb-scanner-lite = "smb_scanner.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
