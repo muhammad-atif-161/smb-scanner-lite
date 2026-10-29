@@ -53,4 +53,4 @@ jobs:
           git add website/styles.css website/index.html
           git status
           git commit -m "Restore full website/index.html and styles.css from good commit; apply card-num fix and for-sale section" || echo "No changes"
-          git push origin HEAD:main
+          git push
