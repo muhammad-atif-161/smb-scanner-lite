@@ -1,0 +1,56 @@
+name: Restore website content
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Restore real website files from last good commit
+        run: |
+          set -e
+          GOOD=b922b1ae04e3b02ef4480a5b646395d5c215db78
+          git show $GOOD:website/styles.css > website/styles.css
+          git show $GOOD:website/index.html > website/index.html
+          python3 - << 'PY'
+          from pathlib import Path
+          p = Path("website/styles.css")
+          text = p.read_text()
+          old = ".card-num {\n  font-family: var(--font-mono);\n  font-size: 0.8rem;\n  color: var(--text-muted);\n  letter-spacing: 0.06em;\n}"
+          new = ".card-num {\n  position: absolute;\n  top: 1.15rem;\n  right: 1.15rem;\n  font-family: var(--font-mono);\n  font-size: 0.8rem;\n  color: var(--text-muted);\n  letter-spacing: 0.06em;\n  line-height: 1;\n  pointer-events: none;\n  z-index: 1;\n}"
+          if old in text:
+              text = text.replace(old, new)
+              p.write_text(text)
+              print("card-num fix applied")
+          else:
+              print("pattern not found")
+          PY
+          python3 - << 'PY'
+          from pathlib import Path
+          p = Path("website/index.html")
+          text = p.read_text()
+          if "#for-sale" not in text:
+              marker = '<section><div class="wrap"><div class="panel reveal" style="text-align:center;padding:clamp(2.5rem,6vw,4.5rem)"><div style="display:flex;justify-content:center"><span class="pill pill-info"><span class="dot dot-info"></span>Ready when you are</span></div>'
+              for_sale = '''<section id="for-sale" style="background:var(--bg-secondary)"><div class="glow" aria-hidden="true"></div><div class="wrap" style="position:relative"><div class="section-head reveal"><p class="eyebrow">Project for sale</p><h2>Full SMB Scanner available for acquisition.</h2><p>The complete private engine, source code, technical documentation, design assets and full copyright assignment are offered as a single package. The public sandbox you see here remains a restricted educational demo.</p></div><div class="panel reveal" style="max-width:42rem;margin-inline:auto"><div style="display:flex;flex-wrap:wrap;gap:1rem;align-items:baseline;justify-content:space-between"><div><p class="eyebrow" style="margin-bottom:0.4rem">Asking price</p><p style="font-family:var(--font-head);font-size:2rem;font-weight:600;letter-spacing:-0.03em">$2,999 <span style="font-size:1rem;color:var(--text-muted);font-weight:500">USD</span></p><p class="faint" style="font-size:0.875rem;margin-top:0.25rem">Negotiable · serious enquiries only</p></div><div><a class="btn btn-primary" href="https://www.sideprojectors.com/project/104650/smb-scanner" rel="noopener" target="_blank">View listing</a></div></div><ul style="margin-top:1.5rem;color:var(--text-secondary);font-size:0.95rem;line-height:1.7;padding-left:1.2rem"><li>Private full engine (all 22 controls + scoring model)</li><li>Complete source history and development notes</li><li>Public sandbox edition and website assets</li><li>Technical documentation and report templates</li><li>Full copyright assignment on transfer</li></ul><p class="faint" style="margin-top:1.25rem;font-size:0.875rem">Contact via the listing or the creator GitHub profile.</p></div></div></section>\n'''
+              if marker in text:
+                  text = text.replace(marker, for_sale + marker)
+                  p.write_text(text)
+                  print("for-sale section inserted")
+              else:
+                  print("marker not found")
+          else:
+              print("for-sale already present")
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add website/styles.css website/index.html
+          git status
+          git commit -m "Restore full website/index.html and styles.css from good commit; apply card-num fix and for-sale section" || echo "No changes"
+          git push
