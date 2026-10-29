@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Public demo — five permitted test domains, consent required</title>
+  <meta name="description" content="Explore the SMB Scanner Lite assessment workflow in the public demo. Restricted to example.com, example.org, example.net, scanme.nmap.org and badssl.com." />
+  <link rel="canonical" href="https://smbscannerlite.me/demo/" />
+  <meta name="author" content="Muhammad Atif" />
+  <meta name="theme-color" content="#080B14" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="keywords" content="SMB Scanner Lite, small business security check, external posture assessment, SPF, DKIM, DMARC, DNSSEC, TLS headers, exposed SMB, evidence-first scanner" />
+  <meta property="og:title" content="Public demo — five permitted test domains, consent required" />
+  <meta property="og:description" content="Explore the SMB Scanner Lite assessment workflow in the public demo. Restricted to example.com, example.org, example.net, scanme.nmap.org and badssl.com." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://smbscannerlite.me/demo/" />
+  <meta property="og:image" content="https://smbscannerlite.me/og-image.png" />
+  <meta property="og:image:alt" content="SMB Scanner Lite: a deep navy posture report card with an electric-blue score bar and evidence findings" />
+  <meta property="og:site_name" content="SMB Scanner Lite" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://smbscannerlite.me/og-image.png" />
+  <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/logo.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
+  <link rel="stylesheet" href="/styles.css" />
+  
+  
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="atlas" aria-hidden="true"></div>
+  <header class="nav" data-nav><a class="brand" href="/"><img src="/logo.svg" width="34" height="34" alt="SMB Scanner Lite logo" /><span>SMB Scanner <span class="lite">Lite</span></span></a><nav class="nav-links" aria-label="Primary"><a href="/">Overview</a><a href="/checks/">Capabilities</a><a href="/sample-report/">Sample report</a><a href="/how/">How it works</a><a href="/methodology/">Methodology</a><a href="/faq/">FAQ</a></nav><div class="nav-cta"><a class="btn btn-primary btn-sm" href="/demo/"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg>Try the demo</a></div><button class="nav-toggle" type="button" data-nav-toggle aria-label="Open menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span data-icon-open style="display:none"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></button></header><div class="nav-panel" data-nav-panel aria-label="Mobile navigation"><nav data-nav-panel-links aria-label="Mobile"><a href="/">Overview<svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></a><a href="/checks/">Capabilities<svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></a><a href="/sample-report/">Sample report<svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></a><a href="/how/">How it works<svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></a><a href="/methodology/">Methodology<svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></a><a href="/faq/">FAQ<svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></a></nav><div class="nav-panel-cta"><a class="btn btn-primary" href="/demo/">Try the demo</a></div></div>
+  <main id="main">
+<section class="hero" style="padding-bottom:clamp(2rem,4vw,3rem)">
+  <div class="wrap">
+    <p class="hero-rise eyebrow">Public demo</p>
+    <h1 class="hero-rise">Explore the assessment before using it on your own infrastructure.</h1>
+    <p class="lede hero-rise" style="margin-top:1rem">The public demo is restricted to a small set of approved test domains. It demonstrates the reporting and assessment workflow — it does not scan the open internet.</p>
+    <div class="hero-rise" style="margin-top:1.4rem"><span class="pill pill-info"><span class="dot dot-info"></span>5 permitted targets</span> <span class="pill pill-warn"><span class="dot dot-warn"></span>Consent required</span> <span class="pill pill-fail"><span class="dot dot-fail"></span>No arbitrary hosts</span></div>
+  </div>
+</section>
+
+<section><div class="wrap">
+  <div class="split" style="align-items:start">
+
+    <div class="reveal">
+      <div class="panel demo-card" data-demo>
+        <div class="panel-head"><h3>Run a demonstration assessment</h3><span class="tag mono">demonstration</span></div>
+
+        <form data-demo-form novalidate>
+          <div class="stack">
+            <div class="field">
+              <label for="demo-target">Target domain</label>
+              <input class="input" id="demo-target" name="target" data-demo-input list="demo-domains" placeholder="example.com" autocomplete="off" spellcheck="false" />
+              <datalist id="demo-domains"><option value="example.com"></option><option value="example.org"></option><option value="example.net"></option><option value="scanme.nmap.org"></option><option value="badssl.com"></option></datalist>
+              <span class="hint">Only the five approved testing domains are accepted. Any other target is rejected before a network request is made.</span>
+            </div>
+
+            <div class="field">
+              <label for="demo-operator">Your name or handle</label>
+              <input class="input" id="demo-operator" name="operator" data-demo-operator placeholder="Signs the consent receipt" autocomplete="name" />
+              <span class="hint">Recorded in the consent receipt on the machine that runs the scan. Never uploaded.</span>
+            </div>
+
+            <div class="field">
+              <label style="display:flex;align-items:flex-start;gap:.6rem;font-weight:400;color:var(--text-secondary)">
+                <input type="checkbox" data-demo-consent style="margin-top:.35rem" />
+                <span>I have read the authorisation notice and the privacy policy, and I am only assessing a domain I own or am permitted to test.</span>
+              </label>
+            </div>
+
+            <div class="btn-row">
+              <button class="btn btn-primary" type="submit" data-demo-submit><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg>Run demonstration</button>
+              <button class="btn btn-ghost" type="button" data-demo-reset>Reset</button>
+            </div>
+          </div>
+        </form>
+
+        <div style="margin-top:1.5rem">
+          <p class="faint" style="font-size:.8125rem;margin-bottom:.6rem">Pick a permitted target:</p>
+          <div class="btn-row"><button class="btn btn-subtle btn-sm" type="button" data-demo-domain="example.com">example.com</button><button class="btn btn-subtle btn-sm" type="button" data-demo-domain="example.org">example.org</button><button class="btn btn-subtle btn-sm" type="button" data-demo-domain="example.net">example.net</button><button class="btn btn-subtle btn-sm" type="button" data-demo-domain="scanme.nmap.org">scanme.nmap.org</button><button class="btn btn-subtle btn-sm" type="button" data-demo-domain="badssl.com">badssl.com</button></div>
+        </div>
+
+        <div data-demo-output style="margin-top:1.5rem">
+          <div class="progress" data-demo-progress hidden><i></i></div>
+          <div class="state state-info" data-demo-state hidden></div>
+          <div class="state state-error" data-demo-error hidden></div>
+          <div data-demo-result></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal">
+      <p class="eyebrow">Before you submit</p>
+      <h2>What this demo is, and what it is not.</h2>
+      <p class="lede" style="margin-top:1rem">This website is a static publication. It does not run scans and it has no backend. The panel on the left renders the assessment workflow and a clearly labelled demonstration report, so you can see what the output looks like before you install anything.</p>
+
+      <ul class="trust-col" style="margin-top:1.5rem">
+        <li><strong style="display:block;margin-bottom:.2rem">Permitted targets are the whole list.</strong>The five domains below, and nothing else. A look-alike subdomain or a raw IP address is rejected.</li>
+        <li><strong style="display:block;margin-bottom:.2rem">Consent comes first.</strong>A scan never starts until the operator accepts the policy and signs a receipt.</li>
+        <li><strong style="display:block;margin-bottom:.2rem">Read-only by design.</strong>DNS queries, mail policy lookups, TLS handshakes, response headers and one protocol-level probe. No login, no exploit.</li>
+        <li><strong style="display:block">The real run happens on your machine.</strong>Install the sandbox from the documentation page to perform an actual assessment.</li>
+      </ul>
+
+      <div class="callout callout-warn" style="margin-top:1.5rem"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5l8.5 15h-17z"/><path d="M12 10v4.2"/><circle cx="12" cy="17" r="0.8"/></svg>
+        <div><p><strong>The website never claims more than the backend enforces.</strong> On this static site the allowlist is enforced in the published sandbox runtime, not in a browser. If a form here accepts something the runtime would reject, the form is wrong — report it.</p></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section style="background:var(--bg-secondary)"><div class="wrap">
+  <div class="section-head reveal"><p class="eyebrow">Permitted targets</p>
+    <h2>Five domains. That is the entire public surface.</h2>
+    <p>Every one of these is free to use, publicly documented, and explicitly designated for testing. They exist so the tool can be demonstrated without touching anyone&rsquo;s infrastructure.</p>
+  </div>
+  <div class="grid g3 reveal" data-stagger="cards"><article class="card"><h3>example.com</h3><p>IANA reserved standard test domain</p></article><article class="card"><h3>example.org</h3><p>IANA reserved organization test domain</p></article><article class="card"><h3>example.net</h3><p>IANA reserved network test domain</p></article><article class="card"><h3>scanme.nmap.org</h3><p>Nmap project authorised test host</p></article><article class="card"><h3>badssl.com</h3><p>Public TLS & certificate teaching site</p></article></div>
+  <p class="faint" style="margin-top:1.2rem;font-size:.8125rem">Any other target is rejected before a network request is made. This restriction is enforced by the sandbox runtime and cannot be changed from the command line, the GUI, or a configuration file.</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="section-head reveal"><p class="eyebrow">Error states</p>
+    <h2>Every refusal explains itself.</h2>
+    <p>A rejection should tell the operator what happened and what to do next. These are the states the interface is designed to handle.</p>
+  </div>
+  <div class="grid g2 reveal" data-stagger="cards"><article class="card"><h3>Invalid domain input</h3><p>The value is empty, contains spaces, or is not a syntactically valid domain name. The field keeps your input and names the problem.</p></article><article class="card"><h3>Target not on the allowlist</h3><p>The domain is not one of the five approved test targets. No network request is made, and the message lists the permitted domains.</p></article><article class="card"><h3>Unsupported target</h3><p>An IP address, a CIDR range, a port, or a URL was supplied. This edition works with domain names only.</p></article><article class="card"><h3>Rate limit reached</h3><p>Too many assessments were requested in a short window. Wait a minute and try again — no partial result is produced.</p></article><article class="card"><h3>Assessment still running</h3><p>The run has started and has not finished. The interface shows progress rather than inventing a result.</p></article><article class="card"><h3>Assessment failed</h3><p>A step could not complete at all. The error says which step, and no score is produced from a partial run.</p></article><article class="card"><h3>No findings available</h3><p>Every control came back inconclusive, so there is nothing conclusive to report. The report says so rather than printing a blank score.</p></article><article class="card"><h3>Network or server error</h3><p>The request did not reach the tool. Nothing was scanned, and nothing was recorded.</p></article></div>
+</div></section>
+
+<section id="contact" style="background:var(--bg-secondary)"><div class="wrap">
+  <div class="panel reveal" style="text-align:center;padding:clamp(2.5rem,6vw,4rem)">
+    <div style="display:flex;justify-content:center"><span class="pill pill-info"><span class="dot dot-info"></span>Questions?</span></div>
+    <h2 style="margin-top:1.2rem;max-width:34rem;margin-inline:auto">Talk to the creator before you rely on a result.</h2>
+    <p class="lede" style="margin:1rem auto 0;text-align:center">The project is maintained by Muhammad Atif in Rawalpindi, Pakistan. Source, issues and contact details are on the public repository.</p>
+    <div class="btn-row" style="justify-content:center;margin-top:2rem"><a class="btn btn-primary" href="https://github.com/muhammad-atif-161/smb-scanner-lite"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg>View the repository</a><a class="btn btn-ghost" href="/about/">About the project</a></div>
+  </div>
+</div></section>
+  </main>
+  <footer class="foot"><div class="wrap"><div class="foot-grid"><div><div class="foot-brand"><img src="/logo.svg" width="30" height="30" alt="" /><span>SMB Scanner <span class="lite">Lite</span></span></div><p>An evidence-first external posture assessment for small and medium businesses. The public edition is locked to five free testing domains.</p></div><div><h4>Product</h4><ul><li><a href="/">Overview</a></li><li><a href="/checks/">Capabilities</a></li><li><a href="/sample-report/">Sample report</a></li><li><a href="/demo/">Try the demo</a></li></ul></div><div><h4>Resources</h4><ul><li><a href="/how/">Documentation</a></li><li><a href="/methodology/">Methodology</a></li><li><a href="/faq/">FAQ</a></li><li><a href="/blog/">Journal</a></li></ul></div><div><h4>Policies</h4><ul><li><a href="/privacy/">Privacy policy</a></li><li><a href="/ethics/">Authorised use</a></li><li><a href="/about/">About the project</a></li></ul></div><div><h4>Project</h4><ul><li><a href="https://github.com/muhammad-atif-161/smb-scanner-lite">Source code</a></li><li><a href="https://github.com/muhammad-atif-161">Creator</a></li><li><a href="/demo/#contact">Contact</a></li></ul></div></div><div class="foot-bottom"><span>Created by Muhammad Atif · Rawalpindi, Pakistan · <span data-year>2026</span></span><span><a href="/privacy/">Privacy</a> · <a href="/faq/">FAQ</a> · <a href="https://github.com/muhammad-atif-161/smb-scanner-lite">Source</a></span></div></div></footer>
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="false"></div>
+  <script src="/site.js"></script>
+</body>
+</html>

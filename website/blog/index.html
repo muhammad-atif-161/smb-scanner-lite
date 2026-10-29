@@ -3,67 +3,42 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Journal — evidence, email locks, and exposed SMB</title>
+  <title>Journal — evidence, email locks and exposed SMB</title>
   <meta name="description" content="Short essays from SMB Scanner Lite on evidence-first reporting, SPF DKIM DMARC for small shops, and why SMB and RDP should not face the internet." />
   <link rel="canonical" href="https://smbscannerlite.me/blog/" />
   <meta name="author" content="Muhammad Atif" />
-  <meta property="og:title" content="Journal — evidence, email locks, and exposed SMB" />
+  <meta name="theme-color" content="#080B14" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="keywords" content="SMB Scanner Lite, small business security check, external posture assessment, SPF, DKIM, DMARC, DNSSEC, TLS headers, exposed SMB, evidence-first scanner" />
+  <meta property="og:title" content="Journal — evidence, email locks and exposed SMB" />
   <meta property="og:description" content="Short essays from SMB Scanner Lite on evidence-first reporting, SPF DKIM DMARC for small shops, and why SMB and RDP should not face the internet." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://smbscannerlite.me/blog/" />
-  <meta property="og:image" content="https://smbscannerlite.me/logo.jpg" />
-  <meta property="og:image:alt" content="SMB Scanner Lite logo: an amber gem inside a glass seal" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:image" content="https://smbscannerlite.me/logo.jpg" />
-  <link rel="icon" href="/logo.svg" type="image/svg+xml" />
-  <link rel="apple-touch-icon" href="/logo.svg" />
-  <meta name="theme-color" content="#110e0c" />
-  <meta name="robots" content="index, follow, max-image-preview:large" />
-  <meta name="keywords" content="SMB Scanner Lite, small business security check, SPF, DKIM, DMARC, DNSSEC, TLS headers, exposed SMB, evidence-first scanner" />
+  <meta property="og:image" content="https://smbscannerlite.me/og-image.png" />
+  <meta property="og:image:alt" content="SMB Scanner Lite: a deep navy posture report card with an electric-blue score bar and evidence findings" />
   <meta property="og:site_name" content="SMB Scanner Lite" />
   <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://smbscannerlite.me/og-image.png" />
+  <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/logo.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,460;0,9..144,560;1,9..144,460&family=Outfit:wght@380;500;560&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
   <link rel="stylesheet" href="/styles.css" />
+  
   
 </head>
 <body>
-  <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
-  <header class="nav glass">
-    <a class="brand" href="/">
-      <img src="/logo.svg" width="36" height="36" alt="SMB Scanner Lite logo" />
-      <span>SMB Scanner <em>Lite</em></span>
-    </a>
-    <button class="nav-toggle" data-nav aria-label="Open menu" aria-expanded="false">☰</button>
-    <nav class="links">
-      <a href="/">Home</a>
-      <a href="/about/">About</a>
-      <a href="/checks/">Checks</a>
-      <a href="/how/">How it works</a>
-      <a href="/ethics/">Ethics</a>
-      <a href="/blog/" aria-current="page">Journal</a>
-      <a href="/faq/">FAQ</a>
-    </nav>
-  </header>
-  <main>
-
-    <section class="wrap">
-      <p class="kicker"><i></i> Journal</p>
-      <h1>Three short essays. No content mill.</h1>
-      <p class="lede">Written to explain the project’s standard, not to chase every keyword on the internet.</p>
-      <div class="grid" style="margin-top:1.2rem">
-        <a class="card glass post" href="/blog/no-claim-without-evidence/"><small>2026-10-20</small><h3>No claim without evidence</h3><p>Why a security report should quote what it saw.</p></a><a class="card glass post" href="/blog/why-email-locks-matter/"><small>2026-10-22</small><h3>Why email locks matter for a small shop</h3><p>SPF, DKIM, and DMARC in one page, without the ceremony.</p></a><a class="card glass post" href="/blog/exposed-smb-and-rdp/"><small>2026-10-24</small><h3>When the office door faces the street</h3><p>SMB and remote desktop do not belong on the public internet.</p></a>
-      </div>
-    </section>
-
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="atlas" aria-hidden="true"></div>
+  <header class="nav" data-nav><a class="brand" href="/"><img src="/logo.svg" width="34" height="34" alt="SMB Scanner Lite logo" /><span>SMB Scanner <span class="lite">Lite</span></span></a><nav class="nav-links" aria-label="Primary"><a href="/">Overview</a><a href="/checks/">Capabilities</a><a href="/sample-report/">Sample report</a><a href="/how/">How it works</a><a href="/methodology/">Methodology</a><a href="/faq/">FAQ</a></nav><div class="nav-cta"><a class="btn btn-primary btn-sm" href="/demo/"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg>Try the demo</a></div><button class="nav-toggle" type="button" data-nav-toggle aria-label="Open menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span data-icon-open style="display:none"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></button></header><div class="nav-panel" data-nav-panel aria-label="Mobile navigation"><nav data-nav-panel-links aria-label="Mobile"><a href="/">Overview<svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></a><a href="/checks/">Capabilities<svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></a><a href="/sample-report/">Sample report<svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></a><a href="/how/">How it works<svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></a><a href="/methodology/">Methodology<svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></a><a href="/faq/">FAQ<svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></a></nav><div class="nav-panel-cta"><a class="btn btn-primary" href="/demo/">Try the demo</a></div></div>
+  <main id="main">
+<section class="hero" style="padding-bottom:clamp(2rem,4vw,3rem)"><div class="wrap"><p class="hero-rise eyebrow">Journal</p><h1 class="hero-rise">Three short essays. No content mill.</h1><p class="lede hero-rise" style="margin-top:1rem">Written to explain the project&rsquo;s standard, not to chase every keyword on the internet.</p></div></section><section class="tight"><div class="wrap"><div class="grid g3 reveal" data-stagger="cards"><a class="card is-interactive post reveal" href="/blog/no-claim-without-evidence/"><span class="card-num">2026-10-20</span><h3>No claim without evidence</h3><p>Why a security report should quote what it saw.</p><span class="tlink">Read the essay <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></span></a><a class="card is-interactive post reveal" href="/blog/why-email-locks-matter/"><span class="card-num">2026-10-22</span><h3>Why email locks matter for a small shop</h3><p>SPF, DKIM and DMARC in one page, without the ceremony.</p><span class="tlink">Read the essay <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></span></a><a class="card is-interactive post reveal" href="/blog/exposed-smb-and-rdp/"><span class="card-num">2026-10-24</span><h3>When the office door faces the street</h3><p>SMB and remote desktop do not belong on the public internet.</p><span class="tlink">Read the essay <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></span></a></div></div></section>
   </main>
-  <footer>
-    <div class="wrap foot">
-      <div>Created by <a href="/about/">Muhammad Atif</a> · Rawalpindi, Pakistan</div>
-      <div><a href="/privacy/">Privacy</a> · <a href="/faq/">FAQ</a> · <a href="https://github.com/muhammad-atif-161/smb-scanner-lite">Source</a></div>
-    </div>
-  </footer>
+  <footer class="foot"><div class="wrap"><div class="foot-grid"><div><div class="foot-brand"><img src="/logo.svg" width="30" height="30" alt="" /><span>SMB Scanner <span class="lite">Lite</span></span></div><p>An evidence-first external posture assessment for small and medium businesses. The public edition is locked to five free testing domains.</p></div><div><h4>Product</h4><ul><li><a href="/">Overview</a></li><li><a href="/checks/">Capabilities</a></li><li><a href="/sample-report/">Sample report</a></li><li><a href="/demo/">Try the demo</a></li></ul></div><div><h4>Resources</h4><ul><li><a href="/how/">Documentation</a></li><li><a href="/methodology/">Methodology</a></li><li><a href="/faq/">FAQ</a></li><li><a href="/blog/">Journal</a></li></ul></div><div><h4>Policies</h4><ul><li><a href="/privacy/">Privacy policy</a></li><li><a href="/ethics/">Authorised use</a></li><li><a href="/about/">About the project</a></li></ul></div><div><h4>Project</h4><ul><li><a href="https://github.com/muhammad-atif-161/smb-scanner-lite">Source code</a></li><li><a href="https://github.com/muhammad-atif-161">Creator</a></li><li><a href="/demo/#contact">Contact</a></li></ul></div></div><div class="foot-bottom"><span>Created by Muhammad Atif · Rawalpindi, Pakistan · <span data-year>2026</span></span><span><a href="/privacy/">Privacy</a> · <a href="/faq/">FAQ</a> · <a href="https://github.com/muhammad-atif-161/smb-scanner-lite">Source</a></span></div></div></footer>
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="false"></div>
   <script src="/site.js"></script>
 </body>
 </html>
