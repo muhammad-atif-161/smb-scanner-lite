@@ -148,6 +148,18 @@
 
     if (reducedMotion || !("IntersectionObserver" in window)) { finish(); return; }
 
+    // The bar and number are rendered at their final values so the page is
+    // correct without JavaScript. Snap them back to zero here - bypassing the
+    // CSS width transition - so the count-up starts cleanly instead of gliding
+    // from 86 down to 0 before it climbs again.
+    if (fill) {
+      fill.style.transition = "none";
+      fill.style.width = "0%";
+      void fill.offsetWidth;
+      fill.style.transition = "";
+    }
+    if (numEl) numEl.textContent = "0";
+
     var duration = 800;
     var startTime = 0;
     function step(now) {
