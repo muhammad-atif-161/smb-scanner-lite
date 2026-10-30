@@ -19,8 +19,8 @@
 window.SMB_CONFIG = {
   siteName: "SMB Scanner Lite",
   siteUrl: "https://smbscannerlite.me",
-  contactEmail: "contact@smbscannerlite.me",
-  formEndpoint: "",
+  contactEmail: "myself.atiff@gmail.com",
+  formEndpoint: "https://formspree.io/f/xbggayev",
   githubUrl: "https://github.com/muhammad-atif-161/smb-scanner-lite",
   listingUrl: "https://www.sideprojectors.com/project/104650/smb-scanner",
   allowlist: ["example.com", "example.org", "example.net", "scanme.nmap.org", "badssl.com"],
