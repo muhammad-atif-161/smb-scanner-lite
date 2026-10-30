@@ -37,6 +37,62 @@ Any other target is rejected before any network request is made.
 
 ---
 
+## Website (smbscannerlite.me)
+
+The public site lives in `website/` and is deployed to GitHub Pages by
+`.github/workflows/deploy-pages.yml` (static upload, no build step on the runner).
+It is generated from a small, dependency-free Python builder so that navigation,
+footer, metadata and the recorded assessment data stay consistent across pages.
+
+```bash
+# Rebuild every page, sitemap and downloadable report
+python3 tools/build_site.py
+
+# Rebuild and verify that every internal link resolves
+python3 tools/build_site.py --check
+```
+
+| Path | Purpose |
+|------|---------|
+| `tools/build_site.py` | Entry point: renders pages, sitemap, robots and report downloads |
+| `tools/sitegen/config.py` | Site identity, navigation, footer, sitemap, contact address |
+| `tools/sitegen/data.py` | 22-control catalog, recorded assessment data, FAQ, resources |
+| `tools/sitegen/pages_*.py` | Page templates grouped by audience |
+| `website/styles.css` | Midnight Intelligence design system (single stylesheet) |
+| `website/site.js` | Navigation, tabs, disclosures, recorded-demo explorer, forms |
+| `website/config.js` | Runtime config read by the browser (contact email, form endpoint) |
+
+### Configuration you may need to change
+
+- **Contact email** — set in `tools/sitegen/config.py` (`CONTACT_EMAIL`) *and*
+  `website/config.js` (`contactEmail`), then rebuild. Both must match.
+- **Form delivery** — the site is static. Forms post to `formEndpoint` in
+  `website/config.js` when it is set (any endpoint accepting a JSON POST, such as
+  Formspree or Web3Forms). When it is empty, the form composes the enquiry in the
+  visitor's mail client and opens it, addressed to the contact email. Neither path
+  stores anything on the website.
+- **Acquisition price and listing** — `tools/site/config.py` and the acquisition
+  page template; keep them consistent with the marketplace listing.
+
+### Content rules enforced by the site
+
+- The recorded assessment shows genuine stored output with its real timestamp,
+  report ID and scanner version. It is labelled "recorded", never "live".
+- No testimonials, customer logos, review scores, revenue figures or usage
+  statistics are published, because none are held with documented permission.
+- The five-domain allowlist is stated wherever the demo appears, and the public
+  CLI/test suite remains unchanged.
+- The 65-control "validation register" is not claimed. `validation/` publishes the
+  five reproducible tests that actually exist in `tests/test_sandbox.py`.
+
+### Legacy URLs
+
+`/checks/`, `/how/`, `/ethics/` and the old `/blog/` entries are kept as static
+redirect pages (meta refresh + canonical) so existing links and search results do
+not break. GitHub Pages does not support server-side redirects.
+
+---
+
 ## Quick Start (Public Sandbox)
 
 ```bash
@@ -80,7 +136,7 @@ Consent logs are stored **locally** on your machine and are excluded from Git vi
 - `tests/` — Safe public tests that verify the 5-domain restriction and consent proofs
 - `PRIVACY_POLICY.md` — Mandatory user consent agreement
 - `LICENSE` — MIT (does **not** authorise scanning systems you do not own)
-- Website assets (for GitHub Pages hosting of the demo interface)
+- `website/` — the generated public site (GitHub Pages) and its builder in `tools/`
 
 The full control catalog, scoring logic, private rules, internal tests, development notes, and complete source history remain in a **private** repository.
 

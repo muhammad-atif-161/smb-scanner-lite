@@ -1,44 +1,377 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sample report — SMB Scanner Lite posture assessment output</title>
-  <meta name="description" content="See what a completed SMB Scanner Lite assessment reports: posture score, letter grade, findings, the evidence behind each one, and what to look at next." />
-  <link rel="canonical" href="https://smbscannerlite.me/sample-report/" />
-  <meta name="author" content="Muhammad Atif" />
-  <meta name="theme-color" content="#080B14" />
-  <meta name="robots" content="index, follow, max-image-preview:large" />
-  <meta name="keywords" content="SMB Scanner Lite, small business security check, external posture assessment, SPF, DKIM, DMARC, DNSSEC, TLS headers, exposed SMB, evidence-first scanner" />
-  <meta property="og:title" content="Sample report — SMB Scanner Lite posture assessment output" />
-  <meta property="og:description" content="See what a completed SMB Scanner Lite assessment reports: posture score, letter grade, findings, the evidence behind each one, and what to look at next." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://smbscannerlite.me/sample-report/" />
-  <meta property="og:image" content="https://smbscannerlite.me/og-image.png" />
-  <meta property="og:image:alt" content="SMB Scanner Lite: a deep navy posture report card with an electric-blue score bar and evidence findings" />
-  <meta property="og:site_name" content="SMB Scanner Lite" />
-  <meta property="og:locale" content="en_US" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:image" content="https://smbscannerlite.me/og-image.png" />
-  <link rel="icon" href="/logo.svg" type="image/svg+xml" />
-  <link rel="apple-touch-icon" href="/logo.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
-  <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
-  <link rel="stylesheet" href="/styles.css" />
-  
-  
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sample Security Assessment Report — SMB Scanner Lite</title>
+<meta name="description" content="A complete, genuine SMB Scanner Lite report: 86/100, grade B, eight findings with evidence, recommendations and assessment metadata, downloadable as HTML, JSON, CSV and TXT." />
+<link rel="canonical" href="https://smbscannerlite.me/sample-report/" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta name="author" content="Muhammad Atif" />
+<meta name="theme-color" content="#080B14" />
+<meta name="generator" content="SMB Scanner Lite static site builder" />
+<meta property="og:site_name" content="SMB Scanner Lite" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Sample Security Assessment Report — SMB Scanner Lite" />
+<meta property="og:description" content="A complete, genuine SMB Scanner Lite report: 86/100, grade B, eight findings with evidence, recommendations and assessment metadata, downloadable as HTML, JSON, CSV and TXT." />
+<meta property="og:url" content="https://smbscannerlite.me/sample-report/" />
+<meta property="og:image" content="https://smbscannerlite.me/og-image.png" />
+<meta property="og:image:alt" content="SMB Scanner Lite — a dark navy assessment report showing a posture score of 86 out of 100, grade B, with evidence-backed findings." />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Sample Security Assessment Report — SMB Scanner Lite" />
+<meta name="twitter:description" content="A complete, genuine SMB Scanner Lite report: 86/100, grade B, eight findings with evidence, recommendations and assessment metadata, downloadable as HTML, JSON, CSV and TXT." />
+<meta name="twitter:image" content="https://smbscannerlite.me/og-image.png" />
+<link rel="icon" href="/logo.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/logo.svg" />
+<link rel="alternate" type="application/json" href="/data/recorded-assessment.json" title="Recorded assessment data (JSON)" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/styles.css" />
+
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Report","name":"SMB Scanner Lite recorded assessment of example.com","about":"External security posture assessment","datePublished":"2026-10-28","author":{"@type":"Organization","name":"SMB Scanner Lite","url":"https://smbscannerlite.me"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://smbscannerlite.me/"},{"@type":"ListItem","position":2,"name":"Sample Report"}]}]}</script>
+<noscript><style>.reveal{opacity:1;transform:none}</style></noscript>
 </head>
-<body>
-  <a class="skip-link" href="#main">Skip to content</a>
-  <div class="atlas" aria-hidden="true"></div>
-  <header class="nav" data-nav><a class="brand" href="/"><img src="/logo.svg" width="34" height="34" alt="SMB Scanner Lite logo" /><span>SMB Scanner <span class="lite">Lite</span></span></a><nav class="nav-links" aria-label="Primary"><a href="/">Overview</a><a href="/checks/">Capabilities</a><a href="/sample-report/" aria-current="page">Sample report</a><a href="/how/">How it works</a><a href="/methodology/">Methodology</a><a href="/faq/">FAQ</a></nav><div class="nav-cta"><a class="btn btn-primary btn-sm" href="/demo/"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg>Try the demo</a></div><button class="nav-toggle" type="button" data-nav-toggle aria-label="Open menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span data-icon-open style="display:none"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></button></header><div class="nav-panel" data-nav-panel aria-label="Mobile navigation"><nav data-nav-panel-links aria-label="Mobile"><a href="/">Overview<svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></a><a href="/checks/">Capabilities<svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></a><a href="/sample-report/">Sample report<svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></a><a href="/how/">How it works<svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></a><a href="/methodology/">Methodology<svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></a><a href="/faq/">FAQ<svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></a></nav><div class="nav-panel-cta"><a class="btn btn-primary" href="/demo/">Try the demo</a></div></div>
-  <main id="main">
-<section class="hero" style="padding-bottom:clamp(2rem,4vw,3rem)"><div class="wrap"><p class="hero-rise eyebrow">Sample report</p><h1 class="hero-rise">See the output before you run anything.</h1><p class="lede hero-rise" style="margin-top:1rem">The report is the product. This is what a completed assessment looks like — score, findings, evidence, and what to look at next.</p><div class="btn-row hero-rise" style="margin-top:1.6rem"><a class="btn btn-primary" href="/demo/"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg>Try the demo</a><a class="btn btn-ghost" href="/methodology/">Scoring methodology</a></div><p class="faint hero-rise" style="margin-top:1rem;font-size:.8125rem">The values on this page are a real sandbox run against example.com, captured 28 October 2026. It is not a scan of a customer.</p></div></section><section><div class="wrap"><div class="split" style="align-items:start"><div class="reveal" style="position:sticky;top:calc(var(--nav-height) + 1.5rem)"><p class="eyebrow">What is in the report</p><h2>From technical checks to actionable context.</h2><p class="lede" style="margin-top:1rem">A report is only useful if a non-specialist can read it. Each section answers one question: what is the score, what failed, what is the proof, and what should I do next.</p><ul class="trust-col" style="margin-top:1.5rem"><li>Score, grade and how many controls actually completed</li><li>Findings grouped by severity, with plain-language explanations</li><li>The evidence string behind each conclusive result</li><li>Inconclusive results shown separately, never merged into a failure</li><li>The consent receipt that proves authorisation was given first</li></ul><div class="btn-row" style="margin-top:1.5rem"><a class="btn btn-ghost" href="/sample-report/"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg>Open the full sample report</a></div><p class="faint" style="margin-top:1rem;font-size:.8125rem">The report is available in HTML, JSON and plain text, and each run embeds its consent receipt.</p></div><div class="reveal"><div class="report"><div class="report-bar"><span class="dots"><i></i><i></i><i></i></span><span>sample report · demonstration</span></div><div class="report-body"><dl class="report-meta"><div><dt>Target</dt><dd>example.com</dd></div><div><dt>Posture score</dt><dd>86 / 100 · Grade B</dd></div><div><dt>Controls</dt><dd>8 completed · 0 inconclusive</dd></div><div><dt>Consent receipt</dt><dd>CONSENT-20261028-A91144E4</dd></div></dl><div class="tabs" role="tablist" aria-label="Report sections" data-tabs="sample"><button class="tab" type="button" role="tab" id="sample-tab-0" aria-selected="true" aria-controls="sample-panel-0" tabindex="0">Summary</button><button class="tab" type="button" role="tab" id="sample-tab-1" aria-selected="false" aria-controls="sample-panel-1" tabindex="-1">Findings</button><button class="tab" type="button" role="tab" id="sample-tab-2" aria-selected="false" aria-controls="sample-panel-2" tabindex="-1">Evidence</button><button class="tab" type="button" role="tab" id="sample-tab-3" aria-selected="false" aria-controls="sample-panel-3" tabindex="-1">Methodology</button></div><div class="tab-panel" role="tabpanel" id="sample-panel-0" aria-labelledby="sample-tab-0" is-active><div style="display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;flex-wrap:wrap"><div class="score-value" style="font-size:3rem"><span>86</span><small> / 100</small></div><div class="score-grade"><b>B</b><span>Grade</span></div></div><div class="score-track" style="margin-top:1rem"><div class="score-fill" style="width:86%"></div></div><div class="kpi-row" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:1.2rem"><div class="kpi"><b>95</b><span>DNS &amp; domain hygiene</span></div><div class="kpi"><b>92</b><span>E-mail authentication</span></div><div class="kpi"><b>90</b><span>Transport security (TLS)</span></div><div class="kpi"><b>68</b><span>Web security headers</span></div></div><p class="muted" style="margin-top:1rem">Grade B — strong. Eight controls completed and none returned an inconclusive answer, so the score covers every check that ran. The two remaining items are informational header gaps typical of a minimal RFC reference site.</p><p class="mono-muted" style="margin-top:1rem">Report SMB-SANDBOX-20261028-A91144E4 · example.com · captured 28 October 2026</p></div><div class="tab-panel" role="tabpanel" id="sample-panel-1" aria-labelledby="sample-tab-1" ><div class="finding"><div class="finding-head"><span class="dot dot-pass"></span><div class="finding-body"><h4>DNS A/AAAA resolution</h4><p>The name resolves to both IPv4 and IPv6 addresses, so visitors can reach the domain.</p><div class="evidence"><span class="val">Resolved example.com -> 104.20.23.154, 172.66.147.243, 2606:4700:10::ac42:93f3, 2606:4700:10::6814:179a</span><button class="copy" type="button" data-copy="Resolved example.com -> 104.20.23.154, 172.66.147.243, 2606:4700:10::ac42:93f3, 2606:4700:10::6814:179a">copy</button></div></div></div></div><div class="finding"><div class="finding-head"><span class="dot dot-pass"></span><div class="finding-body"><h4>DNSSEC validation</h4><p>The zone is signed and the chain validates against the parent delegation.</p><div class="evidence"><span class="val">Zone signed with validated RRSIG and parent DS delegation.</span><button class="copy" type="button" data-copy="Zone signed with validated RRSIG and parent DS delegation.">copy</button></div></div></div></div><div class="finding"><div class="finding-head"><span class="dot dot-pass"></span><div class="finding-body"><h4>SPF hard-fail policy</h4><p>Only the domain itself may send mail; senders outside the policy are rejected.</p><div class="evidence"><span class="val">v=spf1 -all (strict no-mail policy for reserved domain).</span><button class="copy" type="button" data-copy="v=spf1 -all (strict no-mail policy for reserved domain).">copy</button></div></div></div></div><div class="finding"><div class="finding-head"><span class="dot dot-pass"></span><div class="finding-body"><h4>DMARC enforcement</h4><p>Mail that fails authentication is rejected rather than merely monitored.</p><div class="evidence"><span class="val">v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s</span><button class="copy" type="button" data-copy="v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s">copy</button></div></div></div></div><div class="finding"><div class="finding-head"><span class="dot dot-pass"></span><div class="finding-body"><h4>RFC 7505 Null MX</h4><p>The domain publishes a null MX, so it does not accept mail at all.</p><div class="evidence"><span class="val">MX 0 . published indicating domain does not accept e-mail.</span><button class="copy" type="button" data-copy="MX 0 . published indicating domain does not accept e-mail.">copy</button></div></div></div></div><div class="finding"><div class="finding-head"><span class="dot dot-pass"></span><div class="finding-body"><h4>TLS 1.2/1.3 and certificate</h4><p>A valid certificate covers the domain over a modern protocol.</p><div class="evidence"><span class="val">Valid X.509 certificate covering example.com over TLS 1.3.</span><button class="copy" type="button" data-copy="Valid X.509 certificate covering example.com over TLS 1.3.">copy</button></div></div></div></div><div class="finding"><div class="finding-head"><span class="dot dot-warn"></span><div class="finding-body"><h4>HTTP Strict-Transport-Security</h4><p>The header is not enforced, so a browser may be allowed to downgrade to plain HTTP.</p><div class="evidence"><span class="val">Strict-Transport-Security header not enforced on reference landing page.</span><button class="copy" type="button" data-copy="Strict-Transport-Security header not enforced on reference landing page.">copy</button></div></div></div></div><div class="finding"><div class="finding-head"><span class="dot dot-warn"></span><div class="finding-body"><h4>Content-Security-Policy</h4><p>No content security policy is published, so the browser has no extra instruction to work with.</p><div class="evidence"><span class="val">Content-Security-Policy header absent on static reference response.</span><button class="copy" type="button" data-copy="Content-Security-Policy header absent on static reference response.">copy</button></div></div></div></div></div><div class="tab-panel" role="tabpanel" id="sample-panel-2" aria-labelledby="sample-tab-2" ><p>Every conclusive finding quotes the observation that produced it. This is the standard the project calls <strong>no claim without evidence</strong>.</p><div class="evidence" style="margin-top:1rem"><span class="val">v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s</span><button class="copy" type="button" data-copy="v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s">copy</button></div><div class="evidence" style="margin-top:.5rem"><span class="val">v=spf1 -all (strict no-mail policy for reserved domain).</span><button class="copy" type="button" data-copy="v=spf1 -all (strict no-mail policy for reserved domain).">copy</button></div><div class="evidence" style="margin-top:.5rem"><span class="val">Zone signed with validated RRSIG and parent DS delegation.</span><button class="copy" type="button" data-copy="Zone signed with validated RRSIG and parent DS delegation.">copy</button></div><div class="evidence" style="margin-top:.5rem"><span class="val">MX 0 . published indicating domain does not accept e-mail.</span><button class="copy" type="button" data-copy="MX 0 . published indicating domain does not accept e-mail.">copy</button></div><div class="evidence" style="margin-top:.5rem"><span class="val">Valid X.509 certificate covering example.com over TLS 1.3.</span><button class="copy" type="button" data-copy="Valid X.509 certificate covering example.com over TLS 1.3.">copy</button></div><div class="evidence" style="margin-top:.5rem"><span class="val">Content-Security-Policy header absent on static reference response.</span><button class="copy" type="button" data-copy="Content-Security-Policy header absent on static reference response.">copy</button></div></div><div class="tab-panel" role="tabpanel" id="sample-panel-3" aria-labelledby="sample-tab-3" ><ul class="trust-col"><li><strong style="display:block;margin-bottom:.2rem">Weighted scoring</strong>Controls that matter more to a small business count more.</li><li><strong style="display:block;margin-bottom:.2rem">Measured only</strong>A check that timed out is excluded from the score and reported as inconclusive.</li><li><strong style="display:block;margin-bottom:.2rem">Grade bands</strong>A–B strong, C fair, D needs work, F urgent.</li><li><strong style="display:block">Verification</strong>Copy the evidence string and re-run the query from outside your network.</li></ul></div></div></div></div></div></div></section>
-  </main>
-  <footer class="foot"><div class="wrap"><div class="foot-grid"><div><div class="foot-brand"><img src="/logo.svg" width="30" height="30" alt="" /><span>SMB Scanner <span class="lite">Lite</span></span></div><p>An evidence-first external posture assessment for small and medium businesses. The public edition is locked to five free testing domains.</p></div><div><h4>Product</h4><ul><li><a href="/">Overview</a></li><li><a href="/checks/">Capabilities</a></li><li><a href="/sample-report/">Sample report</a></li><li><a href="/demo/">Try the demo</a></li></ul></div><div><h4>Resources</h4><ul><li><a href="/how/">Documentation</a></li><li><a href="/methodology/">Methodology</a></li><li><a href="/faq/">FAQ</a></li><li><a href="/blog/">Journal</a></li></ul></div><div><h4>Policies</h4><ul><li><a href="/privacy/">Privacy policy</a></li><li><a href="/ethics/">Authorised use</a></li><li><a href="/about/">About the project</a></li></ul></div><div><h4>Project</h4><ul><li><a href="https://github.com/muhammad-atif-161/smb-scanner-lite">Source code</a></li><li><a href="https://github.com/muhammad-atif-161">Creator</a></li><li><a href="/demo/#contact">Contact</a></li></ul></div></div><div class="foot-bottom"><span>Created by Muhammad Atif · Rawalpindi, Pakistan · <span data-year>2026</span></span><span><a href="/privacy/">Privacy</a> · <a href="/faq/">FAQ</a> · <a href="https://github.com/muhammad-atif-161/smb-scanner-lite">Source</a></span></div></div></footer>
-  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="false"></div>
-  <script src="/site.js"></script>
+<body class="">
+
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="nav" data-nav>
+  <div class="wrap nav-inner">
+    <a class="brand" href="/" aria-label="SMB Scanner Lite home">
+      <img src="/logo.svg" width="32" height="32" alt="" />
+      <span class="brand-text">SMB Scanner <span class="brand-lite">Lite</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="/">Overview</a><a href="/capabilities/">Capabilities</a><a href="/sample-report/" aria-current="page">Sample Report</a><a href="/methodology/">Methodology</a><a href="/faq/">FAQ</a><a href="/contact/">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="btn btn-primary btn-sm" href="/demo/"><svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5.5 13h5L10 21l7.5-10h-5L13 3z"/></svg><span>Try the Demo</span></a>
+      <button class="nav-toggle" type="button" data-nav-toggle aria-label="Open menu" aria-expanded="false" aria-controls="nav-panel">
+        <span data-nav-open><svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></span>
+        <span data-nav-close hidden><svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="nav-panel" id="nav-panel" data-nav-panel hidden>
+  <nav class="nav-panel-links" aria-label="Mobile">
+    <a href="/">Overview</a><a href="/capabilities/">Capabilities</a><a href="/sample-report/" aria-current="page">Sample Report</a><a href="/methodology/">Methodology</a><a href="/faq/">FAQ</a><a href="/contact/">Contact</a>
+  </nav>
+  <div class="nav-panel-foot">
+    <a class="btn btn-primary" href="/demo/"><svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5.5 13h5L10 21l7.5-10h-5L13 3z"/></svg><span>Try the Demo</span></a>
+    <a class="btn btn-ghost" href="/request-assessment/">Request an assessment</a>
+  </div>
+</div>
+<main id="main">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><span aria-current="page">Sample Report</span></li></ol></nav>
+
+<div class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">Sample report</p>
+    <h1>A complete report, published in full.</h1>
+    <p class="lede">This is the recorded SMB Scanner Lite assessment of <span class="mono">example.com</span> from 28 October 2026. Nothing is redacted for marketing and nothing is added: the score, findings, evidence, metadata and consent receipt are exactly what the run produced.</p>
+    <div class="hero-actions"><a class="btn btn-primary" href="/demo/"><svg class="btn-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5.5 13h5L10 21l7.5-10h-5L13 3z"/></svg><span>Explore it interactively</span></a><a class="btn btn-ghost" href="/capabilities/"><span>Match findings to controls</span></a></div>
+  </div>
+</div>
+
+<section class="section section--flush">
+  <div class="wrap">
+    <div class="recorded-banner reveal"><span class="dot"></span><span><b>Recorded</b> &mdash; stored output from a real run on 28 October 2026. Not a live scan.</span><span>Report SMB-SANDBOX-20261028-A91144E4 · consent CONSENT-20261028-A91144E4</span></div>
+
+    <div class="panel mt-3" data-tabs="report">
+      <div class="panel-head">
+        <div>
+          <span class="tag">Public Sandbox Edition (5-Domain Locked)</span>
+          <h2 class="mt-2 h-sm" style="margin:0">example.com &mdash; external posture assessment</h2>
+        </div>
+        <span class="pill pill-warn"><span class="dot dot-warn"></span>Recorded, not live</span>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Report sections"><button class="tab" type="button" role="tab" id="rep-tab-0" aria-controls="rep-panel-0" aria-selected="true" tabindex="0">Executive Summary</button><button class="tab" type="button" role="tab" id="rep-tab-1" aria-controls="rep-panel-1" aria-selected="false" tabindex="-1">Security Findings</button><button class="tab" type="button" role="tab" id="rep-tab-2" aria-controls="rep-panel-2" aria-selected="false" tabindex="-1">Technical Evidence</button><button class="tab" type="button" role="tab" id="rep-tab-3" aria-controls="rep-panel-3" aria-selected="false" tabindex="-1">Recommendations</button><button class="tab" type="button" role="tab" id="rep-tab-4" aria-controls="rep-panel-4" aria-selected="false" tabindex="-1">Assessment Details</button></div>
+
+      <div class="tab-panel" role="tabpanel" id="rep-panel-0" aria-labelledby="rep-tab-0">
+        <div class="score-panel" data-score-card data-score="86">
+          <div class="gauge" data-gauge style="--v:86">
+            <div class="gauge-inner">
+              <span class="gauge-value" data-score-value>86</span>
+              <span class="gauge-label">Posture score</span>
+              <span class="gauge-grade">Grade B &middot; Strong</span>
+            </div>
+          </div>
+          <div style="flex:1 1 260px;min-width:0">
+            <h3 style="margin-top:0">Executive summary</h3>
+            <p class="muted">example.com demonstrates strong DNSSEC, SPF (-all) and DMARC enforcement, with informational web security header gaps typical of a minimal RFC reference site.</p>
+            <div class="bars"><div class="bar"><div class="bar-head"><span>DNS &amp; Domain Hygiene</span><b>95</b></div><div class="bar-track"><span class="bar-fill" style="width:95%"></span></div></div><div class="bar"><div class="bar-head"><span>E-mail Authentication</span><b>92</b></div><div class="bar-track"><span class="bar-fill" style="width:92%"></span></div></div><div class="bar"><div class="bar-head"><span>Transport Security (TLS)</span><b>90</b></div><div class="bar-track"><span class="bar-fill" style="width:90%"></span></div></div><div class="bar"><div class="bar-head"><span>Web Security Headers</span><b>68</b></div><div class="bar-track"><span class="bar-fill bar-fill--warn" style="width:68%"></span></div></div></div>
+          </div>
+        </div>
+        <div class="grid g2 mt-3">
+          <div class="card">
+            <h3>What this result means</h3>
+            <p>Eight controls completed and none returned an inconclusive answer, so the score covers every check that ran. DNS, email authentication and transport are strong. The two warnings are informational browser-header gaps typical of a minimal reference site.</p>
+          </div>
+          <div class="card">
+            <h3>What it does not mean</h3>
+            <p>A grade B is not a statement that the domain is secure. It means the controls that were measured met their expectations, subject to the limitations of external observation. No application, identity system or internal network was examined.</p>
+          </div>
+        </div>
+        <div class="notice notice--accent mt-3"><svg class="notice-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5"/><circle cx="12" cy="7.8" r="0.9" fill="currentColor" stroke="none"/></svg><div class="notice-body"><strong>Scope</strong><p>External and read-only. The assessment queried public DNS records, completed TLS handshakes, read HTTP response headers, and made no authentication attempt of any kind.</p></div></div>
+      </div>
+
+      <div class="tab-panel" role="tabpanel" id="rep-panel-1" aria-labelledby="rep-tab-1" hidden>
+        <p class="small muted">Eight findings, ordered as recorded. Each carries a status, the control it maps to and the observation behind it.</p>
+        <div class="findings">
+<article class="finding">
+  <div class="finding-head">
+    <span class="dot dot-pass"></span>
+    <div class="finding-body">
+      <div class="finding-title">
+        <h4>DNS A/AAAA Resolution</h4>
+        <span class="status-badge status-pass">Pass</span>
+        <span class="component-tag mono">C01 &middot; A/AAAA resolution</span>
+      </div>
+      <p>The reserved domain resolves to public anycast addresses over IPv4 and IPv6.</p>
+      <div class="evidence"><span class="val">Resolved example.com -&gt; 104.20.23.154, 172.66.147.243, 2606:4700:10::ac42:93f3, 2606:4700:10::6814:179a</span><button class="copy" type="button" data-copy="Resolved example.com -&gt; 104.20.23.154, 172.66.147.243, 2606:4700:10::ac42:93f3, 2606:4700:10::6814:179a">Copy</button></div>
+      
+    </div>
+  </div>
+</article>
+<article class="finding">
+  <div class="finding-head">
+    <span class="dot dot-pass"></span>
+    <div class="finding-body">
+      <div class="finding-title">
+        <h4>DNSSEC Validation</h4>
+        <span class="status-badge status-pass">Pass</span>
+        <span class="component-tag mono">C02 &middot; DNSSEC validation</span>
+      </div>
+      <p>The zone is signed and the chain of trust validates against the parent.</p>
+      <div class="evidence"><span class="val">Zone signed with validated RRSIG and parent DS delegation.</span><button class="copy" type="button" data-copy="Zone signed with validated RRSIG and parent DS delegation.">Copy</button></div>
+      
+    </div>
+  </div>
+</article>
+<article class="finding">
+  <div class="finding-head">
+    <span class="dot dot-pass"></span>
+    <div class="finding-body">
+      <div class="finding-title">
+        <h4>SPF Hard-Fail Policy</h4>
+        <span class="status-badge status-pass">Pass</span>
+        <span class="component-tag mono">C06 &middot; SPF enforcement</span>
+      </div>
+      <p>SPF is published and set to a strict no-mail policy.</p>
+      <div class="evidence"><span class="val">v=spf1 -all (strict no-mail policy for reserved domain).</span><button class="copy" type="button" data-copy="v=spf1 -all (strict no-mail policy for reserved domain).">Copy</button></div>
+      
+    </div>
+  </div>
+</article>
+<article class="finding">
+  <div class="finding-head">
+    <span class="dot dot-pass"></span>
+    <div class="finding-body">
+      <div class="finding-title">
+        <h4>DMARC Enforcement</h4>
+        <span class="status-badge status-pass">Pass</span>
+        <span class="component-tag mono">C08 &middot; DMARC policy</span>
+      </div>
+      <p>Unauthorised senders are rejected at the receiving mail server.</p>
+      <div class="evidence"><span class="val">v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s</span><button class="copy" type="button" data-copy="v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s">Copy</button></div>
+      
+    </div>
+  </div>
+</article>
+<article class="finding">
+  <div class="finding-head">
+    <span class="dot dot-pass"></span>
+    <div class="finding-body">
+      <div class="finding-title">
+        <h4>RFC 7505 Null MX</h4>
+        <span class="status-badge status-pass">Pass</span>
+        <span class="component-tag mono">C10 &middot; MX routing</span>
+      </div>
+      <p>The domain publishes a null MX, signalling that it does not accept mail.</p>
+      <div class="evidence"><span class="val">MX 0 . published indicating domain does not accept e-mail.</span><button class="copy" type="button" data-copy="MX 0 . published indicating domain does not accept e-mail.">Copy</button></div>
+      
+    </div>
+  </div>
+</article>
+<article class="finding">
+  <div class="finding-head">
+    <span class="dot dot-pass"></span>
+    <div class="finding-body">
+      <div class="finding-title">
+        <h4>TLS 1.2/1.3 &amp; Certificate</h4>
+        <span class="status-badge status-pass">Pass</span>
+        <span class="component-tag mono">C12 &middot; Certificate</span>
+      </div>
+      <p>TLS 1.3 is offered with a certificate that covers the domain.</p>
+      <div class="evidence"><span class="val">Valid X.509 certificate covering example.com over TLS 1.3.</span><button class="copy" type="button" data-copy="Valid X.509 certificate covering example.com over TLS 1.3.">Copy</button></div>
+      
+    </div>
+  </div>
+</article>
+<article class="finding">
+  <div class="finding-head">
+    <span class="dot dot-warn"></span>
+    <div class="finding-body">
+      <div class="finding-title">
+        <h4>HTTP Strict-Transport-Security</h4>
+        <span class="status-badge status-warning">Warning</span>
+        <span class="component-tag mono">C15 &middot; HSTS</span>
+      </div>
+      <p>HSTS is not enforced on the reference landing page.</p>
+      <div class="evidence"><span class="val">Strict-Transport-Security header not enforced on reference landing page.</span><button class="copy" type="button" data-copy="Strict-Transport-Security header not enforced on reference landing page.">Copy</button></div>
+      <div class="remediation"><b>Recommended</b>Add Strict-Transport-Security: max-age=31536000; includeSubDomains.</div>
+    </div>
+  </div>
+</article>
+<article class="finding">
+  <div class="finding-head">
+    <span class="dot dot-warn"></span>
+    <div class="finding-body">
+      <div class="finding-title">
+        <h4>Content-Security-Policy</h4>
+        <span class="status-badge status-warning">Warning</span>
+        <span class="component-tag mono">C16 &middot; CSP</span>
+      </div>
+      <p>A content security policy is not set on the static reference response.</p>
+      <div class="evidence"><span class="val">Content-Security-Policy header absent on static reference response.</span><button class="copy" type="button" data-copy="Content-Security-Policy header absent on static reference response.">Copy</button></div>
+      <div class="remediation"><b>Recommended</b>Publish a restrictive Content-Security-Policy (default-src &#x27;self&#x27;; object-src &#x27;none&#x27;).</div>
+    </div>
+  </div>
+</article></div>
+      </div>
+
+      <div class="tab-panel" role="tabpanel" id="rep-panel-2" aria-labelledby="rep-tab-2" hidden>
+        <p class="small muted">The literal observations recorded during the run. Copy any line and re-run the equivalent query from outside your own network; if the answer differs, the finding is stale or specific to the assessment vantage point.</p>
+        <div class="mt-2"><div class="evidence" style="margin-bottom:.5rem"><span class="val">Resolved example.com -&gt; 104.20.23.154, 172.66.147.243, 2606:4700:10::ac42:93f3, 2606:4700:10::6814:179a</span><button class="copy" type="button" data-copy="Resolved example.com -&gt; 104.20.23.154, 172.66.147.243, 2606:4700:10::ac42:93f3, 2606:4700:10::6814:179a">Copy</button></div><div class="evidence" style="margin-bottom:.5rem"><span class="val">Zone signed with validated RRSIG and parent DS delegation.</span><button class="copy" type="button" data-copy="Zone signed with validated RRSIG and parent DS delegation.">Copy</button></div><div class="evidence" style="margin-bottom:.5rem"><span class="val">v=spf1 -all (strict no-mail policy for reserved domain).</span><button class="copy" type="button" data-copy="v=spf1 -all (strict no-mail policy for reserved domain).">Copy</button></div><div class="evidence" style="margin-bottom:.5rem"><span class="val">v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s</span><button class="copy" type="button" data-copy="v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s">Copy</button></div><div class="evidence" style="margin-bottom:.5rem"><span class="val">MX 0 . published indicating domain does not accept e-mail.</span><button class="copy" type="button" data-copy="MX 0 . published indicating domain does not accept e-mail.">Copy</button></div><div class="evidence" style="margin-bottom:.5rem"><span class="val">Valid X.509 certificate covering example.com over TLS 1.3.</span><button class="copy" type="button" data-copy="Valid X.509 certificate covering example.com over TLS 1.3.">Copy</button></div><div class="evidence" style="margin-bottom:.5rem"><span class="val">Strict-Transport-Security header not enforced on reference landing page.</span><button class="copy" type="button" data-copy="Strict-Transport-Security header not enforced on reference landing page.">Copy</button></div><div class="evidence" style="margin-bottom:.5rem"><span class="val">Content-Security-Policy header absent on static reference response.</span><button class="copy" type="button" data-copy="Content-Security-Policy header absent on static reference response.">Copy</button></div></div>
+        <div class="table-wrap mt-3">
+          <table>
+            <caption>Grade bands applied by the scoring model. A 90&ndash;100, B 80&ndash;89, C 65&ndash;79, D 50&ndash;64, F below 50.</caption>
+            <thead><tr><th scope="col">Grade</th><th scope="col">Score</th><th scope="col">Band</th><th scope="col">Interpretation</th></tr></thead>
+            <tbody><tr><td><b>A</b></td><td class='mono'>90-100</td><td>Strong</td><td>Every control that completed meets its published expectation, or is one minor gap away.</td></tr><tr><td><b>B</b></td><td class='mono'>80-89</td><td>Strong</td><td>Well configured overall. The gaps are informational or low-impact hardening items.</td></tr><tr><td><b>C</b></td><td class='mono'>65-79</td><td>Fair</td><td>Meaningful gaps in at least one category. Worth a planned fix, not an emergency.</td></tr><tr><td><b>D</b></td><td class='mono'>50-64</td><td>Needs work</td><td>Several controls are missing or weak across more than one category.</td></tr><tr><td><b>F</b></td><td class='mono'>0-49</td><td>Urgent</td><td>Core controls are absent. Start with the highest-severity findings and work down.</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="tab-panel" role="tabpanel" id="rep-panel-3" aria-labelledby="rep-tab-3" hidden>
+        <p class="small muted">Recommendations are limited to the findings in this run. They are configuration changes with a published basis, not a remediation project plan.</p>
+        <div class="grid g2 mt-2">
+<div class="card reveal">
+  <div class="row" style="justify-content:space-between">
+    <span class="component-tag mono">C15 &middot; Strict-Transport-Security</span>
+    <span class="status-badge status-warning">Warning</span>
+  </div>
+  <h3 style="font-size:1rem">HTTP Strict-Transport-Security</h3>
+  <p>Add Strict-Transport-Security: max-age=31536000; includeSubDomains.</p>
+  <div class="evidence"><span class="val">Strict-Transport-Security header not enforced on reference landing page.</span></div>
+</div>
+<div class="card reveal">
+  <div class="row" style="justify-content:space-between">
+    <span class="component-tag mono">C16 &middot; Content-Security-Policy</span>
+    <span class="status-badge status-warning">Warning</span>
+  </div>
+  <h3 style="font-size:1rem">Content-Security-Policy</h3>
+  <p>Publish a restrictive Content-Security-Policy (default-src &#x27;self&#x27;; object-src &#x27;none&#x27;).</p>
+  <div class="evidence"><span class="val">Content-Security-Policy header absent on static reference response.</span></div>
+</div></div>
+        <div class="callout mt-3"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5l8.5 15h-17l8.5-15z"/><path d="M12 10v4"/><circle cx="12" cy="16.6" r="0.9" fill="currentColor" stroke="none"/></svg><div><p><strong>A failed control is not a confirmed vulnerability.</strong> It means a published expectation was not met. Confirm the observation yourself before treating any finding as a defect, and prioritise by the exposure it creates rather than by the colour of a dot.</p></div></div>
+      </div>
+
+      <div class="tab-panel" role="tabpanel" id="rep-panel-4" aria-labelledby="rep-tab-4" hidden>
+        <dl class="meta-list">
+          <div><dt>Report ID</dt><dd class="mono">SMB-SANDBOX-20261028-A91144E4</dd></div>
+          <div><dt>Target</dt><dd>example.com &mdash; IANA RFC 2606 / RFC 6761 reserved standard test domain</dd></div>
+          <div><dt>Assessment timestamp</dt><dd>28 October 2026, 17:25 UTC</dd></div>
+          <div><dt>Scanner version</dt><dd>v5.2.0</dd></div>
+          <div><dt>Edition</dt><dd>Public Sandbox Edition (5-Domain Locked)</dd></div>
+          <div><dt>Controls completed</dt><dd>8 completed &middot; 0 inconclusive</dd></div>
+          <div><dt>Consent receipt</dt><dd class="mono">CONSENT-20261028-A91144E4</dd></div>
+          <div><dt>Policy version</dt><dd class="mono">2026.10-sandbox-v1</dd></div>
+          <div><dt>Receipt SHA-256</dt><dd class="mono" style="overflow-wrap:anywhere">b068e643725c90429199d458b31a0749b08b4af1caae57fe4ea8878f412820a6</dd></div>
+          <div><dt>Source</dt><dd>Recorded sandbox run, stored as static output</dd></div>
+        </dl>
+        <div class="notice mt-3"><svg class="notice-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6l7-3z"/><path d="M9 12.2l2.2 2.2L15.4 10"/></svg><div class="notice-body"><strong>Why a consent receipt is in a report</strong><p>Before any run, the operator accepts the privacy policy and signs a receipt that is hash-chained to the previous one. The receipt is embedded in the report so the authorisation behind the result travels with it. It is stored on the machine that ran the assessment, not on this website.</p></div></div>
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <h2 style="font-size:1.3rem">Download this report</h2>
+      <p class="small muted">The same recorded assessment in four formats. The data is sanitised: it contains no internal hostnames, no operator identity beyond the demo label, and no private infrastructure detail.</p>
+      <div class="download-grid mt-2"><a class="download-card" href="/downloads/smb-scanner-lite-recorded-assessment-example-com.html" download><span class="dl-type">html</span><span class="dl-name">Readable report</span><span class="tiny faint">smb-scanner-lite-recorded-assessment-example-com.html</span></a><a class="download-card" href="/downloads/smb-scanner-lite-recorded-assessment-example-com.json" download><span class="dl-type">json</span><span class="dl-name">Machine readable</span><span class="tiny faint">smb-scanner-lite-recorded-assessment-example-com.json</span></a><a class="download-card" href="/downloads/smb-scanner-lite-recorded-assessment-example-com.csv" download><span class="dl-type">csv</span><span class="dl-name">Spreadsheet ready</span><span class="tiny faint">smb-scanner-lite-recorded-assessment-example-com.csv</span></a><a class="download-card" href="/downloads/smb-scanner-lite-recorded-assessment-example-com.txt" download><span class="dl-type">txt</span><span class="dl-name">Plain text</span><span class="tiny faint">smb-scanner-lite-recorded-assessment-example-com.txt</span></a></div>
+    </div>
+
+    <div class="grid g3 mt-4">
+      <div class="card reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><path d="M7.5 9.5l2.5 2.5-2.5 2.5"/><path d="M12.5 14.5H16"/></svg></div>
+        <h3>Reproduce it locally</h3>
+        <p>Install the public sandbox and run the same reserved domain on your own machine. The documented commands and expected output are on the documentation page.</p>
+        <a class="tlink mt-1" href="/docs/">Installation guide <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17a8.5 8.5 0 1116 0"/><path d="M12 17l4-5"/></svg></div>
+        <h3>Understand the score</h3>
+        <p>Weights, status credit and grade bands are documented. The score is a weighted summary of what completed &mdash; nothing else.</p>
+        <a class="tlink mt-1" href="/methodology/">Scoring methodology <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="9.5" rx="2.5"/><path d="M8 10.5V8a4 4 0 018 0v2.5"/></svg></div>
+        <h3>Check the limits</h3>
+        <p>What an external assessment cannot establish is written down, because a credible tool states the boundary of its own evidence.</p>
+        <a class="tlink mt-1" href="/limitations/">Assessment limitations <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta-band reveal">
+      <div class="cta-band-text">
+        <h2>Want this report for a domain you own?</h2>
+        <p>Request an assessment and the same structure is produced for your infrastructure &mdash; after scope and written authorisation are agreed.</p>
+      </div>
+      <div class="cta-band-actions">
+        <a class="btn btn-primary" href="/request-assessment/"><svg class="btn-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg><span>Request an assessment</span></a>
+        <a class="btn btn-ghost" href="/contact/"><span>Contact the maintainer</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand-col">
+        <a class="foot-brand" href="/">
+          <img src="/logo.svg" width="30" height="30" alt="" />
+          <span>SMB Scanner <span class="brand-lite">Lite</span></span>
+        </a>
+        <p class="foot-desc">An evidence-first external security posture assessment for small and medium businesses. 22 controls, a 0&ndash;100 score and an A&ndash;F grade &mdash; with the observation behind every conclusive finding. The public edition is restricted to five approved test domains.</p>
+        <p class="foot-meta"><span class="mono">v5.2.0</span> &middot; Public Sandbox Edition</p>
+        <a class="foot-mail" href="mailto:contact@smbscannerlite.me"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M4 8.5l8 5.5 8-5.5"/></svg><span>contact@smbscannerlite.me</span></a>
+      </div>
+      <div class="foot-col"><h3>Product</h3><ul><li><a href="/">Overview</a></li><li><a href="/capabilities/">Capabilities</a></li><li><a href="/demo/">Recorded Demo</a></li><li><a href="/sample-report/">Sample Report</a></li><li><a href="/methodology/">Methodology</a></li></ul></div><div class="foot-col"><h3>Resources</h3><ul><li><a href="/docs/">Documentation</a></li><li><a href="/resources/">Knowledge Base</a></li><li><a href="/resources/#guides">Technical Guides</a></li><li><a href="/validation/">Validation Record</a></li><li><a href="https://github.com/muhammad-atif-161/smb-scanner-lite" rel="noopener" target="_blank">GitHub</a></li></ul></div><div class="foot-col"><h3>Legal</h3><ul><li><a href="/privacy/">Privacy Policy</a></li><li><a href="/terms/">Terms of Use</a></li><li><a href="/responsible-use/">Responsible Use</a></li><li><a href="/limitations/">Assessment Limitations</a></li></ul></div><div class="foot-col"><h3>Business</h3><ul><li><a href="/contact/">Contact</a></li><li><a href="/request-assessment/">Request an Assessment</a></li><li><a href="/acquisition/">Project Acquisition</a></li><li><a href="/about/">About the Project</a></li></ul></div>
+    </div>
+    <div class="foot-bottom">
+      <p>&copy; <span data-year>2026</span> Muhammad Atif &middot; SMB Scanner Lite &middot; Built in Rawalpindi, Pakistan.</p>
+      <p class="foot-bottom-links">
+        <a href="/privacy/">Privacy</a>
+        <a href="/terms/">Terms</a>
+        <a href="/responsible-use/">Responsible use</a>
+        <a href="https://github.com/muhammad-atif-161/smb-scanner-lite" rel="noopener" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </div>
+</footer>
+<div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="false"></div>
+<script src="/config.js"></script>
+<script src="/site.js" defer></script>
 </body>
 </html>

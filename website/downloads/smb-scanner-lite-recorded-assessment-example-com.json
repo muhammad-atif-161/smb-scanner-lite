@@ -1,0 +1,112 @@
+{
+  "report_id": "SMB-SANDBOX-20261028-A91144E4",
+  "edition": "Public Sandbox Edition (5-Domain Locked)",
+  "version": "5.2.0",
+  "target": "example.com",
+  "target_description": "IANA RFC 2606 / RFC 6761 reserved standard test domain",
+  "timestamp_utc": "2026-10-28T17:25:30Z",
+  "score": 86,
+  "grade": "B",
+  "summary": "example.com demonstrates strong DNSSEC, SPF (-all) and DMARC enforcement, with informational web security header gaps typical of a minimal RFC reference site.",
+  "categories": {
+    "DNS & Domain Hygiene": 95,
+    "E-mail Authentication": 92,
+    "Transport Security (TLS)": 90,
+    "Web Security Headers": 68
+  },
+  "controls_completed": 8,
+  "controls_inconclusive": 0,
+  "findings": [
+    {
+      "status": "PASS",
+      "control": "dns-resolution",
+      "catalog_control": "catalog:01",
+      "title": "DNS A/AAAA Resolution",
+      "category": "DNS & Domain Hygiene",
+      "severity": "info",
+      "evidence": "Resolved example.com -> 104.20.23.154, 172.66.147.243, 2606:4700:10::ac42:93f3, 2606:4700:10::6814:179a",
+      "remediation": ""
+    },
+    {
+      "status": "PASS",
+      "control": "dnssec-posture",
+      "catalog_control": "catalog:02",
+      "title": "DNSSEC Validation",
+      "category": "DNS & Domain Hygiene",
+      "severity": "high",
+      "evidence": "Zone signed with validated RRSIG and parent DS delegation.",
+      "remediation": ""
+    },
+    {
+      "status": "PASS",
+      "control": "spf-policy",
+      "catalog_control": "catalog:06",
+      "title": "SPF Hard-Fail Policy",
+      "category": "E-mail Authentication",
+      "severity": "high",
+      "evidence": "v=spf1 -all (strict no-mail policy for reserved domain).",
+      "remediation": ""
+    },
+    {
+      "status": "PASS",
+      "control": "dmarc-policy",
+      "catalog_control": "catalog:08",
+      "title": "DMARC Enforcement",
+      "category": "E-mail Authentication",
+      "severity": "high",
+      "evidence": "v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s",
+      "remediation": ""
+    },
+    {
+      "status": "PASS",
+      "control": "null-mx",
+      "catalog_control": "catalog:10",
+      "title": "RFC 7505 Null MX",
+      "category": "E-mail Authentication",
+      "severity": "medium",
+      "evidence": "MX 0 . published indicating domain does not accept e-mail.",
+      "remediation": ""
+    },
+    {
+      "status": "PASS",
+      "control": "tls-posture",
+      "catalog_control": "catalog:12",
+      "title": "TLS 1.2/1.3 & Certificate",
+      "category": "Transport Security (TLS)",
+      "severity": "high",
+      "evidence": "Valid X.509 certificate covering example.com over TLS 1.3.",
+      "remediation": ""
+    },
+    {
+      "status": "WARNING",
+      "control": "hsts-header",
+      "catalog_control": "catalog:15",
+      "title": "HTTP Strict-Transport-Security",
+      "category": "Web Security Headers",
+      "severity": "medium",
+      "evidence": "Strict-Transport-Security header not enforced on reference landing page.",
+      "remediation": "Add Strict-Transport-Security: max-age=31536000; includeSubDomains."
+    },
+    {
+      "status": "WARNING",
+      "control": "csp-header",
+      "catalog_control": "catalog:16",
+      "title": "Content-Security-Policy",
+      "category": "Web Security Headers",
+      "severity": "medium",
+      "evidence": "Content-Security-Policy header absent on static reference response.",
+      "remediation": "Publish a restrictive Content-Security-Policy (default-src 'self'; object-src 'none')."
+    }
+  ],
+  "consent_proof": {
+    "consent_id": "CONSENT-20261028-A91144E4",
+    "timestamp_utc": "2026-10-28T17:25:30Z",
+    "operator": "public-demo",
+    "target": "example.com",
+    "policy_version": "2026.10-sandbox-v1",
+    "statement": "Public sandbox demonstration run against a reserved test domain.",
+    "receipt_sha256": "b068e643725c90429199d458b31a0749b08b4af1caae57fe4ea8878f412820a6"
+  },
+  "source": "recorded",
+  "notice": "Recorded output of a genuine sandbox run. Not a live scan and not a commercial audit."
+}

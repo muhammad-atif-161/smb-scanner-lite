@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Assessment Limitations — What External Security Assessment Cannot Show</title>
+<meta name="description" content="The stated limits of SMB Scanner Lite: external-only scope, no exploitability proof, no compromise detection, vantage-point dependence, inconclusive results, and why a high score is not a guarantee." />
+<link rel="canonical" href="https://smbscannerlite.me/limitations/" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta name="author" content="Muhammad Atif" />
+<meta name="theme-color" content="#080B14" />
+<meta name="generator" content="SMB Scanner Lite static site builder" />
+<meta property="og:site_name" content="SMB Scanner Lite" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Assessment Limitations — What External Security Assessment Cannot Show" />
+<meta property="og:description" content="The stated limits of SMB Scanner Lite: external-only scope, no exploitability proof, no compromise detection, vantage-point dependence, inconclusive results, and why a high score is not a guarantee." />
+<meta property="og:url" content="https://smbscannerlite.me/limitations/" />
+<meta property="og:image" content="https://smbscannerlite.me/og-image.png" />
+<meta property="og:image:alt" content="SMB Scanner Lite — a dark navy assessment report showing a posture score of 86 out of 100, grade B, with evidence-backed findings." />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Assessment Limitations — What External Security Assessment Cannot Show" />
+<meta name="twitter:description" content="The stated limits of SMB Scanner Lite: external-only scope, no exploitability proof, no compromise detection, vantage-point dependence, inconclusive results, and why a high score is not a guarantee." />
+<meta name="twitter:image" content="https://smbscannerlite.me/og-image.png" />
+<link rel="icon" href="/logo.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/logo.svg" />
+<link rel="alternate" type="application/json" href="/data/recorded-assessment.json" title="Recorded assessment data (JSON)" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/styles.css" />
+
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://smbscannerlite.me/"},{"@type":"ListItem","position":2,"name":"Assessment Limitations"}]}]}</script>
+<noscript><style>.reveal{opacity:1;transform:none}</style></noscript>
+</head>
+<body class="">
+
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="nav" data-nav>
+  <div class="wrap nav-inner">
+    <a class="brand" href="/" aria-label="SMB Scanner Lite home">
+      <img src="/logo.svg" width="32" height="32" alt="" />
+      <span class="brand-text">SMB Scanner <span class="brand-lite">Lite</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="/">Overview</a><a href="/capabilities/">Capabilities</a><a href="/sample-report/">Sample Report</a><a href="/methodology/">Methodology</a><a href="/faq/">FAQ</a><a href="/contact/">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="btn btn-primary btn-sm" href="/demo/"><svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5.5 13h5L10 21l7.5-10h-5L13 3z"/></svg><span>Try the Demo</span></a>
+      <button class="nav-toggle" type="button" data-nav-toggle aria-label="Open menu" aria-expanded="false" aria-controls="nav-panel">
+        <span data-nav-open><svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></span>
+        <span data-nav-close hidden><svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="nav-panel" id="nav-panel" data-nav-panel hidden>
+  <nav class="nav-panel-links" aria-label="Mobile">
+    <a href="/">Overview</a><a href="/capabilities/">Capabilities</a><a href="/sample-report/">Sample Report</a><a href="/methodology/">Methodology</a><a href="/faq/">FAQ</a><a href="/contact/">Contact</a>
+  </nav>
+  <div class="nav-panel-foot">
+    <a class="btn btn-primary" href="/demo/"><svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5.5 13h5L10 21l7.5-10h-5L13 3z"/></svg><span>Try the Demo</span></a>
+    <a class="btn btn-ghost" href="/request-assessment/">Request an assessment</a>
+  </div>
+</div>
+<main id="main">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><span aria-current="page">Assessment Limitations</span></li></ol></nav>
+
+<div class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">Limitations</p>
+    <h1>What an external assessment cannot tell you.</h1>
+    <p class="lede">This page exists because a security product that only describes its strengths is not giving you a usable picture. These are the limits of the method, the tool and the evidence it produces &mdash; stated plainly, and reflected in how findings are worded.</p>
+    <div class="hero-actions"><a class="btn btn-primary" href="/methodology/"><svg class="btn-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg><span>Read the methodology</span></a><a class="btn btn-ghost" href="/sample-report/"><span>See how findings are worded</span></a></div>
+  </div>
+</div>
+
+<section class="section section--flush">
+  <div class="wrap">
+    <div class="prose">
+      <h2 id="scope">1. Scope is external and unauthenticated</h2>
+      <p>SMB Scanner Lite answers questions from the public internet, without credentials. It cannot see anything behind a login: applications, customer portals, admin interfaces that require a session, internal APIs, databases on a private network, directory services, endpoints or backups.</p>
+      <p>A clean external result therefore means <em>the measured external controls looked correct at that moment</em>. It says nothing about what is happening behind the login screen.</p>
+
+      <h2 id="exploitability">2. A failed control is not a proven vulnerability</h2>
+      <p>When a control fails, it means the published expectation was not met &mdash; a DMARC policy set to <code>p=none</code>, an absent Content-Security-Policy, an SMB negotiate answered on port 445. None of these is an exploit. Proving exploitability requires attempting exploitation, which this tool never does, and which requires separate written authorisation.</p>
+
+      <h2 id="compromise">3. It cannot detect compromise</h2>
+      <p>External observation cannot establish whether a system has been breached, whether an account is compromised, or whether data has been exfiltrated. It can highlight exposure that often precedes those outcomes. That is a different claim, and the report keeps them separate.</p>
+
+      <h2 id="vantage">4. Results depend on the vantage point</h2>
+      <p>A DNS record can resolve differently for different resolvers. A firewall can answer one source address and drop another. A CDN can present different security headers on different routes. A finding is an observation made from one place at one time, which is why every finding quotes the observation rather than only the verdict.</p>
+
+      <h2 id="time">5. A finding describes a moment</h2>
+      <p>Configuration changes. A certificate valid at assessment time may expire next week; a header added yesterday may not appear in an older report. Always check the assessment timestamp before acting on a result, and re-assess after changes.</p>
+
+      <h2 id="inconclusive">6. Silence is not evidence</h2>
+      <p>Some controls will return no conclusive answer: rate limiting, geo-blocking, filtering or a slow endpoint. Those results are marked inconclusive and excluded from the score. They are not converted into failures, and they are not counted as passes.</p>
+
+      <h2 id="coverage">7. The public edition runs a subset</h2>
+      <p>The published sandbox executes eight controls across DNS, email authentication, transport and browser headers. The remaining controls belong to the private engine and are not executed publicly. A sandbox score is therefore not directly comparable to a full 22-control assessment, and the site says so wherever a sandbox score appears.</p>
+
+      <h2 id="not-audit">8. It is not an audit, a certification or a guarantee</h2>
+      <p>The output is not an ISO 27001 assessment, not a SOC 2 opinion, not a penetration-test report and not a compliance certificate. It does not certify that a business is secure, and no result from this tool should be presented as such to a customer, regulator or insurer.</p>
+
+      <h2 id="not-commercial">9. A sandbox report is a demonstration</h2>
+      <p>Reports produced by the public sandbox against its five reserved test domains are educational output. They are not commercial assessments of those domains, and they must not be represented as such.</p>
+
+      <div class="callout">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5"/><circle cx="12" cy="7.8" r="0.9" fill="currentColor" stroke="none"/></svg>
+        <div><p><strong>How to use a result responsibly.</strong> Treat every finding as a reason to look, not a verdict. Verify the observation from your own network, prioritise by the exposure it creates, and record what you changed. The report is a starting point for a conversation with someone who can act on it.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta-band reveal">
+      <div class="cta-band-text">
+        <h2>Want the full 22-control assessment instead of the sandbox?</h2>
+        <p>A private assessment covers your domain, with scope and written authorisation agreed first.</p>
+      </div>
+      <div class="cta-band-actions">
+        <a class="btn btn-primary" href="/request-assessment/"><svg class="btn-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg><span>Request an assessment</span></a>
+        <a class="btn btn-ghost" href="/contact/"><span>Ask a question</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand-col">
+        <a class="foot-brand" href="/">
+          <img src="/logo.svg" width="30" height="30" alt="" />
+          <span>SMB Scanner <span class="brand-lite">Lite</span></span>
+        </a>
+        <p class="foot-desc">An evidence-first external security posture assessment for small and medium businesses. 22 controls, a 0&ndash;100 score and an A&ndash;F grade &mdash; with the observation behind every conclusive finding. The public edition is restricted to five approved test domains.</p>
+        <p class="foot-meta"><span class="mono">v5.2.0</span> &middot; Public Sandbox Edition</p>
+        <a class="foot-mail" href="mailto:contact@smbscannerlite.me"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M4 8.5l8 5.5 8-5.5"/></svg><span>contact@smbscannerlite.me</span></a>
+      </div>
+      <div class="foot-col"><h3>Product</h3><ul><li><a href="/">Overview</a></li><li><a href="/capabilities/">Capabilities</a></li><li><a href="/demo/">Recorded Demo</a></li><li><a href="/sample-report/">Sample Report</a></li><li><a href="/methodology/">Methodology</a></li></ul></div><div class="foot-col"><h3>Resources</h3><ul><li><a href="/docs/">Documentation</a></li><li><a href="/resources/">Knowledge Base</a></li><li><a href="/resources/#guides">Technical Guides</a></li><li><a href="/validation/">Validation Record</a></li><li><a href="https://github.com/muhammad-atif-161/smb-scanner-lite" rel="noopener" target="_blank">GitHub</a></li></ul></div><div class="foot-col"><h3>Legal</h3><ul><li><a href="/privacy/">Privacy Policy</a></li><li><a href="/terms/">Terms of Use</a></li><li><a href="/responsible-use/">Responsible Use</a></li><li><a href="/limitations/">Assessment Limitations</a></li></ul></div><div class="foot-col"><h3>Business</h3><ul><li><a href="/contact/">Contact</a></li><li><a href="/request-assessment/">Request an Assessment</a></li><li><a href="/acquisition/">Project Acquisition</a></li><li><a href="/about/">About the Project</a></li></ul></div>
+    </div>
+    <div class="foot-bottom">
+      <p>&copy; <span data-year>2026</span> Muhammad Atif &middot; SMB Scanner Lite &middot; Built in Rawalpindi, Pakistan.</p>
+      <p class="foot-bottom-links">
+        <a href="/privacy/">Privacy</a>
+        <a href="/terms/">Terms</a>
+        <a href="/responsible-use/">Responsible use</a>
+        <a href="https://github.com/muhammad-atif-161/smb-scanner-lite" rel="noopener" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </div>
+</footer>
+<div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="false"></div>
+<script src="/config.js"></script>
+<script src="/site.js" defer></script>
+</body>
+</html>

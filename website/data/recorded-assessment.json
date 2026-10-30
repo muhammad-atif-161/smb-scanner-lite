@@ -1,0 +1,757 @@
+{
+  "product": "SMB Scanner Lite",
+  "version": "5.2.0",
+  "edition": "Public Sandbox Edition",
+  "policy_version": "2026.10-sandbox-v1",
+  "generated": "2026-10-30",
+  "default": "example.com",
+  "allowed_domains": [
+    "example.com",
+    "example.org",
+    "example.net",
+    "scanme.nmap.org",
+    "badssl.com"
+  ],
+  "notice": "Static recorded assessment output. Not a live scan. Values are taken from a genuine sandbox run on 28 October 2026 for example.com; profiles for the other four approved domains are reference profiles shipped with runtime v5.2.0.",
+  "controls": [
+    {
+      "num": 1,
+      "name": "Address resolution and record presence",
+      "short": "A/AAAA resolution",
+      "cat": "dns",
+      "category_name": "DNS & domain integrity",
+      "weight": 4,
+      "summary": "A/AAAA resolution",
+      "evaluates": "Whether the apex name publishes resolvable A and AAAA records, whether the answers are consistent across resolvers, and whether the name is reachable at all.",
+      "why": "Everything else in an external assessment depends on this. A name that does not resolve is either a misconfiguration or an outage - both are visible to customers before they are visible internally.",
+      "example": "Resolved example.com -> 104.20.23.154, 172.66.147.243, 2606:4700:10::ac42:93f3, 2606:4700:10::6814:179a",
+      "recorded": true
+    },
+    {
+      "num": 2,
+      "name": "DNSSEC chain validation",
+      "short": "DNSSEC validation",
+      "cat": "dns",
+      "category_name": "DNS & domain integrity",
+      "weight": 4,
+      "summary": "DNSSEC validation",
+      "evaluates": "Whether the zone is signed, whether a DS record exists at the parent, and whether the chain validates when queried through a validating resolver.",
+      "why": "Without DNSSEC, a forged DNS answer is indistinguishable from a real one for most clients. It does not encrypt traffic; it makes tampering detectable.",
+      "example": "Zone signed with validated RRSIG and parent DS delegation.",
+      "recorded": true
+    },
+    {
+      "num": 3,
+      "name": "CAA authorisation",
+      "short": "CAA policy",
+      "cat": "dns",
+      "category_name": "DNS & domain integrity",
+      "weight": 3,
+      "summary": "CAA policy",
+      "evaluates": "Whether the domain publishes CAA records, which certificate authorities they name, and whether the policy includes a reporting address.",
+      "why": "CAA restricts which CAs may issue for your name. It reduces - but does not eliminate - the chance of an unauthorised certificate being issued by a compliant CA.",
+      "example": "example.org. 300 IN CAA 0 issue \"letsencrypt.org\"",
+      "recorded": false
+    },
+    {
+      "num": 4,
+      "name": "Zone transfer exposure",
+      "short": "AXFR/IXFR",
+      "cat": "dns",
+      "category_name": "DNS & domain integrity",
+      "weight": 3,
+      "summary": "AXFR/IXFR",
+      "evaluates": "Whether each authoritative nameserver answers an AXFR or IXFR request from an unauthorised client.",
+      "why": "A zone that transfers to anyone publishes the complete map of internal hostnames and services. Modern DNS servers refuse this by default; older or misconfigured ones do not.",
+      "example": "AXFR example.org @ns1.example.org -> REFUSED (expected); IXFR -> NOTIMP",
+      "recorded": false
+    },
+    {
+      "num": 5,
+      "name": "Name record hygiene",
+      "short": "Stale pointers",
+      "cat": "dns",
+      "category_name": "DNS & domain integrity",
+      "weight": 3,
+      "summary": "Stale pointers",
+      "evaluates": "Dangling CNAMEs, records pointing at decommissioned hosting, orphaned service records and unexpected wildcard answers.",
+      "why": "A record that points at a name nobody controls any more is the classic subdomain-takeover path. It is quiet, cheap to fix and easy to miss from inside.",
+      "example": "www.example.org. CNAME shop.example-host.io. -> NXDOMAIN (hosting account closed)",
+      "recorded": false
+    },
+    {
+      "num": 6,
+      "name": "SPF policy strength",
+      "short": "SPF enforcement",
+      "cat": "email",
+      "category_name": "Email authentication",
+      "weight": 5,
+      "summary": "SPF enforcement",
+      "evaluates": "Whether an SPF record exists at the apex, which mechanisms it authorises, and whether the policy ends in a hard fail (-all), a soft fail (~all), or no enforcement at all.",
+      "why": "SPF tells receiving servers which hosts may send your mail. A soft policy tells them to be suspicious; a hard fail tells them to reject.",
+      "example": "v=spf1 -all (strict no-mail policy for reserved domain).",
+      "recorded": true
+    },
+    {
+      "num": 7,
+      "name": "SPF record validity",
+      "short": "SPF syntax and limits",
+      "cat": "email",
+      "category_name": "Email authentication",
+      "weight": 4,
+      "summary": "SPF syntax and limits",
+      "evaluates": "Multiple SPF records, recursive lookup count against the RFC 7208 limit of 10 DNS-querying mechanisms, void lookups, and syntax errors that cause permerror.",
+      "why": "An SPF record that errors out is worse than a simple strict one: receivers fall back to a permerror result and policy enforcement becomes unpredictable.",
+      "example": "2 TXT records matched v=spf1 -> permerror per RFC 7208 section 4.5",
+      "recorded": false
+    },
+    {
+      "num": 8,
+      "name": "DMARC enforcement",
+      "short": "DMARC policy",
+      "cat": "email",
+      "category_name": "Email authentication",
+      "weight": 5,
+      "summary": "DMARC policy",
+      "evaluates": "The published _dmarc policy (none, quarantine or reject), the subdomain policy, alignment modes (adkim/aspf), and the reporting addresses.",
+      "why": "DMARC is the policy layer: it tells receivers what to do when SPF or DKIM fails. p=none asks for reports; p=reject actually stops spoofed mail.",
+      "example": "v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s",
+      "recorded": true
+    },
+    {
+      "num": 9,
+      "name": "DKIM presence and key strength",
+      "short": "DKIM selectors",
+      "cat": "email",
+      "category_name": "Email authentication",
+      "weight": 4,
+      "summary": "DKIM selectors",
+      "evaluates": "Whether discoverable selectors publish keys, the key type and length, and whether weak or revoked keys are still in use.",
+      "why": "DKIM signs the message itself, so a forged message cannot carry a valid signature. Short or misconfigured keys weaken that guarantee.",
+      "example": "selector1._domainkey -> v=DKIM1; k=rsa; p=... (2048-bit, rsa-sha256)",
+      "recorded": false
+    },
+    {
+      "num": 10,
+      "name": "MX and null-MX posture",
+      "short": "MX routing",
+      "cat": "email",
+      "category_name": "Email authentication",
+      "weight": 3,
+      "summary": "MX routing",
+      "evaluates": "Whether MX records exist, where they point, whether a null MX (RFC 7505) is published for domains that do not accept mail, and whether the routing is internally consistent.",
+      "why": "A domain that does not send mail should say so. A missing or contradictory MX is an invitation for forged mail to be delivered to a fallback host.",
+      "example": "MX 0 . published indicating domain does not accept e-mail.",
+      "recorded": true
+    },
+    {
+      "num": 11,
+      "name": "TLS protocol versions",
+      "short": "TLS 1.2/1.3",
+      "cat": "tls",
+      "category_name": "Transport security",
+      "weight": 4,
+      "summary": "TLS 1.2/1.3",
+      "evaluates": "Which protocol versions the endpoint negotiates, and whether deprecated versions (TLS 1.0/1.1, SSLv3) are still accepted.",
+      "why": "Old protocol versions carry known weaknesses and are deprecated by every major standards body. A modern baseline is TLS 1.2 with TLS 1.3 preferred.",
+      "example": "TLS 1.3 negotiated; TLS 1.0 and TLS 1.1 refused by the endpoint.",
+      "recorded": false
+    },
+    {
+      "num": 12,
+      "name": "Certificate validity and hostname coverage",
+      "short": "Certificate",
+      "cat": "tls",
+      "category_name": "Transport security",
+      "weight": 5,
+      "summary": "Certificate",
+      "evaluates": "Trust chain, expiry, hostname or SAN coverage, and whether the presented certificate is the one a browser will accept without a warning.",
+      "why": "An expired or mismatched certificate trains users to click through warnings - which is exactly the habit phishing relies on.",
+      "example": "Valid X.509 certificate covering example.com over TLS 1.3.",
+      "recorded": true
+    },
+    {
+      "num": 13,
+      "name": "Cipher suites and forward secrecy",
+      "short": "Cipher policy",
+      "cat": "tls",
+      "category_name": "Transport security",
+      "weight": 3,
+      "summary": "Cipher policy",
+      "evaluates": "Whether modern AEAD suites are offered, whether ephemeral key exchange (ECDHE) is available, and whether legacy CBC or export-grade suites remain enabled.",
+      "why": "Forward secrecy means a stolen private key cannot decrypt traffic recorded earlier. Legacy suites are the first thing removed in a hardening pass.",
+      "example": "TLS_AES_256_GCM_SHA384 preferred; ECDHE available; no CBC or RC4 suites offered.",
+      "recorded": false
+    },
+    {
+      "num": 14,
+      "name": "HTTPS redirect and downgrade path",
+      "short": "HTTPS redirect",
+      "cat": "tls",
+      "category_name": "Transport security",
+      "weight": 3,
+      "summary": "HTTPS redirect",
+      "evaluates": "Whether plain HTTP on port 80 redirects to HTTPS, whether the redirect is permanent, and whether any resource is still served unencrypted.",
+      "why": "A site that answers HTTP without redirecting gives an attacker on the path a free opportunity to intercept or rewrite the first request.",
+      "example": "http://example.org -> 301 https://example.org/ (single hop, no body served).",
+      "recorded": false
+    },
+    {
+      "num": 15,
+      "name": "Strict-Transport-Security",
+      "short": "HSTS",
+      "cat": "headers",
+      "category_name": "Browser security headers",
+      "weight": 4,
+      "summary": "HSTS",
+      "evaluates": "Whether HSTS is sent over HTTPS, the max-age it declares, whether it covers subdomains, and whether it is submitted for preloading.",
+      "why": "HSTS tells the browser to refuse plain HTTP for this host in future. It is the only control that protects the very first request of a later visit.",
+      "example": "Strict-Transport-Security header not enforced on reference landing page.",
+      "recorded": true
+    },
+    {
+      "num": 16,
+      "name": "Content-Security-Policy",
+      "short": "CSP",
+      "cat": "headers",
+      "category_name": "Browser security headers",
+      "weight": 4,
+      "summary": "CSP",
+      "evaluates": "Whether a CSP is present, whether it restricts script sources, and whether it uses unsafe-inline, unsafe-eval or a wildcard that would defeat the purpose.",
+      "why": "CSP is the main browser-side mitigation against cross-site scripting. It does not fix an injection bug, but it limits what the injected script can do.",
+      "example": "Content-Security-Policy header absent on static reference response.",
+      "recorded": true
+    },
+    {
+      "num": 17,
+      "name": "Clickjacking and MIME-sniffing protection",
+      "short": "Framing & sniffing",
+      "cat": "headers",
+      "category_name": "Browser security headers",
+      "weight": 3,
+      "summary": "Framing & sniffing",
+      "evaluates": "X-Frame-Options or CSP frame-ancestors, and X-Content-Type-Options: nosniff.",
+      "why": "Framing protection stops a page being embedded invisibly behind a click target. nosniff stops a browser guessing a content type and executing something it should not.",
+      "example": "X-Frame-Options: DENY; X-Content-Type-Options: nosniff",
+      "recorded": false
+    },
+    {
+      "num": 18,
+      "name": "Referrer, permissions and version disclosure",
+      "short": "Disclosure",
+      "cat": "headers",
+      "category_name": "Browser security headers",
+      "weight": 2,
+      "summary": "Disclosure",
+      "evaluates": "Referrer-Policy, Permissions-Policy, and whether Server or X-Powered-By headers advertise exact software versions.",
+      "why": "Version banners save an attacker reconnaissance. Referrer and permissions policies limit what a page leaks or is allowed to use on the visitor's device.",
+      "example": "Server: nginx/1.18.0 and X-Powered-By: PHP/7.4.3 disclosed in response headers.",
+      "recorded": false
+    },
+    {
+      "num": 19,
+      "name": "High-risk port reachability",
+      "short": "Port reachability",
+      "cat": "exposure",
+      "category_name": "Network & service exposure",
+      "weight": 5,
+      "summary": "Port reachability",
+      "evaluates": "Whether a defined set of high-risk services (FTP 21, Telnet 23, SMTP 25, direct database ports 3306/5432/6379/27017) accepts a TCP connection from the public internet.",
+      "why": "These services were never designed to face the internet. Reachability alone is a finding; the assessment never attempts authentication.",
+      "example": "TCP 3306 connection accepted from assessment vantage point (MySQL banner suppressed).",
+      "recorded": false
+    },
+    {
+      "num": 20,
+      "name": "SMB negotiate exposure (445)",
+      "short": "SMB 445",
+      "cat": "exposure",
+      "category_name": "Network & service exposure",
+      "weight": 5,
+      "summary": "SMB 445",
+      "evaluates": "Whether port 445 completes a single unauthenticated SMB2 negotiate, and which dialect and signing requirements are advertised in the response.",
+      "why": "SMB exposed to the internet is the ingress path behind several ransomware campaigns. The check reads the negotiate response only: no session, no shares, no credentials.",
+      "example": "SMB2 negotiate answered on 445; dialect 3.1.1; signing required -> service exposed.",
+      "recorded": false
+    },
+    {
+      "num": 21,
+      "name": "Remote Desktop reachability (3389)",
+      "short": "RDP 3389",
+      "cat": "exposure",
+      "category_name": "Network & service exposure",
+      "weight": 5,
+      "summary": "RDP 3389",
+      "evaluates": "Whether TCP 3389 accepts a connection and completes a protocol handshake, and whether the negotiated security layer is current.",
+      "why": "Internet-facing RDP is routinely brute-forced. Even with strong passwords, exposure widens the attack surface to anyone with a scanner.",
+      "example": "RDP negotiation answered on 3389 (NLA required) from the public internet.",
+      "recorded": false
+    },
+    {
+      "num": 22,
+      "name": "Database and admin interface exposure",
+      "short": "Admin interfaces",
+      "cat": "exposure",
+      "category_name": "Network & service exposure",
+      "weight": 5,
+      "summary": "Admin interfaces",
+      "evaluates": "Whether common management interfaces (phpMyAdmin, admin panels, Elasticsearch, Docker API) answer on standard ports without a network-level restriction.",
+      "why": "An admin panel reachable from the internet is one credential away from full control. Network restriction is usually the cheapest available fix.",
+      "example": "HTTP 200 with admin login form at :9200/_plugin/... on a public address.",
+      "recorded": false
+    }
+  ],
+  "domains": {
+    "example.com": {
+      "target": "example.com",
+      "description": "IANA RFC 2606 / RFC 6761 reserved standard test domain",
+      "source": "recorded",
+      "source_label": "Recorded capture",
+      "timestamp": "2026-10-28T17:25:30Z",
+      "timestamp_display": "28 October 2026, 17:25 UTC",
+      "report_id": "SMB-SANDBOX-20261028-A91144E4",
+      "consent_id": "CONSENT-20261028-A91144E4",
+      "receipt_sha256": "b068e643725c90429199d458b31a0749b08b4af1caae57fe4ea8878f412820a6",
+      "policy_version": "2026.10-sandbox-v1",
+      "version": "5.2.0",
+      "edition": "Public Sandbox Edition (5-Domain Locked)",
+      "duration_seconds": "not recorded",
+      "score": 86,
+      "grade": "B",
+      "grade_label": "Strong",
+      "summary": "example.com demonstrates strong DNSSEC, SPF (-all) and DMARC enforcement, with informational web security header gaps typical of a minimal RFC reference site.",
+      "categories": {
+        "DNS & Domain Hygiene": 95,
+        "E-mail Authentication": 92,
+        "Transport Security (TLS)": 90,
+        "Web Security Headers": 68
+      },
+      "counts": {
+        "completed": 8,
+        "inconclusive": 0
+      },
+      "findings": [
+        {
+          "status": "pass",
+          "control": 1,
+          "control_id": "dns-resolution",
+          "title": "DNS A/AAAA Resolution",
+          "category": "DNS & Domain Hygiene",
+          "severity": "info",
+          "evidence": "Resolved example.com -> 104.20.23.154, 172.66.147.243, 2606:4700:10::ac42:93f3, 2606:4700:10::6814:179a",
+          "text": "The reserved domain resolves to public anycast addresses over IPv4 and IPv6."
+        },
+        {
+          "status": "pass",
+          "control": 2,
+          "control_id": "dnssec-posture",
+          "title": "DNSSEC Validation",
+          "category": "DNS & Domain Hygiene",
+          "severity": "high",
+          "evidence": "Zone signed with validated RRSIG and parent DS delegation.",
+          "text": "The zone is signed and the chain of trust validates against the parent."
+        },
+        {
+          "status": "pass",
+          "control": 6,
+          "control_id": "spf-policy",
+          "title": "SPF Hard-Fail Policy",
+          "category": "E-mail Authentication",
+          "severity": "high",
+          "evidence": "v=spf1 -all (strict no-mail policy for reserved domain).",
+          "text": "SPF is published and set to a strict no-mail policy."
+        },
+        {
+          "status": "pass",
+          "control": 8,
+          "control_id": "dmarc-policy",
+          "title": "DMARC Enforcement",
+          "category": "E-mail Authentication",
+          "severity": "high",
+          "evidence": "v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s",
+          "text": "Unauthorised senders are rejected at the receiving mail server."
+        },
+        {
+          "status": "pass",
+          "control": 10,
+          "control_id": "null-mx",
+          "title": "RFC 7505 Null MX",
+          "category": "E-mail Authentication",
+          "severity": "medium",
+          "evidence": "MX 0 . published indicating domain does not accept e-mail.",
+          "text": "The domain publishes a null MX, signalling that it does not accept mail."
+        },
+        {
+          "status": "pass",
+          "control": 12,
+          "control_id": "tls-posture",
+          "title": "TLS 1.2/1.3 & Certificate",
+          "category": "Transport Security (TLS)",
+          "severity": "high",
+          "evidence": "Valid X.509 certificate covering example.com over TLS 1.3.",
+          "text": "TLS 1.3 is offered with a certificate that covers the domain."
+        },
+        {
+          "status": "warning",
+          "control": 15,
+          "control_id": "hsts-header",
+          "title": "HTTP Strict-Transport-Security",
+          "category": "Web Security Headers",
+          "severity": "medium",
+          "evidence": "Strict-Transport-Security header not enforced on reference landing page.",
+          "text": "HSTS is not enforced on the reference landing page.",
+          "remediation": "Add Strict-Transport-Security: max-age=31536000; includeSubDomains."
+        },
+        {
+          "status": "warning",
+          "control": 16,
+          "control_id": "csp-header",
+          "title": "Content-Security-Policy",
+          "category": "Web Security Headers",
+          "severity": "medium",
+          "evidence": "Content-Security-Policy header absent on static reference response.",
+          "text": "A content security policy is not set on the static reference response.",
+          "remediation": "Publish a restrictive Content-Security-Policy (default-src 'self'; object-src 'none')."
+        }
+      ]
+    },
+    "example.org": {
+      "target": "example.org",
+      "description": "IANA RFC 2606 / RFC 6761 reserved organization test domain",
+      "source": "reference",
+      "source_label": "Reference profile",
+      "timestamp": null,
+      "timestamp_display": "No dated capture — reference profile shipped in v5.2.0",
+      "report_id": null,
+      "consent_id": null,
+      "receipt_sha256": null,
+      "policy_version": "2026.10-sandbox-v1",
+      "version": "5.2.0",
+      "edition": "Public Sandbox Edition (5-Domain Locked)",
+      "score": 86,
+      "grade": "B",
+      "grade_label": "Strong",
+      "summary": "example.org maintains validated DNSSEC and strict null-mail authentication (v=spf1 -all, DMARC p=reject, null MX), with standard web header hardening recommendations.",
+      "categories": {
+        "DNS & Domain Hygiene": 95,
+        "E-mail Authentication": 92,
+        "Transport Security (TLS)": 90,
+        "Web Security Headers": 68
+      },
+      "counts": {
+        "completed": 7,
+        "inconclusive": 0
+      },
+      "findings": [
+        {
+          "status": "pass",
+          "control": 1,
+          "control_id": "dns-resolution",
+          "title": "DNS A/AAAA Resolution",
+          "category": "DNS & Domain Hygiene",
+          "severity": "info",
+          "evidence": "Resolved authoritative IANA sandbox addresses for example.org.",
+          "text": "The reserved domain resolves through its authoritative nameservers."
+        },
+        {
+          "status": "pass",
+          "control": 2,
+          "control_id": "dnssec-posture",
+          "title": "DNSSEC Validation",
+          "category": "DNS & Domain Hygiene",
+          "severity": "high",
+          "evidence": "Zone signed with validated RRSIG and parent DS delegation.",
+          "text": "The zone is signed and the chain validates."
+        },
+        {
+          "status": "pass",
+          "control": 6,
+          "control_id": "spf-policy",
+          "title": "SPF Hard-Fail Policy",
+          "category": "E-mail Authentication",
+          "severity": "high",
+          "evidence": "v=spf1 -all published at zone apex.",
+          "text": "SPF is published with a hard fail."
+        },
+        {
+          "status": "pass",
+          "control": 8,
+          "control_id": "dmarc-policy",
+          "title": "DMARC Enforcement",
+          "category": "E-mail Authentication",
+          "severity": "high",
+          "evidence": "v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s",
+          "text": "Mail that fails authentication is rejected."
+        },
+        {
+          "status": "pass",
+          "control": 12,
+          "control_id": "tls-posture",
+          "title": "TLS 1.2/1.3 & Certificate",
+          "category": "Transport Security (TLS)",
+          "severity": "high",
+          "evidence": "Valid X.509 certificate covering example.org.",
+          "text": "A valid certificate covers the domain."
+        },
+        {
+          "status": "warning",
+          "control": 15,
+          "control_id": "hsts-header",
+          "title": "HTTP Strict-Transport-Security",
+          "category": "Web Security Headers",
+          "severity": "medium",
+          "evidence": "Strict-Transport-Security header not present.",
+          "text": "HSTS is not sent.",
+          "remediation": "Enable HSTS with max-age >= 31536000."
+        },
+        {
+          "status": "warning",
+          "control": 16,
+          "control_id": "csp-header",
+          "title": "Content-Security-Policy",
+          "category": "Web Security Headers",
+          "severity": "medium",
+          "evidence": "Content-Security-Policy header absent.",
+          "text": "No content security policy is published.",
+          "remediation": "Configure an enforcing Content-Security-Policy."
+        }
+      ]
+    },
+    "example.net": {
+      "target": "example.net",
+      "description": "IANA RFC 2606 / RFC 6761 reserved network test domain",
+      "source": "reference",
+      "source_label": "Reference profile",
+      "timestamp": null,
+      "timestamp_display": "No dated capture — reference profile shipped in v5.2.0",
+      "report_id": null,
+      "consent_id": null,
+      "receipt_sha256": null,
+      "policy_version": "2026.10-sandbox-v1",
+      "version": "5.2.0",
+      "edition": "Public Sandbox Edition (5-Domain Locked)",
+      "score": 86,
+      "grade": "B",
+      "grade_label": "Strong",
+      "summary": "example.net exhibits strong DNSSEC and anti-spoofing email controls (SPF -all, DMARC p=reject), with optional HTTP security header improvements.",
+      "categories": {
+        "DNS & Domain Hygiene": 95,
+        "E-mail Authentication": 92,
+        "Transport Security (TLS)": 90,
+        "Web Security Headers": 68
+      },
+      "counts": {
+        "completed": 6,
+        "inconclusive": 0
+      },
+      "findings": [
+        {
+          "status": "pass",
+          "control": 1,
+          "control_id": "dns-resolution",
+          "title": "DNS A/AAAA Resolution",
+          "category": "DNS & Domain Hygiene",
+          "severity": "info",
+          "evidence": "Resolved authoritative IANA sandbox addresses for example.net.",
+          "text": "The reserved domain resolves."
+        },
+        {
+          "status": "pass",
+          "control": 2,
+          "control_id": "dnssec-posture",
+          "title": "DNSSEC Validation",
+          "category": "DNS & Domain Hygiene",
+          "severity": "high",
+          "evidence": "Validated DNSSEC chain of trust.",
+          "text": "The zone validates."
+        },
+        {
+          "status": "pass",
+          "control": 6,
+          "control_id": "spf-policy",
+          "title": "SPF Hard-Fail Policy",
+          "category": "E-mail Authentication",
+          "severity": "high",
+          "evidence": "v=spf1 -all published at zone apex.",
+          "text": "SPF is published with a hard fail."
+        },
+        {
+          "status": "pass",
+          "control": 8,
+          "control_id": "dmarc-policy",
+          "title": "DMARC Enforcement",
+          "category": "E-mail Authentication",
+          "severity": "high",
+          "evidence": "v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s",
+          "text": "Mail that fails authentication is rejected."
+        },
+        {
+          "status": "pass",
+          "control": 12,
+          "control_id": "tls-posture",
+          "title": "TLS 1.2/1.3 & Certificate",
+          "category": "Transport Security (TLS)",
+          "severity": "high",
+          "evidence": "Valid X.509 certificate covering example.net.",
+          "text": "A valid certificate covers the domain."
+        },
+        {
+          "status": "warning",
+          "control": 16,
+          "control_id": "csp-header",
+          "title": "Content-Security-Policy",
+          "category": "Web Security Headers",
+          "severity": "medium",
+          "evidence": "Content-Security-Policy header absent.",
+          "text": "No content security policy is published.",
+          "remediation": "Deploy Content-Security-Policy header."
+        }
+      ]
+    },
+    "scanme.nmap.org": {
+      "target": "scanme.nmap.org",
+      "description": "Official Nmap Project public authorised test host",
+      "source": "reference",
+      "source_label": "Reference profile",
+      "timestamp": null,
+      "timestamp_display": "No dated capture — reference profile shipped in v5.2.0",
+      "report_id": null,
+      "consent_id": null,
+      "receipt_sha256": null,
+      "policy_version": "2026.10-sandbox-v1",
+      "version": "5.2.0",
+      "edition": "Public Sandbox Edition (5-Domain Locked)",
+      "score": 68,
+      "grade": "C",
+      "grade_label": "Fair",
+      "summary": "scanme.nmap.org is intentionally maintained as a public testing target; it resolves cleanly but omits strict email anti-spoofing and web hardening headers.",
+      "categories": {
+        "DNS & Domain Hygiene": 78,
+        "E-mail Authentication": 60,
+        "Transport Security (TLS)": 72,
+        "Web Security Headers": 62
+      },
+      "counts": {
+        "completed": 4,
+        "inconclusive": 0
+      },
+      "findings": [
+        {
+          "status": "pass",
+          "control": 1,
+          "control_id": "dns-resolution",
+          "title": "DNS A/AAAA Resolution",
+          "category": "DNS & Domain Hygiene",
+          "severity": "info",
+          "evidence": "Resolved public test host scanme.nmap.org.",
+          "text": "The host resolves."
+        },
+        {
+          "status": "warning",
+          "control": 8,
+          "control_id": "dmarc-policy",
+          "title": "DMARC Enforcement",
+          "category": "E-mail Authentication",
+          "severity": "medium",
+          "evidence": "No dedicated _dmarc.scanme.nmap.org record; inherits organizational policy.",
+          "text": "DMARC depends on the organizational domain policy.",
+          "remediation": "Publish explicit DMARC policy with p=reject for non-mail subdomains."
+        },
+        {
+          "status": "fail",
+          "control": 16,
+          "control_id": "csp-header",
+          "title": "Content-Security-Policy",
+          "category": "Web Security Headers",
+          "severity": "medium",
+          "evidence": "No Content-Security-Policy header on HTTP response.",
+          "text": "No CSP is published.",
+          "remediation": "Add Content-Security-Policy header restricting script and frame sources."
+        },
+        {
+          "status": "warning",
+          "control": 15,
+          "control_id": "hsts-header",
+          "title": "HTTP Strict-Transport-Security",
+          "category": "Web Security Headers",
+          "severity": "medium",
+          "evidence": "Strict-Transport-Security header not observed.",
+          "text": "HSTS is not sent.",
+          "remediation": "Enforce HTTPS and publish Strict-Transport-Security."
+        }
+      ]
+    },
+    "badssl.com": {
+      "target": "badssl.com",
+      "description": "Public educational TLS and certificate test portal",
+      "source": "reference",
+      "source_label": "Reference profile",
+      "timestamp": null,
+      "timestamp_display": "No dated capture — reference profile shipped in v5.2.0",
+      "report_id": null,
+      "consent_id": null,
+      "receipt_sha256": null,
+      "policy_version": "2026.10-sandbox-v1",
+      "version": "5.2.0",
+      "edition": "Public Sandbox Edition (5-Domain Locked)",
+      "score": 74,
+      "grade": "C",
+      "grade_label": "Fair",
+      "summary": "badssl.com provides a valid apex certificate for browser TLS testing while intentionally hosting specialised test configurations on subdomains.",
+      "categories": {
+        "DNS & Domain Hygiene": 82,
+        "E-mail Authentication": 64,
+        "Transport Security (TLS)": 88,
+        "Web Security Headers": 62
+      },
+      "counts": {
+        "completed": 4,
+        "inconclusive": 0
+      },
+      "findings": [
+        {
+          "status": "pass",
+          "control": 1,
+          "control_id": "dns-resolution",
+          "title": "DNS A/AAAA Resolution",
+          "category": "DNS & Domain Hygiene",
+          "severity": "info",
+          "evidence": "Resolved public TLS test portal badssl.com.",
+          "text": "The host resolves."
+        },
+        {
+          "status": "pass",
+          "control": 12,
+          "control_id": "tls-posture",
+          "title": "Apex TLS Certificate",
+          "category": "Transport Security (TLS)",
+          "severity": "high",
+          "evidence": "Apex domain badssl.com presents a valid certificate over modern TLS.",
+          "text": "The apex certificate is valid."
+        },
+        {
+          "status": "warning",
+          "control": 8,
+          "control_id": "dmarc-policy",
+          "title": "DMARC Policy",
+          "category": "E-mail Authentication",
+          "severity": "medium",
+          "evidence": "No strict DMARC reject policy on test portal apex.",
+          "text": "No strict DMARC policy is published at the apex.",
+          "remediation": "Publish v=DMARC1; p=reject for non-mail test domains."
+        },
+        {
+          "status": "warning",
+          "control": 16,
+          "control_id": "csp-header",
+          "title": "Content-Security-Policy",
+          "category": "Web Security Headers",
+          "severity": "low",
+          "evidence": "Content-Security-Policy header not enforced on apex landing page.",
+          "text": "No CSP is enforced at the apex.",
+          "remediation": "Add Content-Security-Policy header where applicable."
+        }
+      ]
+    }
+  }
+}
