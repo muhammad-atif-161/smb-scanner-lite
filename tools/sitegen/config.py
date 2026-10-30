@@ -15,9 +15,52 @@ AUTHOR_URL = "https://github.com/muhammad-atif-161"
 REPO_URL = "https://github.com/muhammad-atif-161/smb-scanner-lite"
 LISTING_URL = "https://www.sideprojectors.com/project/104650/smb-scanner"
 
-# Contact route published across the site. The value is mirrored in
-# website/config.js (which the forms read at runtime) - change both together.
-CONTACT_EMAIL = "contact@smbscannerlite.me"
+# ---------------------------------------------------------------------------
+# Contact route - single source of truth
+# ---------------------------------------------------------------------------
+# Everything about the published contact address lives in site.contact.json at
+# the repository root. The build reads it here and regenerates website/config.js
+# from the same values, so the HTML and the browser can never disagree.
+#   python3 tools/set_contact.py --email you@example.com
+#   (or run the "Change contact email" workflow from the GitHub UI)
+import json as _json
+from pathlib import Path as _Path
+
+CONTACT_FILE = _Path(__file__).resolve().parents[2] / "site.contact.json"
+
+_CONTACT_DEFAULTS = {
+    "primary_email": "myself.atiff@gmail.com",
+    "additional_emails": [],
+    "form_endpoint": "",
+}
+
+
+def _load_contact() -> dict:
+    data = dict(_CONTACT_DEFAULTS)
+    try:
+        raw = _json.loads(CONTACT_FILE.read_text(encoding="utf-8"))
+    except (FileNotFoundError, ValueError):
+        return data
+    if isinstance(raw.get("primary_email"), str) and raw["primary_email"].strip():
+        data["primary_email"] = raw["primary_email"].strip()
+    extra = raw.get("additional_emails")
+    if isinstance(extra, list):
+        data["additional_emails"] = [
+            str(item).strip() for item in extra if str(item).strip()
+        ]
+    if isinstance(raw.get("form_endpoint"), str):
+        data["form_endpoint"] = raw["form_endpoint"].strip()
+    return data
+
+
+CONTACT = _load_contact()
+
+# Primary first, duplicates removed, order preserved.
+CONTACT_EMAILS = tuple(
+    dict.fromkeys([CONTACT["primary_email"], *CONTACT["additional_emails"]])
+)
+CONTACT_EMAIL = CONTACT_EMAILS[0]
+FORM_ENDPOINT = CONTACT["form_endpoint"]
 
 PRODUCT_VERSION = "5.2.0"
 EDITION = "Public Sandbox Edition"

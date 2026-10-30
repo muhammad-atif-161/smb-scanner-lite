@@ -2817,13 +2817,24 @@ table caption {
   letter-spacing: 0.03em;
 }
 
+.foot-mails {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: 0.7rem;
+}
+
 .foot-mail {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  margin-top: 0.7rem;
   font-size: 0.84rem;
   color: var(--text-secondary);
+}
+
+.stack-tight {
+  display: grid;
+  gap: 0.3rem;
+  justify-items: start;
 }
 
 .foot-mail:hover {

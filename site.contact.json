@@ -1,0 +1,6 @@
+{
+  "primary_email": "myself.atiff@gmail.com",
+  "additional_emails": [],
+  "form_endpoint": "https://formspree.io/f/xbggayev",
+  "notes": "Single source of truth for the website contact route. Edit this file, then run: python3 tools/build_site.py --check. tools/set_contact.py updates it for you, and the 'Change contact email' GitHub Action does it from the browser."
+}

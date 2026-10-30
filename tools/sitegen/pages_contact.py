@@ -32,7 +32,7 @@ def contact() -> str:
           <span class="tag">first-party form</span>
         </div>
         <p class="small muted">Choose the enquiry type that fits best &mdash; it only helps route the reply. Nothing here triggers a scan.</p>
-        {S.form_core(kind="contact")}
+        {S.form_core(kind="contact", include_company=True, include_domain=True, include_authorisation=True)}
       </div>
       {S.contact_card()}
     </div>

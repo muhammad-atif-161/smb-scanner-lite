@@ -172,7 +172,7 @@ def _field(name, label, *, kind="text", required=True, placeholder="", hint="", 
 
 
 def form_core(*, kind: str, include_company=False, include_domain=False, include_assessment=False,
-              types=None, submit_label="Send enquiry", note=None) -> str:
+              include_authorisation=False, types=None, submit_label="Send enquiry", note=None) -> str:
     fields = [
         _field("name", "Your name", placeholder="First and last name", autocomplete="name"),
         _field("email", "Email address", kind="email", input_type="email", placeholder="name@company.com", autocomplete="email"),
@@ -187,6 +187,16 @@ def form_core(*, kind: str, include_company=False, include_domain=False, include
                          placeholder="What would you like to know, or what are you trying to assess?"))
 
     auth_block = ""
+    if include_authorisation:
+        auth_block = f"""
+<div class="field field--full">
+  <label for="{kind}-authorised">Are you authorised to request an assessment of this domain?</label>
+  <select class="select" id="{kind}-authorised" name="authorised">
+    <option value="no" selected>No &mdash; this is a question, not an assessment request</option>
+    <option value="yes">Yes &mdash; I own the domain or am authorised to request an assessment</option>
+  </select>
+  <span class="field-hint">Answering &ldquo;no&rdquo; is fine. An assessment is only arranged after ownership or written authorisation is confirmed.</span>
+</div>"""
     if include_assessment:
         auth_block = f"""
 <div class="field field--full">
@@ -222,7 +232,7 @@ def contact_card() -> str:
     <div class="card-icon">{icon('mail', 20)}</div>
     <h3>Direct email</h3>
     <p>Prefer your own mail client? Write to the address below and include the same details.</p>
-    <p><a class="tlink" href="mailto:{C.CONTACT_EMAIL}">{e(C.CONTACT_EMAIL)}</a></p>
+    <p class="stack-tight">{''.join(f'<a class="tlink" href="mailto:{e(address)}">{e(address)}</a>' for address in C.CONTACT_EMAILS)}</p>
   </div>
   <div class="card">
     <div class="card-icon card-icon--cyan">{icon('clock', 20)}</div>
