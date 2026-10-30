@@ -1,50 +1,285 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Methodology — scoring, evidence and limitations</title>
-  <meta name="description" content="How SMB Scanner Lite scores a posture, how evidence is attached to each finding, the four finding statuses, and the difference between a failed check and a confirmed vulnerability." />
-  <link rel="canonical" href="https://smbscannerlite.me/methodology/" />
-  <meta name="author" content="Muhammad Atif" />
-  <meta name="theme-color" content="#080B14" />
-  <meta name="robots" content="index, follow, max-image-preview:large" />
-  <meta name="keywords" content="SMB Scanner Lite, small business security check, external posture assessment, SPF, DKIM, DMARC, DNSSEC, TLS headers, exposed SMB, evidence-first scanner" />
-  <meta property="og:title" content="Methodology — scoring, evidence and limitations" />
-  <meta property="og:description" content="How SMB Scanner Lite scores a posture, how evidence is attached to each finding, the four finding statuses, and the difference between a failed check and a confirmed vulnerability." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://smbscannerlite.me/methodology/" />
-  <meta property="og:image" content="https://smbscannerlite.me/og-image.png" />
-  <meta property="og:image:alt" content="SMB Scanner Lite: a deep navy posture report card with an electric-blue score bar and evidence findings" />
-  <meta property="og:site_name" content="SMB Scanner Lite" />
-  <meta property="og:locale" content="en_US" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:image" content="https://smbscannerlite.me/og-image.png" />
-  <link rel="icon" href="/logo.svg" type="image/svg+xml" />
-  <link rel="apple-touch-icon" href="/logo.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
-  <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
-  <link rel="stylesheet" href="/styles.css" />
-  
-  
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Assessment Methodology — How SMB Scanner Lite Measures Security Posture</title>
+<meta name="description" content="The full method behind SMB Scanner Lite: what is observed, how pass, warning, fail and inconclusive are assigned, how the weighted 0-100 score and A-F grades are calculated, and the limits of external assessment." />
+<link rel="canonical" href="https://smbscannerlite.me/methodology/" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta name="author" content="Muhammad Atif" />
+<meta name="theme-color" content="#080B14" />
+<meta name="generator" content="SMB Scanner Lite static site builder" />
+<meta property="og:site_name" content="SMB Scanner Lite" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Assessment Methodology — How SMB Scanner Lite Measures Security Posture" />
+<meta property="og:description" content="The full method behind SMB Scanner Lite: what is observed, how pass, warning, fail and inconclusive are assigned, how the weighted 0-100 score and A-F grades are calculated, and the limits of external assessment." />
+<meta property="og:url" content="https://smbscannerlite.me/methodology/" />
+<meta property="og:image" content="https://smbscannerlite.me/og-image.png" />
+<meta property="og:image:alt" content="SMB Scanner Lite — a dark navy assessment report showing a posture score of 86 out of 100, grade B, with evidence-backed findings." />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Assessment Methodology — How SMB Scanner Lite Measures Security Posture" />
+<meta name="twitter:description" content="The full method behind SMB Scanner Lite: what is observed, how pass, warning, fail and inconclusive are assigned, how the weighted 0-100 score and A-F grades are calculated, and the limits of external assessment." />
+<meta name="twitter:image" content="https://smbscannerlite.me/og-image.png" />
+<link rel="icon" href="/logo.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/logo.svg" />
+<link rel="alternate" type="application/json" href="/data/recorded-assessment.json" title="Recorded assessment data (JSON)" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/styles.css" />
+
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"SMB Scanner Lite assessment methodology","about":"External security posture assessment","author":{"@type":"Organization","name":"SMB Scanner Lite"},"datePublished":"2026-10-28","dateModified":"2026-10-30"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://smbscannerlite.me/"},{"@type":"ListItem","position":2,"name":"Methodology"}]}]}</script>
+<noscript><style>.reveal{opacity:1;transform:none}</style></noscript>
 </head>
-<body>
-  <a class="skip-link" href="#main">Skip to content</a>
-  <div class="atlas" aria-hidden="true"></div>
-  <header class="nav" data-nav><a class="brand" href="/"><img src="/logo.svg" width="34" height="34" alt="SMB Scanner Lite logo" /><span>SMB Scanner <span class="lite">Lite</span></span></a><nav class="nav-links" aria-label="Primary"><a href="/">Overview</a><a href="/checks/">Capabilities</a><a href="/sample-report/">Sample report</a><a href="/how/">How it works</a><a href="/methodology/" aria-current="page">Methodology</a><a href="/faq/">FAQ</a></nav><div class="nav-cta"><a class="btn btn-primary btn-sm" href="/demo/"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg>Try the demo</a></div><button class="nav-toggle" type="button" data-nav-toggle aria-label="Open menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span data-icon-open style="display:none"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></button></header><div class="nav-panel" data-nav-panel aria-label="Mobile navigation"><nav data-nav-panel-links aria-label="Mobile"><a href="/">Overview<svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></a><a href="/checks/">Capabilities<svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></a><a href="/sample-report/">Sample report<svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></a><a href="/how/">How it works<svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></a><a href="/methodology/">Methodology<svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></a><a href="/faq/">FAQ<svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></svg></a></nav><div class="nav-panel-cta"><a class="btn btn-primary" href="/demo/">Try the demo</a></div></div>
-  <main id="main">
-<section class="hero" style="padding-bottom:clamp(2rem,4vw,3rem)"><div class="wrap"><p class="hero-rise eyebrow">Methodology</p><h1 class="hero-rise">Built around evidence, not unexplained scores.</h1><p class="lede hero-rise" style="margin-top:1rem">The rules behind the checks, the scoring and the limitations — in the order a reviewer would ask about them.</p><div class="btn-row hero-rise" style="margin-top:1.6rem"><a class="btn btn-ghost" href="/checks/"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg>See the control catalog</a><a class="btn btn-subtle" href="/sample-report/">Sample report</a></div></div></section><section><div class="wrap"><div class="section-head reveal"><p class="eyebrow">The rules</p><h2>Read the methodology before you trust the number.</h2></div><div class="acc reveal" style="max-width:60rem"><details class="reveal" id="measured"><summary>What is actually measured</summary><div><p>Only what a stranger on the public internet can observe without authenticating: DNS records, mail authentication policy, TLS handshakes, HTTP response headers, and whether a small set of high-risk services answers a protocol-level probe. Nothing behind a login, nothing on a private network, nothing that requires a credential.</p></div></details><details class="reveal" id="evidence"><summary>Evidence and the four statuses</summary><div><p>Every check ends in one of four states. The distinction matters more than the colour.</p><ul class="trust-col" style="margin-top:1rem"><li><strong style="display:block;margin-bottom:.2rem"><span class="dot dot-pass"></span> Pass</strong>The observed control meets the published expectation.</li><li><strong style="display:block;margin-bottom:.2rem"><span class="dot dot-warn"></span> Warning</strong>The control exists but is weaker than intended, or partially configured.</li><li><strong style="display:block;margin-bottom:.2rem"><span class="dot dot-fail"></span> Fail</strong>The control is absent, or what was observed contradicts the expectation.</li><li><strong style="display:block"><span class="dot dot-unknown"></span> Inconclusive</strong>No conclusive answer arrived before the timeout. This is not a failure.</li></ul></div></details><details class="reveal" id="scoring"><summary>Scoring and grading</summary><div><p>Each completed control contributes to a 0–100 posture score, weighted by how much it matters to a small business. The score covers only controls that finished.</p><ul class="trust-col" style="margin-top:1rem"><li><strong style="display:block;margin-bottom:.2rem">Measured only</strong>A timed-out control is excluded from the score and reported separately as inconclusive.</li><li><strong style="display:block;margin-bottom:.2rem">Grade bands</strong>A–B strong, C fair, D needs work, F urgent.</li><li><strong style="display:block">A communication aid</strong>The score helps an owner and an IT helper agree on priority. It is not a guarantee, and it is not a penetration-test certificate.</li></ul></div></details><details class="reveal" id="failure"><summary>A failed check is not a confirmed vulnerability</summary><div><p>A failed control means the published expectation was not met. It is not an exploit, and it is not evidence that a system has been compromised. Treat every finding as a reason to look — then verify it yourself.</p></div></details><details class="reveal" id="limitations"><summary>Limitations and false positives</summary><div><p>External observation is inherently limited. A control can be configured correctly and still look wrong from one network, one resolver, or one point in time.</p><ul class="trust-col" style="margin-top:1rem"><li><strong style="display:block;margin-bottom:.2rem">Location and resolver dependence</strong>A record that resolves differently for you may be correct for the domain owner.</li><li><strong style="display:block;margin-bottom:.2rem">Timeouts</strong>Silence is not a verdict. The tool refuses to convert it into a failure.</li><li><strong style="display:block;margin-bottom:.2rem">No exploitation</strong>Nothing is logged in to, fuzzed, or exploited, so a check cannot confirm whether a weakness is actually exploitable.</li><li><strong style="display:block">Scope</strong>The score says nothing about applications, people, processes or physical security.</li></ul></div></details><details class="reveal" id="verification"><summary>How to verify a finding yourself</summary><div><p>Each conclusive result quotes the record, header or handshake that produced it. Copy it, then run the equivalent query from a machine outside your network and compare.</p><p style="margin-top:1rem">If the answer differs, the finding is stale or specific to the vantage point used. That is a normal result, not a fault in the tool.</p></div></details></div></div></section><section style="background:var(--bg-secondary)"><div class="wrap"><div class="split" style="align-items:center"><div class="reveal"><p class="eyebrow">Reporting</p><h2>Every report carries its own proof of authorisation.</h2><p class="lede" style="margin-top:1rem">Before any scan runs, the operator accepts the privacy policy and signs a consent receipt. That receipt is embedded in the report, hash-chained to the previous one, and stored on the machine that ran the scan.</p><ul class="trust-col" style="margin-top:1.5rem"><li>consent_id, timestamp, operator and target</li><li>policy version and its SHA-256 digest</li><li>previous receipt hash and the receipt hash</li><li>Stored locally — never uploaded to this website</li></ul></div><div class="reveal"><div class="panel"><div class="panel-head"><h3>Consent receipt</h3><span class="tag mono">sha256</span></div><pre class="code" style="border:0;background:transparent;padding:0;margin:0;font-size:.8rem">{"consent_id": "CONSENT-20261028-A91144E4",
- "timestamp_utc": "example.com",
- "operator": "website-demo",
- "target": "2026-10-28T17:25:30Z",
- "policy_version": "2026.10-sandbox-v1",
- "statement": "authorised sandbox use",
- "receipt_sha256": "b068e643725c90429199d458b31a0749b08b4af1caae57fe4ea8878f412820a6"}</pre></div></div></div></div></section><section><div class="wrap"><div class="callout reveal"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5l8.5 15h-17z"/><path d="M12 10v4.2"/><circle cx="12" cy="17" r="0.8"/></svg><div><p><strong>Read this before acting on a result.</strong> An external posture check is a starting point for a conversation, not a verdict on a business. Confirm every finding yourself, and treat the score as one input among several.</p></div></div><div style="margin-top:1.5rem" class="btn-row"><a class="btn btn-ghost" href="/how/"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg>Read the documentation</a><a class="btn btn-subtle" href="/privacy/">Privacy policy</a></div></div></section>
-  </main>
-  <footer class="foot"><div class="wrap"><div class="foot-grid"><div><div class="foot-brand"><img src="/logo.svg" width="30" height="30" alt="" /><span>SMB Scanner <span class="lite">Lite</span></span></div><p>An evidence-first external posture assessment for small and medium businesses. The public edition is locked to five free testing domains.</p></div><div><h4>Product</h4><ul><li><a href="/">Overview</a></li><li><a href="/checks/">Capabilities</a></li><li><a href="/sample-report/">Sample report</a></li><li><a href="/demo/">Try the demo</a></li></ul></div><div><h4>Resources</h4><ul><li><a href="/how/">Documentation</a></li><li><a href="/methodology/">Methodology</a></li><li><a href="/faq/">FAQ</a></li><li><a href="/blog/">Journal</a></li></ul></div><div><h4>Policies</h4><ul><li><a href="/privacy/">Privacy policy</a></li><li><a href="/ethics/">Authorised use</a></li><li><a href="/about/">About the project</a></li></ul></div><div><h4>Project</h4><ul><li><a href="https://github.com/muhammad-atif-161/smb-scanner-lite">Source code</a></li><li><a href="https://github.com/muhammad-atif-161">Creator</a></li><li><a href="/demo/#contact">Contact</a></li></ul></div></div><div class="foot-bottom"><span>Created by Muhammad Atif · Rawalpindi, Pakistan · <span data-year>2026</span></span><span><a href="/privacy/">Privacy</a> · <a href="/faq/">FAQ</a> · <a href="https://github.com/muhammad-atif-161/smb-scanner-lite">Source</a></span></div></div></footer>
-  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="false"></div>
-  <script src="/site.js"></script>
+<body class="">
+
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="nav" data-nav>
+  <div class="wrap nav-inner">
+    <a class="brand" href="/" aria-label="SMB Scanner Lite home">
+      <img src="/logo.svg" width="32" height="32" alt="" />
+      <span class="brand-text">SMB Scanner <span class="brand-lite">Lite</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="/">Overview</a><a href="/capabilities/">Capabilities</a><a href="/sample-report/">Sample Report</a><a href="/methodology/" aria-current="page">Methodology</a><a href="/faq/">FAQ</a><a href="/contact/">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="btn btn-primary btn-sm" href="/demo/"><svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5.5 13h5L10 21l7.5-10h-5L13 3z"/></svg><span>Try the Demo</span></a>
+      <button class="nav-toggle" type="button" data-nav-toggle aria-label="Open menu" aria-expanded="false" aria-controls="nav-panel">
+        <span data-nav-open><svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></span>
+        <span data-nav-close hidden><svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="nav-panel" id="nav-panel" data-nav-panel hidden>
+  <nav class="nav-panel-links" aria-label="Mobile">
+    <a href="/">Overview</a><a href="/capabilities/">Capabilities</a><a href="/sample-report/">Sample Report</a><a href="/methodology/" aria-current="page">Methodology</a><a href="/faq/">FAQ</a><a href="/contact/">Contact</a>
+  </nav>
+  <div class="nav-panel-foot">
+    <a class="btn btn-primary" href="/demo/"><svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5.5 13h5L10 21l7.5-10h-5L13 3z"/></svg><span>Try the Demo</span></a>
+    <a class="btn btn-ghost" href="/request-assessment/">Request an assessment</a>
+  </div>
+</div>
+<main id="main">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><span aria-current="page">Methodology</span></li></ol></nav>
+
+<div class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">Methodology</p>
+    <h1>Built around evidence, not unexplained scores.</h1>
+    <p class="lede">What is measured, how a status is assigned, how the score is weighted, how evidence is preserved, and where the method stops being able to tell you anything. Read this before you quote a number from the tool.</p>
+    <div class="hero-actions"><a class="btn btn-primary" href="/capabilities/"><svg class="btn-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg><span>See the 22 controls</span></a><a class="btn btn-ghost" href="/limitations/"><span>Read the limitations</span></a></div>
+  </div>
+</div>
+
+<section class="section section--flush">
+  <div class="wrap">
+    <div class="grid g2" style="align-items:start">
+      <div>
+        <div class="section-head reveal" data-align="left"><p class="eyebrow">Measurement</p><h2>Only what an outsider can observe.</h2></div>
+        <div class="prose">
+          <p>Every control in the catalog is answered from the public internet, without credentials and without privileged access. In practice that means five kinds of observation:</p>
+          <ul>
+            <li>DNS queries for records the domain publishes: addresses, mail routing, policy records and delegations.</li>
+            <li>Mail authentication policy read from TXT records: SPF, DMARC and discoverable DKIM selectors.</li>
+            <li>TLS handshakes against the public endpoint, including protocol version, cipher and certificate chain.</li>
+            <li>HTTP response headers from a single unauthenticated request per control.</li>
+            <li>Protocol-level reachability of specific high-risk ports, with at most a negotiation exchange &mdash; never a login, a listing or a payload.</li>
+          </ul>
+          <p>Nothing behind a login is examined. Nothing on a private network is reached. Nothing is enumerated, fuzzed, brute-forced or exploited.</p>
+        </div>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon card-icon--cyan"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5c-4.1 0-7.5 3.4-7.5 7.5 0 1.6.5 3 1.3 4.2"/><path d="M12 8a4 4 0 014 4c0 2.4-.6 4.6-1.6 6.5"/><path d="M9.6 19.2A9 9 0 018 17.5"/><path d="M12 11.5c.9 0 1.5.7 1.5 1.5 0 2-.5 3.9-1.3 5.5"/></svg></div>
+        <h3>Vantage point and reproducibility</h3>
+        <p>External observation depends on where it is made. A record can resolve differently for a different resolver, and a firewall can answer one network and drop another.</p>
+        <p class="small">That is why every finding quotes the observation itself. A reader can repeat the query from a machine outside their own network and compare the answer. If the two disagree, the finding is stale or vantage-specific &mdash; and the report says that is a normal result, not a tool fault.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="wrap">
+    <div class="section-head reveal" data-align="left"><p class="eyebrow">Statuses</p><h2>Four outcomes, and the difference between them matters.</h2><p class="section-lede">The distinction between a failure and an absence of an answer is the core of the evidence model.</p></div>
+    <div class="table-wrap reveal">
+      <table>
+        <caption>Score credit is shown per status. Inconclusive controls are excluded from both the numerator and the denominator of the score.</caption>
+        <thead><tr><th scope="col">Status</th><th scope="col">Meaning</th><th scope="col">Score credit</th></tr></thead>
+        <tbody><tr><td><span class="status-badge status-pass">Pass</span></td><td>The observed control meets the published expectation.</td><td class='mono'>100%</td></tr><tr><td><span class="status-badge status-warning">Warning</span></td><td>The control exists but is weaker than intended, or partially configured.</td><td class='mono'>partial</td></tr><tr><td><span class="status-badge status-fail">Fail</span></td><td>The control is absent, or what was observed contradicts the expectation.</td><td class='mono'>0%</td></tr><tr><td><span class="status-badge status-inconclusive">Inconclusive</span></td><td>No conclusive answer arrived before the timeout. This is not a failure.</td><td class='mono'>excluded</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head reveal" data-align="left"><p class="eyebrow">Scoring</p><h2>How the 0&ndash;100 score is calculated.</h2><p class="section-lede">The score is a weighted mean over the controls that reached a conclusive status. It is arithmetic, not judgement, and it is reproducible from the report.</p></div>
+    <div class="grid g2" style="align-items:start">
+      <div class="prose">
+        <ol>
+          <li>Each control resolves to a status: pass, warning, fail or inconclusive.</li>
+          <li>Each control carries a severity weight from 1 to 5, reflecting the consequence of the exposure it describes.</li>
+          <li>Pass earns full credit, warning earns partial credit, fail earns none. Inconclusive controls are excluded from both sides of the fraction.</li>
+          <li>Control results roll up into the five categories using the category weights below.</li>
+          <li>The final score is rounded to the nearest integer and mapped to a grade band.</li>
+        </ol>
+        <p>If every control that ran passed, the score is 100. If none passed, it is 0. Partial configurations land in between, weighted by how much the individual control matters.</p>
+        <blockquote>A high score means the measured controls met their expectations. It does not mean the business is secure.</blockquote>
+      </div>
+      <div class="table-wrap reveal">
+        <table>
+          <caption>Category weights. The public sandbox reports a read-only subset, so a sandbox score is derived from the subset that ran and is not directly comparable to a full 22-control assessment.</caption>
+          <thead><tr><th scope="col">Category</th><th scope="col">Weight</th><th scope="col">Controls</th><th scope="col">What it covers</th></tr></thead>
+          <tbody><tr><th scope='row'>DNS &amp; domain integrity</th><td class='mono'>20%</td><td>5</td><td>Whether the name resolves as intended, whether answers can be tampered with in transit, and whether the zone leaks control to a stranger.</td></tr><tr><th scope='row'>Email authentication</th><td class='mono'>25%</td><td>5</td><td>Whether a stranger can send mail that looks like it came from your domain - the exposure behind invoice fraud and business email compromise.</td></tr><tr><th scope='row'>Transport security</th><td class='mono'>20%</td><td>4</td><td>How the site proves its identity and which protocols and ciphers it is willing to negotiate with a visitor&#x27;s browser.</td></tr><tr><th scope='row'>Browser security headers</th><td class='mono'>15%</td><td>4</td><td>The instructions a server sends to the browser. They are cheap to add, commonly missing, and directly affect how much a single scripting mistake can do.</td></tr><tr><th scope='row'>Network &amp; service exposure</th><td class='mono'>20%</td><td>4</td><td>Whether high-risk services answer on the public internet. Detection is protocol-level only: no login, no share listing, no payload.</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="mt-4">
+      <h2 style="font-size:1.3rem">Grade bands</h2>
+      <p class="small muted">The same bands apply to every target. The current recorded assessment is grade B.</p>
+      <div class="grade-scale reveal"><div class="grade-row"><b>A</b><span class="mono">90-100</span><span class="mono">Strong</span><span class="grade-desc muted">Every control that completed meets its published expectation, or is one minor gap away.</span></div><div class="grade-row is-current"><b>B</b><span class="mono">80-89</span><span class="mono">Strong</span><span class="grade-desc muted">Well configured overall. The gaps are informational or low-impact hardening items.</span></div><div class="grade-row"><b>C</b><span class="mono">65-79</span><span class="mono">Fair</span><span class="grade-desc muted">Meaningful gaps in at least one category. Worth a planned fix, not an emergency.</span></div><div class="grade-row"><b>D</b><span class="mono">50-64</span><span class="mono">Needs work</span><span class="grade-desc muted">Several controls are missing or weak across more than one category.</span></div><div class="grade-row"><b>F</b><span class="mono">0-49</span><span class="mono">Urgent</span><span class="grade-desc muted">Core controls are absent. Start with the highest-severity findings and work down.</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="wrap">
+    <div class="section-head reveal" data-align="left"><p class="eyebrow">Evidence</p><h2>No claim without evidence.</h2><p class="section-lede">Every conclusive finding quotes the record, header or handshake behind it. The report is designed so that a sceptical reader can check it without running the tool.</p></div>
+    <div class="grid g3">
+      <div class="card reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3.5H7.5A2.5 2.5 0 005 6v12a2.5 2.5 0 002.5 2.5h9A2.5 2.5 0 0019 18V8.5L14 3.5z"/><path d="M14 3.5V9h5"/></svg></div>
+        <h3>Quoted observation</h3>
+        <p>An evidence string is a literal fragment: a DNS answer, an SPF policy, a certificate subject, a header value, a negotiate response code.</p>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="8.5" y="8.5" width="11" height="11" rx="2"/><path d="M15.5 8.5V6.5a2 2 0 00-2-2h-7a2 2 0 00-2 2v7a2 2 0 002 2h2"/></svg></div>
+        <h3>Copy and re-check</h3>
+        <p>Every evidence block in this site can be copied with one click. Re-run the equivalent query yourself and compare &mdash; that is the intended workflow.</p>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="9.5" rx="2.5"/><path d="M8 10.5V8a4 4 0 018 0v2.5"/></svg></div>
+        <h3>Consent travelled with it</h3>
+        <p>Each report embeds the hash-chained consent receipt recorded before the run, including the policy version and its digest.</p>
+      </div>
+    </div>
+    <div class="callout mt-3 reveal">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5l8.5 15h-17l8.5-15z"/><path d="M12 10v4"/><circle cx="12" cy="16.6" r="0.9" fill="currentColor" stroke="none"/></svg>
+      <div><p><strong>A failed control is not a confirmed vulnerability.</strong> It means the published expectation was not met. It is not an exploit, it is not proof of compromise, and it is not a verdict on the business. Treat every finding as a reason to look, then verify.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head reveal" data-align="left"><p class="eyebrow">Boundaries</p><h2>Where this method stops.</h2><p class="section-lede">The limitations are part of the methodology, not a footnote to it.</p></div>
+    <div class="grid g2">
+      <div class="card reveal">
+        <h3>What the method cannot see</h3>
+        <ul class="card-list">
+          <li>Anything behind authentication: applications, admin panels, customer portals</li>
+          <li>Internal networks, directory services and endpoint configuration</li>
+          <li>People, process and physical security</li>
+          <li>Whether a weakness is actually exploitable</li>
+          <li>Compromise, past or present</li>
+        </ul>
+        <a class="tlink mt-1" href="/limitations/">Full limitations <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="card reveal">
+        <h3>Known sources of error</h3>
+        <ul class="card-list">
+          <li>Resolver and location differences producing different answers</li>
+          <li>Rate limiting or filtering creating inconclusive results</li>
+          <li>Configurations that are correct for the business but unusual for the standard</li>
+          <li>Time: a finding describes one moment, not a permanent state</li>
+        </ul>
+        <p class="small mt-1">When an error is possible, the report states the observing condition instead of hiding it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="wrap">
+    <div class="split">
+      <div class="reveal">
+        <p class="eyebrow">Reporting</p>
+        <h2>Every report carries proof of authorisation.</h2>
+        <p class="section-lede">Before a run, the operator accepts the privacy policy and records a receipt. Receipts are hash-chained, so a deleted or altered entry breaks the chain and verification fails.</p>
+        <ul class="trust-list mt-2">
+          <li><strong>Contents</strong>Consent ID, ISO-8601 UTC timestamp, operator, target, policy version and digest, previous receipt hash and this receipt's hash.</li>
+          <li><strong>Storage</strong>Written to the machine that ran the assessment. Never uploaded to this website.</li>
+          <li><strong>Verification</strong>One command re-walks the chain and reports whether it is intact.</li>
+        </ul>
+        <div class="btn-row mt-3"><a class="btn btn-ghost" href="/privacy/"><span>Privacy policy</span></a><a class="btn btn-ghost" href="/validation/"><svg class="btn-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg><span>See the test record</span></a></div>
+      </div>
+      <div class="card reveal">
+        <div class="row" style="justify-content:space-between"><span class="tag">consent receipt</span><span class="status-badge status-pass">hash chain intact</span></div>
+        <div class="evidence" style="margin-top:.6rem"><span class="val">{
+  "consent_id": "CONSENT-20261028-A91144E4",
+  "timestamp_utc": "2026-10-28T17:25:30Z",
+  "operator": "public-demo",
+  "target": "example.com",
+  "policy_version": "2026.10-sandbox-v1",
+  "statement": "authorised sandbox use",
+  "receipt_sha256": "b068e643725c90429199d458b31a0749b08b4af1caae57fe4ea8878f412820a6"
+}</span></div>
+        <p class="faint tiny mt-2">Sanitised excerpt of the receipt embedded in the recorded report. The operator label is the demonstration identity used for the public run.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta-band reveal">
+      <div class="cta-band-text">
+        <h2>Read the method, then check the evidence.</h2>
+        <p>The catalog documents every control; the sample report shows what the output looks like when the method is applied.</p>
+      </div>
+      <div class="cta-band-actions">
+        <a class="btn btn-primary" href="/capabilities/"><svg class="btn-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg><span>Open the control catalog</span></a>
+        <a class="btn btn-ghost" href="/sample-report/"><span>Inspect a real report</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand-col">
+        <a class="foot-brand" href="/">
+          <img src="/logo.svg" width="30" height="30" alt="" />
+          <span>SMB Scanner <span class="brand-lite">Lite</span></span>
+        </a>
+        <p class="foot-desc">An evidence-first external security posture assessment for small and medium businesses. 22 controls, a 0&ndash;100 score and an A&ndash;F grade &mdash; with the observation behind every conclusive finding. The public edition is restricted to five approved test domains.</p>
+        <p class="foot-meta"><span class="mono">v5.2.0</span> &middot; Public Sandbox Edition</p>
+        <a class="foot-mail" href="mailto:contact@smbscannerlite.me"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M4 8.5l8 5.5 8-5.5"/></svg><span>contact@smbscannerlite.me</span></a>
+      </div>
+      <div class="foot-col"><h3>Product</h3><ul><li><a href="/">Overview</a></li><li><a href="/capabilities/">Capabilities</a></li><li><a href="/demo/">Recorded Demo</a></li><li><a href="/sample-report/">Sample Report</a></li><li><a href="/methodology/">Methodology</a></li></ul></div><div class="foot-col"><h3>Resources</h3><ul><li><a href="/docs/">Documentation</a></li><li><a href="/resources/">Knowledge Base</a></li><li><a href="/resources/#guides">Technical Guides</a></li><li><a href="/validation/">Validation Record</a></li><li><a href="https://github.com/muhammad-atif-161/smb-scanner-lite" rel="noopener" target="_blank">GitHub</a></li></ul></div><div class="foot-col"><h3>Legal</h3><ul><li><a href="/privacy/">Privacy Policy</a></li><li><a href="/terms/">Terms of Use</a></li><li><a href="/responsible-use/">Responsible Use</a></li><li><a href="/limitations/">Assessment Limitations</a></li></ul></div><div class="foot-col"><h3>Business</h3><ul><li><a href="/contact/">Contact</a></li><li><a href="/request-assessment/">Request an Assessment</a></li><li><a href="/acquisition/">Project Acquisition</a></li><li><a href="/about/">About the Project</a></li></ul></div>
+    </div>
+    <div class="foot-bottom">
+      <p>&copy; <span data-year>2026</span> Muhammad Atif &middot; SMB Scanner Lite &middot; Built in Rawalpindi, Pakistan.</p>
+      <p class="foot-bottom-links">
+        <a href="/privacy/">Privacy</a>
+        <a href="/terms/">Terms</a>
+        <a href="/responsible-use/">Responsible use</a>
+        <a href="https://github.com/muhammad-atif-161/smb-scanner-lite" rel="noopener" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </div>
+</footer>
+<div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="false"></div>
+<script src="/config.js"></script>
+<script src="/site.js" defer></script>
 </body>
 </html>

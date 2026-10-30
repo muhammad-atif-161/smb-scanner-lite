@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
 
+# Static site. No scanning endpoints, no private paths and nothing to crawl
+# that is not linked from the sitemap.
+Disallow: /downloads/
+
 Sitemap: https://smbscannerlite.me/sitemap.xml

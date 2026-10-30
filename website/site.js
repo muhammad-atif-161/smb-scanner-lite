@@ -1,124 +1,140 @@
 /* ==========================================================================
-   SMB Scanner Lite — site interactions
-   No dependencies. Every control degrades to a working static state.
+   SMB Scanner Lite — site behaviour
+   Dependency-free, progressive enhancement only. Every page is readable and
+   every link works with JavaScript disabled; this file adds navigation,
+   disclosure, tab and recorded-assessment behaviour on top.
    ========================================================================== */
 (function () {
   "use strict";
 
-  var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var CFG = window.SMB_CONFIG || {};
+  var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var $ = function (sel, root) { return (root || document).querySelector(sel); };
-  var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
+  var $$ = function (sel, root) {
+    return Array.prototype.slice.call((root || document).querySelectorAll(sel));
+  };
+  var esc = function (value) {
+    return String(value == null ? "" : value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  };
 
-  /* --------------------------------------------------------------------------
+  /* ------------------------------------------------------------------------
      Toast
-     -------------------------------------------------------------------------- */
+     ---------------------------------------------------------------------- */
   var toastRegion = $("#toastRegion");
 
-  function showToast(message, tone) {
+  function toast(message, tone) {
     if (!toastRegion) return;
     var dotClass = tone === "success" ? "dot-pass" : tone === "error" ? "dot-fail" : "dot-info";
-    var toast = document.createElement("div");
-    toast.className = "toast";
-    toast.setAttribute("role", "status");
-    toast.innerHTML = '<span class="dot ' + dotClass + '"></span><span></span>';
-    toast.lastChild.textContent = message;
-    toastRegion.appendChild(toast);
+    var box = document.createElement("div");
+    box.className = "toast";
+    box.setAttribute("role", "status");
+    box.innerHTML = '<span class="dot ' + dotClass + '"></span><span></span>';
+    box.lastChild.textContent = message;
+    toastRegion.appendChild(box);
     window.setTimeout(function () {
-      toast.classList.add("is-out");
-      window.setTimeout(function () { toast.remove(); }, 260);
-    }, 3600);
+      box.classList.add("is-out");
+      window.setTimeout(function () { box.remove(); }, 260);
+    }, 3400);
   }
-  window.showToast = showToast;
 
-  /* --------------------------------------------------------------------------
-     Copy to clipboard
-     -------------------------------------------------------------------------- */
+  /* ------------------------------------------------------------------------
+     Clipboard
+     ---------------------------------------------------------------------- */
   function copyText(text) {
     if (navigator.clipboard && window.isSecureContext) {
       return navigator.clipboard.writeText(text);
     }
     return new Promise(function (resolve, reject) {
-      var ta = document.createElement("textarea");
-      ta.value = text;
-      ta.setAttribute("readonly", "");
-      ta.style.position = "fixed";
-      ta.style.left = "-1000px";
-      document.body.appendChild(ta);
-      ta.select();
+      var area = document.createElement("textarea");
+      area.value = text;
+      area.setAttribute("readonly", "");
+      area.style.position = "fixed";
+      area.style.left = "-1000px";
+      document.body.appendChild(area);
+      area.select();
       try { document.execCommand("copy"); resolve(); }
       catch (err) { reject(err); }
-      finally { ta.remove(); }
+      finally { area.remove(); }
     });
   }
 
-  function bindCopy(btn) {
-    var source = btn.closest("[data-copy-source]");
-    var value = btn.getAttribute("data-copy") || (source ? source.getAttribute("data-copy-source") : "") || "";
-    if (value && !btn.dataset.bound) {
+  function bindCopy(root) {
+    $$("[data-copy]", root).forEach(function (btn) {
+      if (btn.dataset.bound === "1") return;
       btn.dataset.bound = "1";
       btn.addEventListener("click", function () {
+        var value = btn.getAttribute("data-copy") || "";
         copyText(value).then(function () {
-          showToast("Evidence copied to clipboard", "success");
+          toast("Evidence copied to clipboard", "success");
         }).catch(function () {
-          showToast("Could not copy — select the text manually", "error");
+          toast("Could not copy — select the text manually", "error");
         });
       });
-    }
+    });
   }
 
-  /* --------------------------------------------------------------------------
-     Sticky navigation
-     -------------------------------------------------------------------------- */
+  /* ------------------------------------------------------------------------
+     Sticky navigation + mobile panel
+     ---------------------------------------------------------------------- */
   var nav = $(".nav");
   if (nav) {
-    var onScroll = function () {
-      if (window.scrollY > 8) nav.classList.add("is-scrolled");
-      else nav.classList.remove("is-scrolled");
+    var syncNav = function () {
+      nav.classList.toggle("is-scrolled", window.scrollY > 8);
     };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
+    syncNav();
+    window.addEventListener("scroll", syncNav, { passive: true });
   }
 
-  /* --------------------------------------------------------------------------
-     Mobile navigation panel
-     -------------------------------------------------------------------------- */
-  var navToggle = $("[data-nav-toggle]");
-  var navPanel = $("[data-nav-panel]");
+  var toggle = $("[data-nav-toggle]");
+  var panel = $("[data-nav-panel]");
+  var iconOpen = $("[data-nav-open]");
+  var iconClose = $("[data-nav-close]");
 
   function setNav(open) {
-    if (!navToggle || !navPanel) return;
-    navPanel.classList.toggle("is-open", open);
-    navToggle.setAttribute("aria-expanded", open ? "true" : "false");
-    navToggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    if (!toggle || !panel) return;
+    panel.hidden = !open;
+    panel.classList.toggle("is-open", open);
+    toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
     document.body.classList.toggle("is-locked", open);
-    var focusables = $$('a[href], button:not([disabled])', navPanel);
-    if (open && focusables.length) focusables[0].focus();
-    if (!open) {
-      var trigger = navToggle.querySelector("[data-icon-open]") || navToggle;
-      if (trigger) trigger.focus();
+    if (iconOpen) iconOpen.hidden = open;
+    if (iconClose) iconClose.hidden = !open;
+    if (open) {
+      var first = $("a, button", panel);
+      if (first) first.focus();
+    } else {
+      toggle.focus();
     }
   }
 
-  if (navToggle && navPanel) {
-    navToggle.addEventListener("click", function () {
-      setNav(!navPanel.classList.contains("is-open"));
+  if (toggle && panel) {
+    panel.hidden = true;
+    toggle.addEventListener("click", function () {
+      setNav(panel.hidden);
     });
-    $$("#navPanelLinks a").forEach(function (link) {
+    $$("a", panel).forEach(function (link) {
       link.addEventListener("click", function () { setNav(false); });
     });
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && navPanel.classList.contains("is-open")) setNav(false);
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && !panel.hidden) setNav(false);
     });
     window.addEventListener("resize", function () {
-      if (window.innerWidth > 980 && navPanel.classList.contains("is-open")) setNav(false);
+      if (window.innerWidth > 1080 && !panel.hidden) setNav(false);
     });
   }
 
-  /* --------------------------------------------------------------------------
+  /* ------------------------------------------------------------------------
      Scroll reveal
-     -------------------------------------------------------------------------- */
+     ---------------------------------------------------------------------- */
   var reveals = $$(".reveal");
-  if (reducedMotion || !("IntersectionObserver" in window)) {
+  if (!reveals.length) {
+    /* nothing to do */
+  } else if (reduced || !("IntersectionObserver" in window)) {
     reveals.forEach(function (el) { el.classList.add("is-visible"); });
   } else {
     var revealObserver = new IntersectionObserver(function (entries) {
@@ -128,429 +144,541 @@
           revealObserver.unobserve(entry.target);
         }
       });
-    }, { rootMargin: "0px 0px -10% 0px", threshold: 0.12 });
-    reveals.forEach(function (el) { revealObserver.observe(el); });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.1 });
+    reveals.forEach(function (el) {
+      var siblings = el.parentNode ? Array.prototype.indexOf.call(el.parentNode.children, el) : 0;
+      el.style.setProperty("--reveal-delay", Math.min(siblings * 45, 240) + "ms");
+      revealObserver.observe(el);
+    });
   }
 
-  /* --------------------------------------------------------------------------
-     Score animation
-     -------------------------------------------------------------------------- */
-  function animateScore(card) {
-    var target = parseFloat(card.getAttribute("data-score")) || 0;
-    var numEl = $("[data-score-num]", card);
-    var fill = $("[data-score-fill]", card);
-    var gradeEl = $("[data-score-grade]", card);
-
-    function finish() {
-      if (numEl) numEl.textContent = String(target);
-      if (fill) fill.style.width = target + "%";
-    }
-
-    if (reducedMotion || !("IntersectionObserver" in window)) { finish(); return; }
-
-    // The bar and number are rendered at their final values so the page is
-    // correct without JavaScript. Snap them back to zero here - bypassing the
-    // CSS width transition - so the count-up starts cleanly instead of gliding
-    // from 86 down to 0 before it climbs again.
-    if (fill) {
-      fill.style.transition = "none";
-      fill.style.width = "0%";
-      void fill.offsetWidth;
-      fill.style.transition = "";
-    }
-    if (numEl) numEl.textContent = "0";
-
-    var duration = 800;
-    var startTime = 0;
-    function step(now) {
-      if (!startTime) startTime = now;
-      var t = Math.min((now - startTime) / duration, 1);
-      var eased = 1 - Math.pow(1 - t, 3);
-      if (numEl) numEl.textContent = String(Math.round(target * eased));
-      if (fill) fill.style.width = (target * eased) + "%";
-      if (t < 1) requestAnimationFrame(step);
-      else if (gradeEl) gradeEl.classList.add("is-done");
-    }
-    requestAnimationFrame(step);
-  }
-
-  $$("[data-score-card]").forEach(function (card) {
-    if (reducedMotion || !("IntersectionObserver" in window)) { animateScore(card); return; }
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          animateScore(entry.target);
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.4 });
-    observer.observe(card);
-  });
-
-  /* --------------------------------------------------------------------------
+  /* ------------------------------------------------------------------------
      Tabs
-     -------------------------------------------------------------------------- */
+     ---------------------------------------------------------------------- */
   $$("[data-tabs]").forEach(function (group) {
     var tabs = $$("[role='tab']", group);
     var panels = $$("[role='tabpanel']", group);
+    if (!tabs.length) return;
 
-    function activate(tab, focus) {
-      tabs.forEach(function (t) {
-        var selected = t === tab;
-        t.setAttribute("aria-selected", selected ? "true" : "false");
-        t.tabIndex = selected ? 0 : -1;
+    function activate(tab, moveFocus) {
+      tabs.forEach(function (item) {
+        var selected = item === tab;
+        item.setAttribute("aria-selected", selected ? "true" : "false");
+        item.tabIndex = selected ? 0 : -1;
       });
       panels.forEach(function (p) {
-        p.classList.toggle("is-active", p.getAttribute("aria-labelledby") === tab.id);
-        p.hidden = p.getAttribute("aria-labelledby") !== tab.id;
+        var match = p.getAttribute("aria-labelledby") === tab.id;
+        p.hidden = !match;
+        p.classList.toggle("is-active", match);
       });
-      if (focus !== false) tab.focus();
+      if (moveFocus !== false) tab.focus();
     }
 
-    tabs.forEach(function (tab, i) {
-      tab.addEventListener("click", function () { activate(tab); });
-      tab.addEventListener("keydown", function (e) {
+    tabs.forEach(function (tab, index) {
+      tab.addEventListener("click", function () { activate(tab, false); });
+      tab.addEventListener("keydown", function (event) {
         var next = null;
-        if (e.key === "ArrowRight" || e.key === "ArrowDown") next = tabs[(i + 1) % tabs.length];
-        if (e.key === "ArrowLeft" || e.key === "ArrowUp") next = tabs[(i - 1 + tabs.length) % tabs.length];
-        if (e.key === "Home") next = tabs[0];
-        if (e.key === "End") next = tabs[tabs.length - 1];
-        if (next) { e.preventDefault(); activate(next); }
+        if (event.key === "ArrowRight" || event.key === "ArrowDown") next = tabs[(index + 1) % tabs.length];
+        if (event.key === "ArrowLeft" || event.key === "ArrowUp") next = tabs[(index - 1 + tabs.length) % tabs.length];
+        if (event.key === "Home") next = tabs[0];
+        if (event.key === "End") next = tabs[tabs.length - 1];
+        if (next) {
+          event.preventDefault();
+          activate(next);
+        }
       });
     });
 
-    // Make sure one panel is visible even if JS was loaded late.
-    var current = tabs.filter(function (t) { return t.getAttribute("aria-selected") === "true"; })[0] || tabs[0];
-    if (current) activate(current, false);
+    var initial = tabs.filter(function (t) { return t.getAttribute("aria-selected") === "true"; })[0] || tabs[0];
+    activate(initial, false);
   });
 
-  /* --------------------------------------------------------------------------
-     Modal
-     -------------------------------------------------------------------------- */
-  var modal = $("[data-modal]");
-  var lastFocused = null;
+  /* ------------------------------------------------------------------------
+     Accordion groups: expand all / collapse all
+     ---------------------------------------------------------------------- */
+  $$("[data-acc-controls]").forEach(function (controls) {
+    var target = $(controls.getAttribute("data-acc-controls"));
+    if (!target) return;
+    var details = $$("details", target);
+    var openAll = $("[data-acc-open]", controls);
+    var closeAll = $("[data-acc-close]", controls);
+    if (openAll) openAll.addEventListener("click", function () {
+      details.forEach(function (d) { d.open = true; });
+    });
+    if (closeAll) closeAll.addEventListener("click", function () {
+      details.forEach(function (d) { d.open = false; });
+    });
+  });
 
-  function openModal(opener) {
-    if (!modal) return;
-    lastFocused = opener || document.activeElement;
-    modal.classList.add("is-open");
-    modal.setAttribute("aria-hidden", "false");
-    document.body.classList.add("is-locked");
-    var closeBtn = $("[data-modal-close]", modal);
-    if (closeBtn) closeBtn.focus();
-    else {
-      var focusables = $$('a[href], button:not([disabled])', modal);
-      if (focusables.length) focusables[0].focus();
+  /* ------------------------------------------------------------------------
+     Score, gauge and bar animation
+     ---------------------------------------------------------------------- */
+  function animateNumber(el, target, duration) {
+    var start = null;
+    function step(now) {
+      if (start === null) start = now;
+      var t = Math.min((now - start) / duration, 1);
+      var eased = 1 - Math.pow(1 - t, 3);
+      el.textContent = String(Math.round(target * eased));
+      if (t < 1) window.requestAnimationFrame(step);
+      else el.textContent = String(target);
+    }
+    window.requestAnimationFrame(step);
+  }
+
+  function paint(el) {
+    var score = parseFloat(el.getAttribute("data-score")) || 0;
+    var valueEl = $("[data-score-value]", el);
+    var gauge = $("[data-gauge]", el);
+    $$("[data-bar]", el).forEach(function (bar) {
+      bar.style.width = (parseFloat(bar.getAttribute("data-bar")) || 0) + "%";
+    });
+    if (gauge) gauge.style.setProperty("--v", String(score));
+    if (valueEl) {
+      if (reduced) valueEl.textContent = String(Math.round(score));
+      else animateNumber(valueEl, score, 900);
     }
   }
 
-  function closeModal() {
-    if (!modal || !modal.classList.contains("is-open")) return;
-    modal.classList.remove("is-open");
-    modal.setAttribute("aria-hidden", "true");
-    document.body.classList.remove("is-locked");
-    if (lastFocused && lastFocused.focus) lastFocused.focus();
-  }
+  $$("[data-score-card]").forEach(function (card) {
+    if (reduced || !("IntersectionObserver" in window)) {
+      paint(card);
+      return;
+    }
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          paint(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.35 });
+    observer.observe(card);
+  });
 
-  if (modal) {
-    $$("[data-modal-open]").forEach(function (btn) {
-      btn.addEventListener("click", function (e) { e.preventDefault(); openModal(btn); });
-    });
-    var closeBtn = $("[data-modal-close]", modal);
-    if (closeBtn) closeBtn.addEventListener("click", closeModal);
-    var backdrop = $(".modal-backdrop", modal) || modal;
-    backdrop.addEventListener("click", function (e) {
-      if (e.target === backdrop) closeModal();
-    });
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && modal.classList.contains("is-open")) closeModal();
-      if (e.key === "Tab" && modal.classList.contains("is-open")) {
-        var focusables = $$('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])', modal)
-          .filter(function (el) { return el.offsetParent !== null; });
-        if (!focusables.length) return;
-        var first = focusables[0];
-        var last = focusables[focusables.length - 1];
-        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-      }
-    });
-  }
-
-  /* --------------------------------------------------------------------------
-     Copy buttons
-     -------------------------------------------------------------------------- */
-  $$("[data-copy]").forEach(bindCopy);
-
-  /* --------------------------------------------------------------------------
-     Footer year
-     -------------------------------------------------------------------------- */
-  $$("[data-year]").forEach(function (el) { el.textContent = new Date().getFullYear(); });
-
-  /* --------------------------------------------------------------------------
-     Demonstration assessment (demo page)
-     -------------------------------------------------------------------------- */
-  var ALLOWED = ["example.com", "example.org", "example.net", "scanme.nmap.org", "badssl.com"];
-
+  /* ------------------------------------------------------------------------
+     Recorded assessment explorer
+     ---------------------------------------------------------------------- */
   var demo = $("[data-demo]");
+
   if (demo) {
-    var form = $("[data-demo-form]", demo);
-    var input = $("[data-demo-input]", demo);
-    var consent = $("[data-demo-consent]", demo);
-    var operator = $("[data-demo-operator]", demo);
-    var submitBtn = $("[data-demo-submit]", demo);
-    var resetBtn = $("[data-demo-reset]", demo);
+    var dataUrl = CFG.recordedDataUrl || "/data/recorded-assessment.json";
+    var domainsBox = $("[data-demo-domains]", demo);
+    var stageBox = $("[data-demo-stages]", demo);
     var progress = $("[data-demo-progress]", demo);
-    var stateBox = $("[data-demo-state]", demo);
-    var resultBox = $("[data-demo-result]", demo);
-    var errorBox = $("[data-demo-error]", demo);
+    var statusBox = $("[data-demo-status]", demo);
+    var reportBox = $("[data-demo-report]", demo);
+    var controlList = $("[data-demo-control-list]");
+    var controlDetail = $("[data-demo-control-detail]");
+    var allowlist = CFG.allowlist || [];
+    var dataset = null;
+    var currentTarget = null;
+    var selectedControl = null;
 
-    function normalize(value) {
-      return String(value || "")
-        .trim()
-        .toLowerCase()
-        .replace(/^[a-z]+:\/\//, "")
-        .replace(/\/.*$/, "")
-        .replace(/^www\./, "")
-        .replace(/\.$/, "");
+    var STATUS_LABEL = { pass: "Pass", warning: "Warning", fail: "Fail", inconclusive: "Inconclusive" };
+
+    function setStatus(html, tone) {
+      if (!statusBox) return;
+      statusBox.className = "form-status form-status--" + (tone || "warn");
+      statusBox.innerHTML = html;
+      statusBox.hidden = false;
     }
 
-    function setState(html, tone) {
-      if (!stateBox) return;
-      stateBox.className = "state " + (tone ? "state-" + tone : "state-info");
-      stateBox.innerHTML = html;
-      stateBox.hidden = false;
-    }
-
-    function validate() {
-      var value = normalize(input.value);
-      var problems = [];
-      if (!value) problems.push("Enter one of the approved test domains.");
-      else if (/^[0-9.]+$/.test(value)) problems.push("IP addresses are not accepted — this edition works with domain names only.");
-      else if (value.indexOf(" ") !== -1) problems.push("Domains cannot contain spaces.");
-      else if (ALLOWED.indexOf(value) === -1) {
-        problems.push("“" + value + "” is not on the public allowlist.");
-        problems.push("This edition can assess example.com, example.org, example.net, scanme.nmap.org and badssl.com only.");
-      }
-      if (!consent.checked) problems.push("Read and accept the authorisation notice before continuing.");
-      if (!operator.value.trim()) problems.push("Enter the name or handle that will sign the consent receipt.");
-      return problems;
-    }
-
-    function fieldError(inputEl, problems) {
-      var wrap = inputEl.closest(".field");
-      if (!wrap) return;
-      var msg = problems.filter(function (p) {
-        return p.indexOf("allowlist") !== -1 || p.indexOf("IP address") !== -1 || p.indexOf("spaces") !== -1 || p.indexOf("Enter one") !== -1;
-      })[0];
-      wrap.classList.toggle("has-error", Boolean(msg));
-      var err = $(".field-error", wrap);
-      if (msg) {
-        if (!err) {
-          err = document.createElement("p");
-          err.className = "field-error";
-          err.innerHTML = '<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="10" cy="14" r="0.9" fill="currentColor"/></svg>';
-          wrap.appendChild(err);
-        }
-        err.lastChild.textContent = msg;
-      } else if (err) {
-        err.remove();
+    function showStages(stageIndex) {
+      if (!stageBox) return;
+      var rows = $$("[data-stage]", stageBox);
+      rows.forEach(function (row, index) {
+        var complete = stageIndex >= rows.length;
+        row.classList.toggle("is-active", index === stageIndex);
+        row.classList.toggle("is-done", complete || index < stageIndex);
+      });
+      if (progress) {
+        progress.style.width = Math.min(((stageIndex + 1) / 3) * 100, 100) + "%";
       }
     }
 
-    function showError(message) {
-      if (!errorBox) return;
-      errorBox.hidden = false;
-      errorBox.innerHTML = '<strong>The assessment could not start.</strong><p>' + message + '</p>';
+    function domainCard(record) {
+      var label = record.source === "recorded" ? "Recorded capture" : "Reference profile";
+      var when = record.source === "recorded" ? "28 Oct 2026" : "No dated capture";
+      return (
+        '<button class="domain-card" type="button" data-domain="' + esc(record.target) + '" aria-pressed="false">' +
+        '<span class="dc-name">' + esc(record.target) + "</span>" +
+        '<span class="dc-meta">' + esc(label) + " &middot; " + esc(when) + "</span>" +
+        '<span class="dc-score">' + esc(record.score) + "/100 &middot; " + esc(record.grade) + "</span>" +
+        "</button>"
+      );
     }
 
-    function hideError() { if (errorBox) { errorBox.hidden = true; errorBox.innerHTML = ""; } }
-
-    function sleep(ms) { return new Promise(function (r) { window.setTimeout(r, ms); }); }
-
-    /* The demonstration result is a stored, real capture of the public sandbox
-       run against example.com - a reserved test domain. It is not a scan of the
-       domain the visitor typed, and this website cannot run one. */
-    var DEMO_FIXTURE = {
-      target: "example.com",
-      targetDescription: "IANA RFC 2606 / RFC 6761 reserved standard test domain",
-      score: 86,
-      grade: "B",
-      reportId: "SMB-SANDBOX-20261028-A91144E4",
-      consentId: "CONSENT-20261028-A91144E4",
-      receiptHash: "b068e643725c90429199d458b31a0749b08b4af1caae57fe4ea8878f412820a6",
-      timestamp: "2026-10-28T17:25:30Z",
-      edition: "Public Sandbox Edition (5-Domain Locked)",
-      controls: "8 completed · 0 inconclusive",
-      categories: [
-        ["DNS & Domain Hygiene", 95],
-        ["E-mail Authentication", 92],
-        ["Transport Security (TLS)", 90],
-        ["Web Security Headers", 68]
-      ],
-      findings: [
-        ["pass", "info", "DNS A/AAAA Resolution",
-          "The reserved domain resolves to public anycast addresses.",
-          "Resolved example.com -> 104.20.23.154, 172.66.147.243, 2606:4700:10::ac42:93f3, 2606:4700:10::6814:179a"],
-        ["pass", "high", "DNSSEC Validation",
-          "The zone is signed and the chain of trust validates against the parent.",
-          "Zone signed with validated RRSIG and parent DS delegation."],
-        ["pass", "high", "SPF Hard-Fail Policy",
-          "SPF is published and set to a strict no-mail policy.",
-          "v=spf1 -all (strict no-mail policy for reserved domain)."],
-        ["pass", "high", "DMARC Enforcement",
-          "Unauthorised senders are rejected at the receiving mail server.",
-          "v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s"],
-        ["pass", "medium", "RFC 7505 Null MX",
-          "The domain publishes a null MX, signalling that it does not accept mail.",
-          "MX 0 . published indicating domain does not accept e-mail."],
-        ["pass", "high", "TLS 1.2/1.3 & Certificate",
-          "TLS 1.3 is offered with a certificate that covers the domain.",
-          "Valid X.509 certificate covering example.com over TLS 1.3."],
-        ["warn", "medium", "HTTP Strict-Transport-Security",
-          "HSTS is not enforced on the reference landing page.",
-          "Strict-Transport-Security header not enforced on reference landing page."],
-        ["warn", "medium", "Content-Security-Policy",
-          "A content security policy is not set on the static reference response.",
-          "Content-Security-Policy header absent on static reference response."]
-      ]
-    };
-
-    var DEMO_NOTE =
-      "This is the stored demonstration result for <strong>example.com</strong>, a reserved test " +
-      "domain, captured 28 October 2026. It is not a scan of the domain you entered - this website " +
-      "cannot scan anything. The public sandbox performs the real read-only checks on your own machine.";
-
-    function dotFor(kind) {
-      if (kind === "warn") return "dot dot-warn";
-      if (kind === "fail") return "dot dot-fail";
-      return "dot dot-pass";
+    function renderMeta(record) {
+      var rows = [
+        ["Target", esc(record.target)],
+        ["Source", esc(record.source_label)],
+        ["Assessment timestamp", esc(record.timestamp_display)],
+        ["Report ID", record.report_id ? '<span class="mono-inline">' + esc(record.report_id) + "</span>" : "Not issued for this profile"],
+        ["Scanner version", "v" + esc(record.version) + " &middot; " + esc(record.edition)],
+        ["Consent receipt", record.consent_id ? '<span class="mono-inline">' + esc(record.consent_id) + "</span>" : "Not recorded for this profile"]
+      ];
+      return '<dl class="meta-list">' + rows.map(function (row) {
+        return "<div><dt>" + row[0] + "</dt><dd>" + row[1] + "</dd></div>";
+      }).join("") + "</dl>";
     }
 
-    function esc(v) { return String(v).replace(/"/g, "&quot;").replace(/&/g, "&amp;"); }
+    function renderCategories(record) {
+      return '<div class="bars">' + Object.keys(record.categories).map(function (name) {
+        var value = record.categories[name];
+        var cls = value >= 80 ? "" : value >= 65 ? " bar-fill--cyan" : " bar-fill--warn";
+        return (
+          '<div class="bar"><div class="bar-head"><span>' + esc(name) + "</span><b>" + value + '</b></div>' +
+          '<div class="bar-track"><span class="bar-fill' + cls + '" style="width:' + value + '%"></span></div></div>'
+        );
+      }).join("") + "</div>";
+    }
 
-    function renderDemoResult() {
-      if (!resultBox) return;
-      var f = DEMO_FIXTURE;
-      var cats = f.categories.map(function (c) {
-        return '<div class="kpi"><b>' + c[1] + '</b><span>' + c[0] + '</span></div>';
+    function findingRow(finding) {
+      var control = dataset.controls.filter(function (c) { return c.num === finding.control; })[0];
+      var controlLabel = control ? "C" + (control.num < 10 ? "0" : "") + control.num + " &middot; " + esc(control.short) : "";
+      var evidence = '<div class="evidence"><span class="val">' + esc(finding.evidence) + "</span>" +
+        '<button class="copy" type="button" data-copy="' + esc(finding.evidence) + '">Copy</button></div>';
+      var remediation = finding.remediation
+        ? '<div class="remediation"><b>Recommended</b>' + esc(finding.remediation) + "</div>"
+        : "";
+      return (
+        '<article class="finding" data-control="' + finding.control + '">' +
+        '<div class="finding-head"><span class="dot dot-' +
+        (finding.status === "pass" ? "pass" : finding.status === "fail" ? "fail" : finding.status === "warning" ? "warn" : "neutral") +
+        '"></span><div class="finding-body">' +
+        '<div class="finding-title"><h4>' + esc(finding.title) + "</h4>" +
+        '<span class="status-badge status-' + esc(finding.status) + '">' + esc(STATUS_LABEL[finding.status] || finding.status) + "</span>" +
+        (controlLabel ? '<span class="component-tag mono">' + controlLabel + "</span>" : "") +
+        "</div><p>" + esc(finding.text) + "</p>" + evidence + remediation +
+        "</div></div></article>"
+      );
+    }
+
+    function renderReport(record) {
+      if (!reportBox) return;
+      reportBox.hidden = false;
+      reportBox.innerHTML =
+        '<div class="report-shell"><div class="window-bar"><span class="window-dots"><i></i><i></i><i></i></span>' +
+        '<span class="mono">' + esc(record.source === "recorded" ? "recorded-assessment.json" : "reference-profile.json") + "</span>" +
+        '<span class="window-label">' + esc(record.source_label) + "</span></div>" +
+        '<div class="report-shell-body">' +
+        '<div class="recorded-banner"><span class="dot"></span><span><b>Recorded</b> &mdash; stored output, not a live scan.</span>' +
+        '<span>' + esc(record.timestamp_display) + "</span></div>" +
+        '<div class="score-panel mt-3">' +
+        '<div class="gauge" data-gauge style="--v:' + record.score + '"><div class="gauge-inner">' +
+        '<span class="gauge-value" data-score-value>' + record.score + "</span>" +
+        '<span class="gauge-label">Posture score</span>' +
+        '<span class="gauge-grade">Grade ' + esc(record.grade) + " &middot; " + esc(record.grade_label) + "</span>" +
+        "</div></div>" +
+        '<div><h3 class="mt-0">' + esc(record.target) + "</h3>" +
+        '<p class="muted small">' + esc(record.summary) + "</p>" + renderCategories(record) + "</div>" +
+        "</div>" +
+        '<div class="mt-3">' + renderMeta(record) + "</div>" +
+        '<div class="mt-3"><h3 class="h-sm">Findings in this run</h3>' +
+        '<p class="faint tiny">' + record.counts.completed + " controls completed &middot; " + record.counts.inconclusive + " inconclusive. The public sandbox evaluates a read-only subset of the 22-control catalog.</p>" +
+        '<div class="findings mt-2" data-findings>' + record.findings.map(findingRow).join("") + "</div></div>" +
+        "</div></div>";
+      bindCopy(reportBox);
+    }
+
+    function renderControlDetail(num) {
+      if (!controlDetail || !dataset) return;
+      var control = dataset.controls.filter(function (c) { return c.num === num; })[0];
+      if (!control) return;
+      selectedControl = num;
+      if (controlList) $$("[data-control-num]", controlList).forEach(function (btn) {
+        btn.setAttribute("aria-pressed", Number(btn.getAttribute("data-control-num")) === num ? "true" : "false");
+      });
+      var record = dataset.domains[currentTarget];
+      var finding = record.findings.filter(function (f) { return f.control === num; })[0];
+      var runStatus = finding
+        ? '<span class="status-badge status-' + esc(finding.status) + '">' + esc(STATUS_LABEL[finding.status]) + "</span>"
+        : '<span class="status-badge status-inconclusive">Not in this run</span>';
+      var evidenceBlock = finding
+        ? '<div class="evidence"><span class="val">' + esc(finding.evidence) + "</span>" +
+          '<button class="copy" type="button" data-copy="' + esc(finding.evidence) + '">Copy</button></div>'
+        : '<p class="faint small">This control is part of the full 22-control engine. The public sandbox executes a read-only subset, and this control was not part of the ' +
+          (record.source === "recorded" ? "recorded run" : "reference profile") + ".</p>";
+      controlDetail.innerHTML =
+        '<div class="row" style="justify-content:space-between">' +
+        '<span class="mono faint">C' + (control.num < 10 ? "0" : "") + control.num + " &middot; " + esc(control.category_name) + "</span>" + runStatus + "</div>" +
+        "<h4>" + esc(control.name) + "</h4>" +
+        "<p class=\"muted small\">" + esc(control.summary) + "</p>" +
+        "<dl><div><dt>What it evaluates</dt><dd>" + esc(control.evaluates) + "</dd></div>" +
+        "<div><dt>Why it matters</dt><dd>" + esc(control.why) + "</dd></div>" +
+        "<div><dt>Evidence in this " + (record.source === "recorded" ? "recorded run" : "reference profile") + "</dt><dd>" + evidenceBlock + "</dd></div></dl>";
+      bindCopy(controlDetail);
+    }
+
+    function renderControls() {
+      if (!controlList || !dataset) return;
+      controlList.innerHTML = dataset.controls.map(function (control) {
+        return (
+          '<button type="button" data-control-num="' + control.num + '" aria-pressed="false">' +
+          '<span class="cl-num">C' + (control.num < 10 ? "0" : "") + control.num + "</span>" +
+          "<span>" + esc(control.name) + "</span></button>"
+        );
       }).join("");
-      var rows = f.findings.map(function (x) {
-        return '<div class="finding"><div class="finding-head"><span class="' + dotFor(x[0]) + '"></span>' +
-          '<div class="finding-body"><h4>' + x[2] + '</h4><p>' + x[3] + '</p>' +
-          '<div class="evidence"><span class="val">' + x[4] + '</span>' +
-          '<button class="copy" data-copy="' + esc(x[4]) + '" type="button">copy</button></div>' +
-          '</div></div></div>';
-      }).join("");
-      resultBox.hidden = false;
-      resultBox.innerHTML =
-        '<div class="report-bar"><span class="dots"><i></i><i></i><i></i></span>' +
-        '<span>demonstration · stored capture · not a live scan</span></div>' +
-        '<div class="report-body">' +
-        '<dl class="report-meta">' +
-        '<div><dt>Target</dt><dd>' + f.target + ' - ' + f.targetDescription + '</dd></div>' +
-        '<div><dt>Report</dt><dd>' + f.reportId + ' · ' + f.edition + '</dd></div>' +
-        '<div><dt>Timestamp</dt><dd>' + f.timestamp + '</dd></div>' +
-        '<div><dt>Consent receipt</dt><dd>' + f.consentId + ' · sha256 ' + f.receiptHash + '</dd></div>' +
-        '<div><dt>Posture score</dt><dd>' + f.score + ' / 100 · Grade ' + f.grade + '</dd></div>' +
-        '<div><dt>Controls assessed</dt><dd>' + f.controls + '</dd></div>' +
-        '</dl>' +
-        '<div class="alert alert-info" style="margin:1rem 0">' + DEMO_NOTE + '</div>' +
-        '<div class="score-track"><div class="score-fill" style="width:' + f.score + '%"></div></div>' +
-        '<div class="kpi-row">' + cats + '</div>' +
-        '<div class="findings">' + rows + '</div>' +
-        '<p class="faint" style="font-size:.8125rem;margin-top:1rem">Every line above quotes the observation ' +
-        'the sandbox recorded. Run the tool on your own machine to reproduce it against a domain you are ' +
-        'authorised to assess.</p>' +
-        '</div>';
-      $$("[data-copy]", resultBox).forEach(bindCopy);
+      $$("[data-control-num]", controlList).forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          renderControlDetail(Number(btn.getAttribute("data-control-num")));
+        });
+      });
     }
 
-    if (form) {
-      form.addEventListener("submit", function (e) {
-        e.preventDefault();
-        hideError();
-        resultBox.hidden = true;
+    function selectDomain(target) {
+      if (!dataset || !dataset.domains[target]) return;
+      if (allowlist.length && allowlist.indexOf(target) === -1) {
+        setStatus("<strong>Target not permitted.</strong><p>" + esc(target) + " is not one of the five approved demonstration domains. The public edition accepts example.com, example.org, example.net, scanme.nmap.org and badssl.com only.</p>", "err");
+        return;
+      }
+      currentTarget = target;
+      if (statusBox) statusBox.hidden = true;
+      $$("[data-domain]", domainsBox).forEach(function (btn) {
+        btn.setAttribute("aria-pressed", btn.getAttribute("data-domain") === target ? "true" : "false");
+      });
 
-        var problems = validate();
-        fieldError(input, problems);
-        if (!consent.checked) {
-          var cWrap = consent.closest(".field");
-          if (cWrap) {
-            cWrap.classList.add("has-error");
-            var cErr = $(".field-error", cWrap);
-            if (!cErr) {
-              cErr = document.createElement("p");
-              cErr.className = "field-error";
-              cErr.innerHTML = '<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="10" cy="14" r="0.9" fill="currentColor"/></svg>';
-              cWrap.appendChild(cErr);
-            }
-            cErr.lastChild.textContent = "Read and accept the authorisation notice before continuing.";
-          }
+      var steps = 3;
+      var delay = reduced ? 0 : 320;
+      var index = 0;
+
+      function advance() {
+        showStages(index);
+        if (index < steps - 1) {
+          index += 1;
+          window.setTimeout(advance, delay);
         } else {
-          var cWrap2 = consent.closest(".field");
-          if (cWrap2) { cWrap2.classList.remove("has-error"); var e2 = $(".field-error", cWrap2); if (e2) e2.remove(); }
+          window.setTimeout(function () {
+            showStages(steps + 1);
+            renderReport(dataset.domains[target]);
+            renderControlDetail(dataset.domains[target].findings[0].control);
+          }, delay);
         }
-        if (problems.length) { showError(problems[0]); return; }
+      }
 
-        var target = normalize(input.value);
-        submitBtn.disabled = true;
-        setState('<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="10" cy="14" r="0.9" fill="currentColor"/></svg><div><strong>Validating target…</strong><p>Checking the allowlist before any network request is made.</p></div>', "info");
-
-        window.setTimeout(function () {
-          setState('<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="10" cy="14" r="0.9" fill="currentColor"/></svg><div><strong>Allowlist check passed</strong><p>' + target + ' is an approved public test domain. Consent receipt is being signed.</p></div>', "info");
-        }, 700);
-
-        window.setTimeout(function () {
-          setState('<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8.5" stroke="currentColor" stroke-width="1.5" opacity="0.5"/><path d="M10 5.5v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><div><strong>Assessment running (demonstration)</strong><p>This is illustrative output. The runnable sandbox performs the real read-only checks on your own machine.</p></div>', "info");
-          if (progress) progress.hidden = false;
-        }, 1400);
-
-        window.setTimeout(function () {
-          if (progress) progress.hidden = true;
-          renderDemoResult();
-          setState('<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><div><strong>Demonstration report ready</strong><p>Signed consent receipt ' + DEMO_FIXTURE.consentId + ' · recorded locally by the sandbox, never uploaded. The result shown is the stored capture for example.com.</p></div>', "success");
-          submitBtn.disabled = false;
-        }, 2400);
-      });
+      if (reportBox) reportBox.hidden = true;
+      advance();
     }
 
-    if (resetBtn) {
-      resetBtn.addEventListener("click", function () {
-        form.reset();
-        hideError();
-        if (resultBox) { resultBox.hidden = true; resultBox.innerHTML = ""; }
-        if (stateBox) { stateBox.hidden = true; stateBox.innerHTML = ""; }
-        if (progress) progress.hidden = true;
-        var wrap = input.closest(".field");
-        if (wrap) { wrap.classList.remove("has-error"); var err = $(".field-error", wrap); if (err) err.remove(); }
-        input.focus();
+    fetch(dataUrl, { cache: "no-cache" })
+      .then(function (response) {
+        if (!response.ok) throw new Error("HTTP " + response.status);
+        return response.json();
+      })
+      .then(function (json) {
+        dataset = json;
+        if (domainsBox) {
+          domainsBox.innerHTML = Object.keys(json.domains).map(function (key) {
+            return domainCard(json.domains[key]);
+          }).join("");
+          $$("[data-domain]", domainsBox).forEach(function (btn) {
+            btn.addEventListener("click", function () {
+              selectDomain(btn.getAttribute("data-domain"));
+            });
+          });
+        }
+        renderControls();
+        selectDomain(json.default || "example.com");
+      })
+      .catch(function () {
+        setStatus(
+          "<strong>The recorded data could not be loaded.</strong><p>This is usually a temporary network or hosting issue. The same assessment is published as a static page in the <a href=\"/sample-report/\">sample report</a>, and the raw data is available at <a href=\"/data/recorded-assessment.json\">/data/recorded-assessment.json</a>.</p>",
+          "err"
+        );
+        if (progress) progress.style.width = "0%";
       });
-    }
-
-    $$("[data-demo-domain]").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        input.value = btn.getAttribute("data-demo-domain");
-        var wrap = input.closest(".field");
-        if (wrap) { wrap.classList.remove("has-error"); var err = $(".field-error", wrap); if (err) err.remove(); }
-        hideError();
-        input.focus();
-      });
-    });
   }
 
-  /* --------------------------------------------------------------------------
-     Inline expansion for capability groups (progressive enhancement)
-     -------------------------------------------------------------------------- */
-  $$(".group-card summary").forEach(function (summary) {
-    summary.addEventListener("click", function (e) {
-      // Native <details> handles this; we only manage focus for keyboard users.
-      if (e.detail === 0) {
-        var details = summary.closest("details");
-        window.setTimeout(function () {
-          var first = $("a[href], button:not([disabled])", details.querySelector(".group-body"));
-          if (first) first.focus();
-        }, 30);
+  /* ------------------------------------------------------------------------
+     Enquiry forms
+     ---------------------------------------------------------------------- */
+  var REGISTRY_KEY = "smb-enquiry-last-sent";
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
+
+  function fieldWrap(el) {
+    return el.closest(".field");
+  }
+
+  function setFieldError(el, message) {
+    var wrap = fieldWrap(el);
+    if (!wrap) return;
+    wrap.classList.add("has-error");
+    el.setAttribute("aria-invalid", "true");
+    el.setAttribute("aria-describedby", "err-" + el.name);
+    var err = wrap.querySelector(".field-error");
+    if (!err) {
+      err = document.createElement("p");
+      err.className = "field-error";
+      err.id = "err-" + el.name;
+      err.innerHTML = '<svg viewBox="0 0 20 20" width="14" height="14" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="8.5"/><path d="M10 6v5"/><circle cx="10" cy="14" r="0.9" fill="currentColor" stroke="none"/></svg><span></span>';
+      wrap.appendChild(err);
+    }
+    err.lastChild.textContent = message;
+  }
+
+  function clearFieldError(el) {
+    var wrap = fieldWrap(el);
+    if (!wrap) return;
+    wrap.classList.remove("has-error");
+    el.removeAttribute("aria-invalid");
+    el.removeAttribute("aria-describedby");
+    var err = wrap.querySelector(".field-error");
+    if (err) err.remove();
+  }
+
+  function buildMailto(payload) {
+    var email = CFG.contactEmail || "";
+    var subject = "[" + payload.enquiryType + "] " + (payload.company || payload.name || "Website enquiry");
+    var lines = [
+      "Name: " + payload.name,
+      "Email: " + payload.email
+    ];
+    if (payload.company) lines.push("Company: " + payload.company);
+    if (payload.domain) lines.push("Domain: " + payload.domain);
+    lines.push("Enquiry type: " + payload.enquiryType);
+    lines.push("Submitted from: " + window.location.href);
+    if (payload.authorised) lines.push("Authorisation confirmed: yes");
+    lines.push("", "Message:", payload.message);
+    var body = lines.join("\n").slice(0, 1800);
+    return "mailto:" + encodeURIComponent(email) + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+  }
+
+  function validateForm(form) {
+    var problems = [];
+    var required = $$("[data-required]", form);
+    required.forEach(function (el) {
+      var value = (el.type === "checkbox" ? (el.checked ? "yes" : "") : el.value).trim();
+      if (!value) {
+        var label = el.getAttribute("data-label") || el.name;
+        setFieldError(el, label + " is required.");
+        problems.push(el);
+        return;
+      }
+      clearFieldError(el);
+      if (el.type === "email" && !EMAIL_RE.test(value)) {
+        setFieldError(el, "Enter a valid email address, for example name@company.com.");
+        problems.push(el);
+      }
+    });
+    var message = form.querySelector("[name='message']");
+    if (message && message.value.trim().length > 0 && message.value.trim().length < 20) {
+      setFieldError(message, "Please add a little more detail (at least 20 characters).");
+      problems.push(message);
+    }
+    return problems;
+  }
+
+  $$("form[data-enquiry-form]").forEach(function (form) {
+    var status = $("[data-form-status]", form);
+    var submit = $("[type='submit']", form);
+    var renderedAt = Date.now();
+
+    $$("input, textarea, select", form).forEach(function (el) {
+      el.addEventListener("input", function () { clearFieldError(el); });
+      el.addEventListener("change", function () { clearFieldError(el); });
+    });
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      if (status) { status.hidden = true; status.innerHTML = ""; }
+
+      var honeypot = form.querySelector("[name='_gotcha']");
+      if (honeypot && honeypot.value) return; /* silently drop bots */
+
+      var last = Number(window.localStorage.getItem(REGISTRY_KEY) || 0);
+      if (Date.now() - last < 45000) {
+        if (status) {
+          status.hidden = false;
+          status.className = "form-status form-status--warn";
+          status.innerHTML = "<strong>Please wait a moment.</strong><p>An enquiry was already sent from this browser in the last minute. If it did not arrive, use the direct email address below.</p>";
+        }
+        return;
+      }
+
+      var problems = validateForm(form);
+      if (problems.length) {
+        problems[0].focus();
+        if (status) {
+          status.hidden = false;
+          status.className = "form-status form-status--err";
+          status.innerHTML = "<strong>Check the highlighted fields.</strong><p>" + problems.length + " field" + (problems.length > 1 ? "s need" : " needs") + " attention before this can be sent.</p>";
+        }
+        return;
+      }
+
+      if (Date.now() - renderedAt < 1500) {
+        if (status) {
+          status.hidden = false;
+          status.className = "form-status form-status--warn";
+          status.innerHTML = "<strong>Just a moment.</strong><p>Please take a second to review your message, then submit again.</p>";
+        }
+        return;
+      }
+
+      var payload = {
+        kind: form.getAttribute("data-form-kind") || "enquiry",
+        name: form.querySelector("[name='name']").value.trim(),
+        email: form.querySelector("[name='email']").value.trim(),
+        company: (form.querySelector("[name='company']") || {}).value ? form.querySelector("[name='company']").value.trim() : "",
+        domain: (form.querySelector("[name='domain']") || {}).value ? form.querySelector("[name='domain']").value.trim() : "",
+        enquiryType: (form.querySelector("[name='enquiryType']") || {}).value || "General enquiry",
+        message: form.querySelector("[name='message']").value.trim(),
+        authorised: Boolean(form.querySelector("[name='authorised']") && form.querySelector("[name='authorised']").checked),
+        page: window.location.pathname
+      };
+
+      function success(source) {
+        window.localStorage.setItem(REGISTRY_KEY, String(Date.now()));
+        if (submit) { submit.disabled = false; submit.removeAttribute("aria-busy"); }
+        form.reset();
+        if (status) {
+          status.hidden = false;
+          status.className = "form-status form-status--ok";
+          status.innerHTML =
+            "<strong>Thank you — your enquiry is ready to send.</strong>" +
+            "<p>" + (source === "endpoint"
+              ? "It has been delivered. You will receive a reply at " + esc(payload.email) + " once it has been reviewed."
+              : "Your mail application should have opened with the enquiry filled in. Press send there to complete the handover — nothing is stored on this website.") +
+            "</p><p class=\"tiny\">Prefer email? Write directly to <a href=\"mailto:" + esc(CFG.contactEmail) + "\">" + esc(CFG.contactEmail) + "</a>. Assessment requests are reviewed manually; nothing is scanned automatically.</p>";
+          status.scrollIntoView({ block: "nearest", behavior: reduced ? "auto" : "smooth" });
+        }
+      }
+
+      if (CFG.formEndpoint) {
+        if (submit) { submit.disabled = true; submit.setAttribute("aria-busy", "true"); }
+        if (status) {
+          status.hidden = false;
+          status.className = "form-status form-status--warn";
+          status.innerHTML = "<strong>Sending…</strong><p>Please wait while the enquiry is delivered.</p>";
+        }
+        fetch(CFG.formEndpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(payload)
+        })
+          .then(function (response) {
+            if (!response.ok) throw new Error("HTTP " + response.status);
+            success("endpoint");
+          })
+          .catch(function () {
+            if (submit) { submit.disabled = false; submit.removeAttribute("aria-busy"); }
+            window.location.href = buildMailto(payload);
+            success("mailto");
+          });
+      } else {
+        window.location.href = buildMailto(payload);
+        success("mailto");
       }
     });
   });
+
+  /* ------------------------------------------------------------------------
+     Page furniture
+     ---------------------------------------------------------------------- */
+  $$("[data-year]").forEach(function (el) {
+    el.textContent = String(new Date().getFullYear());
+  });
+
+  bindCopy(document);
 })();

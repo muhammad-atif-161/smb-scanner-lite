@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>How to read a 0-100 security posture score honestly — SMB Scanner Lite Knowledge Base</title>
+<meta name="description" content="Why a single number is useful for prioritisation and dangerous as a certificate, and the questions to ask before you quote one in a board pack." />
+<link rel="canonical" href="https://smbscannerlite.me/resources/understanding-posture-scores/" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta name="author" content="Muhammad Atif" />
+<meta name="theme-color" content="#080B14" />
+<meta name="generator" content="SMB Scanner Lite static site builder" />
+<meta property="og:site_name" content="SMB Scanner Lite" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="How to read a 0-100 security posture score honestly — SMB Scanner Lite Knowledge Base" />
+<meta property="og:description" content="Why a single number is useful for prioritisation and dangerous as a certificate, and the questions to ask before you quote one in a board pack." />
+<meta property="og:url" content="https://smbscannerlite.me/resources/understanding-posture-scores/" />
+<meta property="og:image" content="https://smbscannerlite.me/og-image.png" />
+<meta property="og:image:alt" content="SMB Scanner Lite — a dark navy assessment report showing a posture score of 86 out of 100, grade B, with evidence-backed findings." />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="How to read a 0-100 security posture score honestly — SMB Scanner Lite Knowledge Base" />
+<meta name="twitter:description" content="Why a single number is useful for prioritisation and dangerous as a certificate, and the questions to ask before you quote one in a board pack." />
+<meta name="twitter:image" content="https://smbscannerlite.me/og-image.png" />
+<link rel="icon" href="/logo.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/logo.svg" />
+<link rel="alternate" type="application/json" href="/data/recorded-assessment.json" title="Recorded assessment data (JSON)" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/styles.css" />
+
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","headline":"How to read a 0-100 security posture score honestly","description":"Why a single number is useful for prioritisation and dangerous as a certificate, and the questions to ask before you quote one in a board pack.","datePublished":"2026-10-24","dateModified":"2026-10-24","author":{"@type":"Person","name":"Muhammad Atif","url":"https://github.com/muhammad-atif-161"},"publisher":{"@type":"Organization","name":"SMB Scanner Lite","url":"https://smbscannerlite.me"},"mainEntityOfPage":"https://smbscannerlite.me/resources/understanding-posture-scores/","articleSection":"Method and measurement"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://smbscannerlite.me/"},{"@type":"ListItem","position":2,"name":"Knowledge Base","item":"https://smbscannerlite.me/resources/"},{"@type":"ListItem","position":3,"name":"How to read a 0-100 security posture score honestly"}]}]}</script>
+<noscript><style>.reveal{opacity:1;transform:none}</style></noscript>
+</head>
+<body class="">
+
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="nav" data-nav>
+  <div class="wrap nav-inner">
+    <a class="brand" href="/" aria-label="SMB Scanner Lite home">
+      <img src="/logo.svg" width="32" height="32" alt="" />
+      <span class="brand-text">SMB Scanner <span class="brand-lite">Lite</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="/">Overview</a><a href="/capabilities/">Capabilities</a><a href="/sample-report/">Sample Report</a><a href="/methodology/">Methodology</a><a href="/faq/">FAQ</a><a href="/contact/">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="btn btn-primary btn-sm" href="/demo/"><svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5.5 13h5L10 21l7.5-10h-5L13 3z"/></svg><span>Try the Demo</span></a>
+      <button class="nav-toggle" type="button" data-nav-toggle aria-label="Open menu" aria-expanded="false" aria-controls="nav-panel">
+        <span data-nav-open><svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></span>
+        <span data-nav-close hidden><svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="nav-panel" id="nav-panel" data-nav-panel hidden>
+  <nav class="nav-panel-links" aria-label="Mobile">
+    <a href="/">Overview</a><a href="/capabilities/">Capabilities</a><a href="/sample-report/">Sample Report</a><a href="/methodology/">Methodology</a><a href="/faq/">FAQ</a><a href="/contact/">Contact</a>
+  </nav>
+  <div class="nav-panel-foot">
+    <a class="btn btn-primary" href="/demo/"><svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5.5 13h5L10 21l7.5-10h-5L13 3z"/></svg><span>Try the Demo</span></a>
+    <a class="btn btn-ghost" href="/request-assessment/">Request an assessment</a>
+  </div>
+</div>
+<main id="main">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/resources/">Knowledge Base</a></li><li><span aria-current="page">How to read a 0-100 security posture score honestly</span></li></ol></nav>
+
+<article>
+  <header class="article-head">
+    <div class="wrap">
+      <p class="eyebrow">Method and measurement</p>
+      <h1>How to read a 0-100 security posture score honestly</h1>
+      <p class="lede">Why a single number is useful for prioritisation and dangerous as a certificate, and the questions to ask before you quote one in a board pack.</p>
+      <div class="article-meta">
+        <span>Published 2026-10-24</span>
+        <span>7 min read</span>
+        <span>SMB Scanner Lite knowledge base</span>
+      </div>
+    </div>
+  </header>
+  <div class="wrap">
+    <div class="article-layout">
+      <div class="prose">
+        <h2 id="appeal">Why a single number is appealing</h2><p>A score compresses a complicated picture into something a non-specialist can hold in their head. That is genuinely useful: it lets an owner ask "are we better or worse than last quarter" without learning what a DMARC alignment mode is.</p><p>It is also dangerous in the same breath, because compression loses the thing that matters most &mdash; which specific controls produced the result.</p><h2 id="arithmetic">What a defensible score is made of</h2><p>A posture score should be reproducible arithmetic over defined inputs. In SMB Scanner Lite, each control reaches one of four statuses, each control carries a severity weight, and the score is a weighted mean over the controls that completed. Inconclusive controls are excluded from both the numerator and the denominator.</p><p>That last rule is the one most worth checking in any scoring model. If a scanner treats a timeout as a failure, a quiet network produces a bad score. If it treats silence as a pass, a filtering firewall produces a good one. Either way the number stops describing configuration and starts describing reachability.</p><h2 id="grades">What a grade band adds</h2><p>Letter grades are a second compression on top of the first. They are useful for conversation and useless for diagnosis: nobody fixes a B, they fix a missing header.</p><p>The bands should be published and fixed, not adjusted per customer. Ours are A 90&ndash;100, B 80&ndash;89, C 65&ndash;79, D 50&ndash;64 and F below 50, and they are applied identically to every target.</p><h2 id="questions">Questions to ask before quoting a score</h2><p>What was measured, and what was excluded? How were inconclusive results handled? What weights were used, and who decided them? Is the score comparable between two different scopes? How old is it?</p><p>If a vendor cannot answer those five questions, the number is decoration. If they can, the number is a useful index &mdash; still not a certificate, but an index with a methodology behind it.</p><h2 id="abuse">The three ways scores get abused</h2><p><strong>Comparability.</strong> A sandbox score derived from eight controls is not comparable to a full 22-control assessment. Presenting them side by side without that context is misleading, which is why the sandbox report says so explicitly.</p><p><strong>Guarantees.</strong> "Score 95, therefore secure" is a non-sequitur. The score describes measured configuration only.</p><p><strong>Marketing.</strong> A high score on a marketing site is a claim about that site's configuration, not about the product or the business behind it.</p><h2 id="use">Using one well</h2><p>Treat the score as an index into the findings. Read the findings, act on the highest-severity ones, and re-assess after the change. The movement between two assessments of the same scope is more informative than either absolute value.</p><p>The <a href="/methodology/">methodology page</a> documents the weights and the arithmetic. The <a href="/sample-report/">recorded report</a> shows a score next to the findings that produced it, which is the only responsible way to present one.</p>
+        <div class="callout mt-4">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6l7-3z"/><path d="M9 12.2l2.2 2.2L15.4 10"/></svg>
+          <div><p><strong>See how this is measured.</strong> SMB Scanner Lite evaluates these controls from outside and attaches the observation behind every conclusive finding. <a href="/capabilities/">Browse the 22-control catalog</a> or inspect the <a href="/sample-report/">recorded assessment</a>.</p></div>
+        </div>
+      </div>
+      <aside class="article-aside">
+        <nav class="toc" aria-label="On this page">
+          <h2>On this page</h2>
+          <ol><li><a href="#appeal">Why a single number is appealing</a></li><li><a href="#arithmetic">What a defensible score is made of</a></li><li><a href="#grades">What a grade band adds</a></li><li><a href="#questions">Questions to ask before quoting a score</a></li><li><a href="#abuse">The three ways scores get abused</a></li><li><a href="#use">Using one well</a></li></ol>
+        </nav>
+        <div class="card">
+          <h3 style="font-size:0.95rem">Questions about your own domain?</h3>
+          <p class="small">A private assessment covers the full catalog, after scope and written authorisation are agreed.</p>
+          <a class="tlink mt-1" href="/request-assessment/">Request an assessment <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</article>
+
+<section class="section section--alt">
+  <div class="wrap">
+    <div class="section-head"><p class="eyebrow">Keep reading</p><h2>Related articles</h2></div>
+    <div class="resource-grid">
+<a class="resource-card" href="/resources/external-security-posture-assessment/">
+  <span class="component-tag mono">Fundamentals</span>
+  <h3>External security posture assessment: what it measures and what it cannot</h3>
+  <span class="resource-meta"><span>9 min read</span></span>
+</a>
+<a class="resource-card" href="/resources/smb-cybersecurity-basics/">
+  <span class="component-tag mono">Fundamentals</span>
+  <h3>SMB cybersecurity: where small businesses are actually exposed</h3>
+  <span class="resource-meta"><span>8 min read</span></span>
+</a>
+<a class="resource-card" href="/resources/spf-dkim-dmarc/">
+  <span class="component-tag mono">Email authentication</span>
+  <h3>SPF, DKIM and DMARC: how email authentication actually works</h3>
+  <span class="resource-meta"><span>11 min read</span></span>
+</a></div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand-col">
+        <a class="foot-brand" href="/">
+          <img src="/logo.svg" width="30" height="30" alt="" />
+          <span>SMB Scanner <span class="brand-lite">Lite</span></span>
+        </a>
+        <p class="foot-desc">An evidence-first external security posture assessment for small and medium businesses. 22 controls, a 0&ndash;100 score and an A&ndash;F grade &mdash; with the observation behind every conclusive finding. The public edition is restricted to five approved test domains.</p>
+        <p class="foot-meta"><span class="mono">v5.2.0</span> &middot; Public Sandbox Edition</p>
+        <a class="foot-mail" href="mailto:contact@smbscannerlite.me"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M4 8.5l8 5.5 8-5.5"/></svg><span>contact@smbscannerlite.me</span></a>
+      </div>
+      <div class="foot-col"><h3>Product</h3><ul><li><a href="/">Overview</a></li><li><a href="/capabilities/">Capabilities</a></li><li><a href="/demo/">Recorded Demo</a></li><li><a href="/sample-report/">Sample Report</a></li><li><a href="/methodology/">Methodology</a></li></ul></div><div class="foot-col"><h3>Resources</h3><ul><li><a href="/docs/">Documentation</a></li><li><a href="/resources/">Knowledge Base</a></li><li><a href="/resources/#guides">Technical Guides</a></li><li><a href="/validation/">Validation Record</a></li><li><a href="https://github.com/muhammad-atif-161/smb-scanner-lite" rel="noopener" target="_blank">GitHub</a></li></ul></div><div class="foot-col"><h3>Legal</h3><ul><li><a href="/privacy/">Privacy Policy</a></li><li><a href="/terms/">Terms of Use</a></li><li><a href="/responsible-use/">Responsible Use</a></li><li><a href="/limitations/">Assessment Limitations</a></li></ul></div><div class="foot-col"><h3>Business</h3><ul><li><a href="/contact/">Contact</a></li><li><a href="/request-assessment/">Request an Assessment</a></li><li><a href="/acquisition/">Project Acquisition</a></li><li><a href="/about/">About the Project</a></li></ul></div>
+    </div>
+    <div class="foot-bottom">
+      <p>&copy; <span data-year>2026</span> Muhammad Atif &middot; SMB Scanner Lite &middot; Built in Rawalpindi, Pakistan.</p>
+      <p class="foot-bottom-links">
+        <a href="/privacy/">Privacy</a>
+        <a href="/terms/">Terms</a>
+        <a href="/responsible-use/">Responsible use</a>
+        <a href="https://github.com/muhammad-atif-161/smb-scanner-lite" rel="noopener" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </div>
+</footer>
+<div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="false"></div>
+<script src="/config.js"></script>
+<script src="/site.js" defer></script>
+</body>
+</html>

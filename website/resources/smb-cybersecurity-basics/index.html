@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SMB cybersecurity: where small businesses are actually exposed — SMB Scanner Lite Knowledge Base</title>
+<meta name="description" content="Most small-business incidents start with something visible from the public internet. A practical look at the five exposures that appear again and again." />
+<link rel="canonical" href="https://smbscannerlite.me/resources/smb-cybersecurity-basics/" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta name="author" content="Muhammad Atif" />
+<meta name="theme-color" content="#080B14" />
+<meta name="generator" content="SMB Scanner Lite static site builder" />
+<meta property="og:site_name" content="SMB Scanner Lite" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="SMB cybersecurity: where small businesses are actually exposed — SMB Scanner Lite Knowledge Base" />
+<meta property="og:description" content="Most small-business incidents start with something visible from the public internet. A practical look at the five exposures that appear again and again." />
+<meta property="og:url" content="https://smbscannerlite.me/resources/smb-cybersecurity-basics/" />
+<meta property="og:image" content="https://smbscannerlite.me/og-image.png" />
+<meta property="og:image:alt" content="SMB Scanner Lite — a dark navy assessment report showing a posture score of 86 out of 100, grade B, with evidence-backed findings." />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="SMB cybersecurity: where small businesses are actually exposed — SMB Scanner Lite Knowledge Base" />
+<meta name="twitter:description" content="Most small-business incidents start with something visible from the public internet. A practical look at the five exposures that appear again and again." />
+<meta name="twitter:image" content="https://smbscannerlite.me/og-image.png" />
+<link rel="icon" href="/logo.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/logo.svg" />
+<link rel="alternate" type="application/json" href="/data/recorded-assessment.json" title="Recorded assessment data (JSON)" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/styles.css" />
+
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","headline":"SMB cybersecurity: where small businesses are actually exposed","description":"Most small-business incidents start with something visible from the public internet. A practical look at the five exposures that appear again and again.","datePublished":"2026-10-29","dateModified":"2026-10-29","author":{"@type":"Person","name":"Muhammad Atif","url":"https://github.com/muhammad-atif-161"},"publisher":{"@type":"Organization","name":"SMB Scanner Lite","url":"https://smbscannerlite.me"},"mainEntityOfPage":"https://smbscannerlite.me/resources/smb-cybersecurity-basics/","articleSection":"Fundamentals"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://smbscannerlite.me/"},{"@type":"ListItem","position":2,"name":"Knowledge Base","item":"https://smbscannerlite.me/resources/"},{"@type":"ListItem","position":3,"name":"SMB cybersecurity: where small businesses are actually exposed"}]}]}</script>
+<noscript><style>.reveal{opacity:1;transform:none}</style></noscript>
+</head>
+<body class="">
+
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="nav" data-nav>
+  <div class="wrap nav-inner">
+    <a class="brand" href="/" aria-label="SMB Scanner Lite home">
+      <img src="/logo.svg" width="32" height="32" alt="" />
+      <span class="brand-text">SMB Scanner <span class="brand-lite">Lite</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="/">Overview</a><a href="/capabilities/">Capabilities</a><a href="/sample-report/">Sample Report</a><a href="/methodology/">Methodology</a><a href="/faq/">FAQ</a><a href="/contact/">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="btn btn-primary btn-sm" href="/demo/"><svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5.5 13h5L10 21l7.5-10h-5L13 3z"/></svg><span>Try the Demo</span></a>
+      <button class="nav-toggle" type="button" data-nav-toggle aria-label="Open menu" aria-expanded="false" aria-controls="nav-panel">
+        <span data-nav-open><svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></span>
+        <span data-nav-close hidden><svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="nav-panel" id="nav-panel" data-nav-panel hidden>
+  <nav class="nav-panel-links" aria-label="Mobile">
+    <a href="/">Overview</a><a href="/capabilities/">Capabilities</a><a href="/sample-report/">Sample Report</a><a href="/methodology/">Methodology</a><a href="/faq/">FAQ</a><a href="/contact/">Contact</a>
+  </nav>
+  <div class="nav-panel-foot">
+    <a class="btn btn-primary" href="/demo/"><svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5.5 13h5L10 21l7.5-10h-5L13 3z"/></svg><span>Try the Demo</span></a>
+    <a class="btn btn-ghost" href="/request-assessment/">Request an assessment</a>
+  </div>
+</div>
+<main id="main">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/resources/">Knowledge Base</a></li><li><span aria-current="page">SMB cybersecurity: where small businesses are actually exposed</span></li></ol></nav>
+
+<article>
+  <header class="article-head">
+    <div class="wrap">
+      <p class="eyebrow">Fundamentals</p>
+      <h1>SMB cybersecurity: where small businesses are actually exposed</h1>
+      <p class="lede">Most small-business incidents start with something visible from the public internet. A practical look at the five exposures that appear again and again.</p>
+      <div class="article-meta">
+        <span>Published 2026-10-29</span>
+        <span>8 min read</span>
+        <span>SMB Scanner Lite knowledge base</span>
+      </div>
+    </div>
+  </header>
+  <div class="wrap">
+    <div class="article-layout">
+      <div class="prose">
+        <h2 id="why">Why small businesses are exposed in a specific way</h2><p>A small business rarely loses data because an attacker developed a novel exploit for it. The usual path is more mundane: a spoofed invoice that arrives from the company's own domain, a remote desktop service reachable from the internet with a reused password, or a file share exposed by a router rule nobody remembers adding.</p><p>These are configuration outcomes, not sophisticated attacks. They persist because nobody's job includes looking at the outside view, and because the systems involved were set up to work, not to be safe from the public internet.</p><h2 id="five">Five exposures that appear again and again</h2><p><strong>1. Email that anyone can forge.</strong> Without SPF, DKIM and a DMARC policy that actually enforces, a supplier or customer has no reliable way to tell a real invoice from a fake one. This is the highest-value, lowest-cost gap in most small businesses. It is also the one most likely to be described as "we have antivirus" in conversation.</p><p><strong>2. Remote access facing the world.</strong> Remote Desktop on port 3389 and SMB on port 445 were designed for networks where everyone was already trusted. Exposing them to the internet exposes every credential-stuffing list in existence to the same login prompt.</p><p><strong>3. A DNS record pointing at something retired.</strong> A subdomain that points at a decommissioned hosting account is a takeover waiting to happen. It costs nothing to check and takes ten minutes to clean up.</p><p><strong>4. No DNSSEC, so answers can be forged.</strong> DNSSEC does not encrypt anything. It makes a forged answer detectable, which matters most for the records that direct mail and logins.</p><p><strong>5. Browser headers that were never added because nobody asked.</strong> HSTS, Content-Security-Policy and framing protection are cheap and commonly absent. On a simple brochure site the consequences are modest; on a site with a login form they are not.</p><h2 id="cheap">Start with what is cheap to change</h2><p>A pragmatic order is: publish a DMARC policy in monitoring mode, confirm SPF and DKIM pass for your real senders, then move DMARC to quarantine and eventually reject. In parallel, close remote-access ports that should never have been open, and clean up DNS records that point at retired infrastructure.</p><p>None of that requires new products. It requires an inventory and someone with the authority to change records.</p><p>Header hardening and DNSSEC come next. They are slightly more involved and considerably less urgent than email authentication, but they are still configuration work rather than projects.</p><h2 id="what-to-ask">What to ask an IT provider</h2><p>Ask for the current DMARC policy and who owns it. Ask which ports on the public IP addresses accept connections from the internet and which of those are deliberate. Ask what happens to DNS records when a hosting account is closed. Ask for a dated report rather than a verbal assurance.</p><p>A provider who can answer those four questions is measurably ahead. A provider who cannot is not necessarily negligent &mdash; but the gap is now visible, which is the useful part.</p><h2 id="measure">Measure it, then re-measure it</h2><p>An external posture assessment gives you a baseline you can compare against next quarter. The comparison matters more than the absolute score: a finding that disappears after a change is proof the change worked, and a finding that reappears is a process that regressed.</p><p>The <a href="/demo/">recorded assessment</a> shows what the output looks like. If you want the equivalent for your own domain, <a href="/request-assessment/">request an assessment</a> &mdash; scope and authorisation are agreed before anything runs.</p>
+        <div class="callout mt-4">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6l7-3z"/><path d="M9 12.2l2.2 2.2L15.4 10"/></svg>
+          <div><p><strong>See how this is measured.</strong> SMB Scanner Lite evaluates these controls from outside and attaches the observation behind every conclusive finding. <a href="/capabilities/">Browse the 22-control catalog</a> or inspect the <a href="/sample-report/">recorded assessment</a>.</p></div>
+        </div>
+      </div>
+      <aside class="article-aside">
+        <nav class="toc" aria-label="On this page">
+          <h2>On this page</h2>
+          <ol><li><a href="#why">Why small businesses are exposed in a specific way</a></li><li><a href="#five">Five exposures that appear again and again</a></li><li><a href="#cheap">Start with what is cheap to change</a></li><li><a href="#what-to-ask">What to ask an IT provider</a></li><li><a href="#measure">Measure it, then re-measure it</a></li></ol>
+        </nav>
+        <div class="card">
+          <h3 style="font-size:0.95rem">Questions about your own domain?</h3>
+          <p class="small">A private assessment covers the full catalog, after scope and written authorisation are agreed.</p>
+          <a class="tlink mt-1" href="/request-assessment/">Request an assessment <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</article>
+
+<section class="section section--alt">
+  <div class="wrap">
+    <div class="section-head"><p class="eyebrow">Keep reading</p><h2>Related articles</h2></div>
+    <div class="resource-grid">
+<a class="resource-card" href="/resources/external-security-posture-assessment/">
+  <span class="component-tag mono">Fundamentals</span>
+  <h3>External security posture assessment: what it measures and what it cannot</h3>
+  <span class="resource-meta"><span>9 min read</span></span>
+</a>
+<a class="resource-card" href="/resources/spf-dkim-dmarc/">
+  <span class="component-tag mono">Email authentication</span>
+  <h3>SPF, DKIM and DMARC: how email authentication actually works</h3>
+  <span class="resource-meta"><span>11 min read</span></span>
+</a>
+<a class="resource-card" href="/resources/dnssec-explained/">
+  <span class="component-tag mono">DNS and transport</span>
+  <h3>DNSSEC in plain terms: what it protects and what it does not</h3>
+  <span class="resource-meta"><span>9 min read</span></span>
+</a></div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand-col">
+        <a class="foot-brand" href="/">
+          <img src="/logo.svg" width="30" height="30" alt="" />
+          <span>SMB Scanner <span class="brand-lite">Lite</span></span>
+        </a>
+        <p class="foot-desc">An evidence-first external security posture assessment for small and medium businesses. 22 controls, a 0&ndash;100 score and an A&ndash;F grade &mdash; with the observation behind every conclusive finding. The public edition is restricted to five approved test domains.</p>
+        <p class="foot-meta"><span class="mono">v5.2.0</span> &middot; Public Sandbox Edition</p>
+        <a class="foot-mail" href="mailto:contact@smbscannerlite.me"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M4 8.5l8 5.5 8-5.5"/></svg><span>contact@smbscannerlite.me</span></a>
+      </div>
+      <div class="foot-col"><h3>Product</h3><ul><li><a href="/">Overview</a></li><li><a href="/capabilities/">Capabilities</a></li><li><a href="/demo/">Recorded Demo</a></li><li><a href="/sample-report/">Sample Report</a></li><li><a href="/methodology/">Methodology</a></li></ul></div><div class="foot-col"><h3>Resources</h3><ul><li><a href="/docs/">Documentation</a></li><li><a href="/resources/">Knowledge Base</a></li><li><a href="/resources/#guides">Technical Guides</a></li><li><a href="/validation/">Validation Record</a></li><li><a href="https://github.com/muhammad-atif-161/smb-scanner-lite" rel="noopener" target="_blank">GitHub</a></li></ul></div><div class="foot-col"><h3>Legal</h3><ul><li><a href="/privacy/">Privacy Policy</a></li><li><a href="/terms/">Terms of Use</a></li><li><a href="/responsible-use/">Responsible Use</a></li><li><a href="/limitations/">Assessment Limitations</a></li></ul></div><div class="foot-col"><h3>Business</h3><ul><li><a href="/contact/">Contact</a></li><li><a href="/request-assessment/">Request an Assessment</a></li><li><a href="/acquisition/">Project Acquisition</a></li><li><a href="/about/">About the Project</a></li></ul></div>
+    </div>
+    <div class="foot-bottom">
+      <p>&copy; <span data-year>2026</span> Muhammad Atif &middot; SMB Scanner Lite &middot; Built in Rawalpindi, Pakistan.</p>
+      <p class="foot-bottom-links">
+        <a href="/privacy/">Privacy</a>
+        <a href="/terms/">Terms</a>
+        <a href="/responsible-use/">Responsible use</a>
+        <a href="https://github.com/muhammad-atif-161/smb-scanner-lite" rel="noopener" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </div>
+</footer>
+<div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="false"></div>
+<script src="/config.js"></script>
+<script src="/site.js" defer></script>
+</body>
+</html>

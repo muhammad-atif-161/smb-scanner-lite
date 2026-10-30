@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Documentation — Install and Run the SMB Scanner Lite Sandbox</title>
+<meta name="description" content="Installation, command reference, output formats and consent-ledger handling for the restricted SMB Scanner Lite public sandbox edition. Five approved test domains, no arbitrary scanning." />
+<link rel="canonical" href="https://smbscannerlite.me/docs/" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta name="author" content="Muhammad Atif" />
+<meta name="theme-color" content="#080B14" />
+<meta name="generator" content="SMB Scanner Lite static site builder" />
+<meta property="og:site_name" content="SMB Scanner Lite" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Documentation — Install and Run the SMB Scanner Lite Sandbox" />
+<meta property="og:description" content="Installation, command reference, output formats and consent-ledger handling for the restricted SMB Scanner Lite public sandbox edition. Five approved test domains, no arbitrary scanning." />
+<meta property="og:url" content="https://smbscannerlite.me/docs/" />
+<meta property="og:image" content="https://smbscannerlite.me/og-image.png" />
+<meta property="og:image:alt" content="SMB Scanner Lite — a dark navy assessment report showing a posture score of 86 out of 100, grade B, with evidence-backed findings." />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Documentation — Install and Run the SMB Scanner Lite Sandbox" />
+<meta name="twitter:description" content="Installation, command reference, output formats and consent-ledger handling for the restricted SMB Scanner Lite public sandbox edition. Five approved test domains, no arbitrary scanning." />
+<meta name="twitter:image" content="https://smbscannerlite.me/og-image.png" />
+<link rel="icon" href="/logo.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/logo.svg" />
+<link rel="alternate" type="application/json" href="/data/recorded-assessment.json" title="Recorded assessment data (JSON)" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/styles.css" />
+
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"SMB Scanner Lite documentation","about":"Installing and running the restricted sandbox edition","author":{"@type":"Organization","name":"SMB Scanner Lite"},"dateModified":"2026-10-30"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://smbscannerlite.me/"},{"@type":"ListItem","position":2,"name":"Documentation"}]}]}</script>
+<noscript><style>.reveal{opacity:1;transform:none}</style></noscript>
+</head>
+<body class="">
+
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="nav" data-nav>
+  <div class="wrap nav-inner">
+    <a class="brand" href="/" aria-label="SMB Scanner Lite home">
+      <img src="/logo.svg" width="32" height="32" alt="" />
+      <span class="brand-text">SMB Scanner <span class="brand-lite">Lite</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="/">Overview</a><a href="/capabilities/">Capabilities</a><a href="/sample-report/">Sample Report</a><a href="/methodology/">Methodology</a><a href="/faq/">FAQ</a><a href="/contact/">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="btn btn-primary btn-sm" href="/demo/"><svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5.5 13h5L10 21l7.5-10h-5L13 3z"/></svg><span>Try the Demo</span></a>
+      <button class="nav-toggle" type="button" data-nav-toggle aria-label="Open menu" aria-expanded="false" aria-controls="nav-panel">
+        <span data-nav-open><svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></span>
+        <span data-nav-close hidden><svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="nav-panel" id="nav-panel" data-nav-panel hidden>
+  <nav class="nav-panel-links" aria-label="Mobile">
+    <a href="/">Overview</a><a href="/capabilities/">Capabilities</a><a href="/sample-report/">Sample Report</a><a href="/methodology/">Methodology</a><a href="/faq/">FAQ</a><a href="/contact/">Contact</a>
+  </nav>
+  <div class="nav-panel-foot">
+    <a class="btn btn-primary" href="/demo/"><svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5.5 13h5L10 21l7.5-10h-5L13 3z"/></svg><span>Try the Demo</span></a>
+    <a class="btn btn-ghost" href="/request-assessment/">Request an assessment</a>
+  </div>
+</div>
+<main id="main">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><span aria-current="page">Documentation</span></li></ol></nav>
+
+<div class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">Documentation</p>
+    <h1>Install the sandbox. It will not scan the open internet.</h1>
+    <p class="lede">The published copy is the sandbox edition. Before any lookup it checks the target against five approved domains and requires a signed consent receipt. This page documents installation, the command-line surface, the outputs and the boundaries.</p>
+    <div class="hero-actions"><a class="btn btn-primary" href="/demo/"><svg class="btn-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12s3.5-6.5 9.5-6.5S21.5 12 21.5 12s-3.5 6.5-9.5 6.5S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg><span>See the recorded output first</span></a><a class="btn btn-ghost" href="https://github.com/muhammad-atif-161/smb-scanner-lite" rel="noopener" target="_blank"><svg class="btn-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><path d="M20 4l-8.5 8.5"/><path d="M18 14v4.5A2.5 2.5 0 0115.5 21h-9A2.5 2.5 0 014 18.5v-9A2.5 2.5 0 016.5 7H11"/></svg><span>View source</span></a></div>
+  </div>
+</div>
+
+<section class="section section--flush">
+  <div class="wrap">
+    <div class="grid g2" style="align-items:start">
+      <div class="reveal">
+        <h2 style="font-size:1.3rem">1 &middot; Clone and install</h2>
+        <p class="small muted">Python 3.10 or newer. The package is installed in editable mode so the console entry point becomes available.</p>
+        <div class="evidence"><span class="val">git clone https://github.com/muhammad-atif-161/smb-scanner-lite.git
+cd smb-scanner-lite
+pip install -e .</span></div>
+
+        <h2 class="mt-4" style="font-size:1.3rem">2 &middot; List the permitted targets</h2>
+        <p class="small muted">Read-only. Prints the five approved domains and makes no network request.</p>
+        <div class="evidence"><span class="val">smb-scanner --list-domains</span></div>
+
+        <h2 class="mt-4" style="font-size:1.3rem">3 &middot; Run an assessment</h2>
+        <p class="small muted">Consent is mandatory. Without the policy flag and a name, the tool refuses.</p>
+        <div class="evidence"><span class="val">smb-scanner example.com \
+  --accept-privacy-policy \
+  --consent-user "Your Name" \
+  --html report.html</span></div>
+
+        <h2 class="mt-4" style="font-size:1.3rem">4 &middot; Verify the consent ledger</h2>
+        <p class="small muted">Each receipt is chained to the previous one. Verification tells you whether the ledger on this machine is intact.</p>
+        <div class="evidence"><span class="val">smb-scanner --verify-consent-log</span></div>
+      </div>
+
+      <div class="card reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="9.5" rx="2.5"/><path d="M8 10.5V8a4 4 0 018 0v2.5"/></svg></div>
+        <h3>The allowlist is the product boundary</h3>
+        <p>Any other name &mdash; including a look-alike subdomain, a raw IP address, an alternate port or a trailing dot &mdash; is rejected before a network request is made. The restriction lives in the runtime, so it cannot be disabled by editing a setting, passing a flag or modifying the interface.</p>
+        <div class="chips mt-1"><span class="chip">example.com</span><span class="chip">example.org</span><span class="chip">example.net</span><span class="chip">scanme.nmap.org</span><span class="chip">badssl.com</span></div>
+        <p class="small mt-2">Each name is a reserved documentation domain or a public testing resource published for this purpose:</p>
+        <ul class="card-list">
+          <li><span class="mono">example.com / .org / .net</span> &mdash; IANA reserved test domains</li>
+          <li><span class="mono">scanme.nmap.org</span> &mdash; Nmap Project authorised test host</li>
+          <li><span class="mono">badssl.com</span> &mdash; public TLS and certificate teaching site</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="wrap">
+    <div class="section-head reveal" data-align="left"><p class="eyebrow">Command reference</p><h2>Every flag the sandbox accepts.</h2><p class="section-lede">The public CLI is deliberately small. Anything that would widen the target list is absent rather than hidden.</p></div>
+    <div class="table-wrap reveal">
+      <table>
+        <caption>Run <code>smb-scanner --help</code> for the authoritative list in your installed version.</caption>
+        <thead><tr><th scope="col">Flag</th><th scope="col">Purpose</th></tr></thead>
+        <tbody><tr><th scope='row'><code>--list-domains</code></th><td>Print the five permitted testing domains. Makes no network request.</td></tr><tr><th scope='row'><code>--accept-privacy-policy</code></th><td>Record that the privacy policy was read and accepted. Required before any run.</td></tr><tr><th scope='row'><code>--consent-user NAME</code></th><td>Operator identity written into the consent receipt.</td></tr><tr><th scope='row'><code>--consent-log PATH</code></th><td>Optional path for the consent ledger (default: ~/.smb_scanner_lite/consent_proofs.jsonl).</td></tr><tr><th scope='row'><code>--verify-consent-log</code></th><td>Re-walk the SHA-256 hash chain and report whether it is intact.</td></tr><tr><th scope='row'><code>--html PATH</code></th><td>Write an HTML report including the consent receipt.</td></tr><tr><th scope='row'><code>--json PATH</code></th><td>Write a JSON report for machine processing.</td></tr><tr><th scope='row'><code>--txt PATH</code></th><td>Write a plain-text report.</td></tr><tr><th scope='row'><code>--gui</code></th><td>Launch the desktop interface for the sandbox.</td></tr><tr><th scope='row'><code>--version</code></th><td>Print the application and edition version.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="grid g3">
+      <div class="card reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3.5H7.5A2.5 2.5 0 005 6v12a2.5 2.5 0 002.5 2.5h9A2.5 2.5 0 0019 18V8.5L14 3.5z"/><path d="M14 3.5V9h5"/></svg></div>
+        <h3>What you get back</h3>
+        <ul class="card-list">
+          <li>Score, grade and completed-control count</li>
+          <li>One evidence line per conclusive finding</li>
+          <li>Inconclusive results listed separately</li>
+          <li>Embedded consent receipt, hash-chained</li>
+          <li>HTML, JSON or plain text output</li>
+        </ul>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon card-icon--cyan"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5c-4.1 0-7.5 3.4-7.5 7.5 0 1.6.5 3 1.3 4.2"/><path d="M12 8a4 4 0 014 4c0 2.4-.6 4.6-1.6 6.5"/><path d="M9.6 19.2A9 9 0 018 17.5"/><path d="M12 11.5c.9 0 1.5.7 1.5 1.5 0 2-.5 3.9-1.3 5.5"/></svg></div>
+        <h3>Where the ledger lives</h3>
+        <p>Consent receipts are written to the machine that ran the assessment, by default under your home directory. The path is configurable and the file is excluded from Git.</p>
+        <div class="evidence mt-1"><span class="val">~/.smb_scanner_lite/consent_proofs.jsonl</span></div>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><path d="M7.5 9.5l2.5 2.5-2.5 2.5"/><path d="M12.5 14.5H16"/></svg></div>
+        <h3>Desktop interface</h3>
+        <p>The same sandbox runtime is available as a GUI for demonstration and teaching. It enforces the identical allowlist and consent requirements.</p>
+        <div class="evidence mt-1"><span class="val">smb-scanner --gui</span></div>
+      </div>
+    </div>
+
+    <div class="notice notice--warn mt-4">
+      <svg class="notice-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5l8.5 15h-17l8.5-15z"/><path d="M12 10v4"/><circle cx="12" cy="16.6" r="0.9" fill="currentColor" stroke="none"/></svg>
+      <div class="notice-body"><strong>If a command fails</strong><p>A blocked target exits with code 2 and a message naming the five permitted domains. A missing policy acceptance or operator name exits with a consent error. Neither case produces a network request &mdash; that is the intended behaviour, not a bug to work around.</p></div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta-band reveal">
+      <div class="cta-band-text">
+        <h2>Need a domain outside the sandbox?</h2>
+        <p>The public edition will not scan it. A private assessment can, after scope and written authorisation are agreed.</p>
+      </div>
+      <div class="cta-band-actions">
+        <a class="btn btn-primary" href="/request-assessment/"><svg class="btn-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg><span>Request an assessment</span></a>
+        <a class="btn btn-ghost" href="/contact/"><span>Ask a technical question</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand-col">
+        <a class="foot-brand" href="/">
+          <img src="/logo.svg" width="30" height="30" alt="" />
+          <span>SMB Scanner <span class="brand-lite">Lite</span></span>
+        </a>
+        <p class="foot-desc">An evidence-first external security posture assessment for small and medium businesses. 22 controls, a 0&ndash;100 score and an A&ndash;F grade &mdash; with the observation behind every conclusive finding. The public edition is restricted to five approved test domains.</p>
+        <p class="foot-meta"><span class="mono">v5.2.0</span> &middot; Public Sandbox Edition</p>
+        <a class="foot-mail" href="mailto:contact@smbscannerlite.me"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M4 8.5l8 5.5 8-5.5"/></svg><span>contact@smbscannerlite.me</span></a>
+      </div>
+      <div class="foot-col"><h3>Product</h3><ul><li><a href="/">Overview</a></li><li><a href="/capabilities/">Capabilities</a></li><li><a href="/demo/">Recorded Demo</a></li><li><a href="/sample-report/">Sample Report</a></li><li><a href="/methodology/">Methodology</a></li></ul></div><div class="foot-col"><h3>Resources</h3><ul><li><a href="/docs/">Documentation</a></li><li><a href="/resources/">Knowledge Base</a></li><li><a href="/resources/#guides">Technical Guides</a></li><li><a href="/validation/">Validation Record</a></li><li><a href="https://github.com/muhammad-atif-161/smb-scanner-lite" rel="noopener" target="_blank">GitHub</a></li></ul></div><div class="foot-col"><h3>Legal</h3><ul><li><a href="/privacy/">Privacy Policy</a></li><li><a href="/terms/">Terms of Use</a></li><li><a href="/responsible-use/">Responsible Use</a></li><li><a href="/limitations/">Assessment Limitations</a></li></ul></div><div class="foot-col"><h3>Business</h3><ul><li><a href="/contact/">Contact</a></li><li><a href="/request-assessment/">Request an Assessment</a></li><li><a href="/acquisition/">Project Acquisition</a></li><li><a href="/about/">About the Project</a></li></ul></div>
+    </div>
+    <div class="foot-bottom">
+      <p>&copy; <span data-year>2026</span> Muhammad Atif &middot; SMB Scanner Lite &middot; Built in Rawalpindi, Pakistan.</p>
+      <p class="foot-bottom-links">
+        <a href="/privacy/">Privacy</a>
+        <a href="/terms/">Terms</a>
+        <a href="/responsible-use/">Responsible use</a>
+        <a href="https://github.com/muhammad-atif-161/smb-scanner-lite" rel="noopener" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </div>
+</footer>
+<div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="false"></div>
+<script src="/config.js"></script>
+<script src="/site.js" defer></script>
+</body>
+</html>

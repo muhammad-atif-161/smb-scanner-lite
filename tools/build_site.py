@@ -1,0 +1,362 @@
+#!/usr/bin/env python3
+"""Build the SMB Scanner Lite website into `website/`.
+
+Usage:
+    python3 tools/build_site.py           # render every page
+    python3 tools/build_site.py --check   # render, then verify internal links
+
+The generator uses only the Python standard library. Output files are committed
+and served by GitHub Pages, so the deployment workflow stays a plain static
+upload with no build step on the runner.
+"""
+
+from __future__ import annotations
+
+import csv
+import io
+import json
+import re
+import sys
+from datetime import date
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from sitegen import config as C  # noqa: E402
+from sitegen import data as D  # noqa: E402
+from sitegen import pages_home, pages_legal, pages_product, pages_resources  # noqa: E402
+from sitegen import pages_contact, pages_trust  # noqa: E402
+
+OUT = ROOT / "website"
+BUILD_DATE = date.today().isoformat()
+
+# ---------------------------------------------------------------------------
+# Page registry
+# ---------------------------------------------------------------------------
+
+PAGES = {
+    "index.html": pages_home.build,
+    "capabilities/index.html": pages_product.capabilities,
+    "sample-report/index.html": pages_product.sample_report,
+    "methodology/index.html": pages_product.methodology,
+    "demo/index.html": pages_product.demo,
+    "docs/index.html": pages_product.docs,
+    "validation/index.html": pages_trust.validation,
+    "faq/index.html": pages_trust.faq,
+    "limitations/index.html": pages_trust.limitations,
+    "responsible-use/index.html": pages_trust.responsible_use,
+    "about/index.html": pages_trust.about,
+    "contact/index.html": pages_contact.contact,
+    "request-assessment/index.html": pages_contact.request_assessment,
+    "acquisition/index.html": pages_contact.acquisition,
+    "privacy/index.html": pages_legal.privacy,
+    "terms/index.html": pages_legal.terms,
+    "resources/index.html": pages_resources.resources_index,
+    "404.html": pages_legal.not_found,
+}
+
+for res in D.RESOURCES:
+    PAGES[f"resources/{res['slug']}/index.html"] = (
+        lambda slug=res["slug"]: pages_resources.article(slug)
+    )
+
+# Legacy URLs kept alive as static redirects (GitHub Pages has no rewrites).
+REDIRECTS = {
+    "checks/index.html": ("/capabilities/", "Capabilities"),
+    "how/index.html": ("/docs/", "Documentation"),
+    "ethics/index.html": ("/responsible-use/", "Responsible use"),
+    "blog/index.html": ("/resources/", "Knowledge base"),
+    "blog/no-claim-without-evidence/index.html": ("/resources/assessment-methodology/", "Assessment methodology"),
+    "blog/why-email-locks-matter/index.html": ("/resources/spf-dkim-dmarc/", "SPF, DKIM and DMARC"),
+    "blog/exposed-smb-and-rdp/index.html": ("/resources/security-misconfigurations/", "Security misconfigurations"),
+}
+
+
+def write(rel: str, content: str) -> Path:
+    path = OUT / rel
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(content, encoding="utf-8")
+    return path
+
+
+# ---------------------------------------------------------------------------
+# Recorded assessment data (single source of truth for the demo)
+# ---------------------------------------------------------------------------
+
+def build_data() -> None:
+    controls = []
+    for control in D.CONTROLS:
+        controls.append({
+            "num": control["num"],
+            "name": control["name"],
+            "short": control["short"],
+            "cat": control["cat"],
+            "category_name": D.category(control["cat"])["name"],
+            "weight": control["weight"],
+            "summary": control["short"],
+            "evaluates": control["evaluates"],
+            "why": control["why"],
+            "example": control["example"],
+            "recorded": control["recorded"],
+        })
+
+    payload = {
+        "product": C.SITE_NAME,
+        "version": C.PRODUCT_VERSION,
+        "edition": C.EDITION,
+        "policy_version": C.POLICY_VERSION,
+        "generated": BUILD_DATE,
+        "default": D.RECORDED_DEFAULT,
+        "allowed_domains": list(C.ALLOWED_DOMAINS),
+        "notice": (
+            "Static recorded assessment output. Not a live scan. Values are taken from a "
+            "genuine sandbox run on 28 October 2026 for example.com; profiles for the other "
+            "four approved domains are reference profiles shipped with runtime v5.2.0."
+        ),
+        "controls": controls,
+        "domains": D.RECORDED,
+    }
+    write("data/recorded-assessment.json", json.dumps(payload, indent=2, ensure_ascii=False) + "\n")
+
+
+# ---------------------------------------------------------------------------
+# Downloadable report formats
+# ---------------------------------------------------------------------------
+
+def build_downloads() -> None:
+    r = D.RECORDED[D.RECORDED_DEFAULT]
+    base = "smb-scanner-lite-recorded-assessment-example-com"
+    consent = {
+        "consent_id": r["consent_id"],
+        "timestamp_utc": r["timestamp"],
+        "operator": "public-demo",
+        "target": r["target"],
+        "policy_version": r["policy_version"],
+        "statement": "Public sandbox demonstration run against a reserved test domain.",
+        "receipt_sha256": r["receipt_sha256"],
+    }
+    report = {
+        "report_id": r["report_id"],
+        "edition": r["edition"],
+        "version": r["version"],
+        "target": r["target"],
+        "target_description": r["description"],
+        "timestamp_utc": r["timestamp"],
+        "score": r["score"],
+        "grade": r["grade"],
+        "summary": r["summary"],
+        "categories": r["categories"],
+        "controls_completed": r["counts"]["completed"],
+        "controls_inconclusive": r["counts"]["inconclusive"],
+        "findings": [
+            {
+                "status": f["status"].upper(),
+                "control": f["control_id"],
+                "catalog_control": f"catalog:{f['control']:02d}",
+                "title": f["title"],
+                "category": f["category"],
+                "severity": f["severity"],
+                "evidence": f["evidence"],
+                "remediation": f.get("remediation", ""),
+            }
+            for f in r["findings"]
+        ],
+        "consent_proof": consent,
+        "source": "recorded",
+        "notice": "Recorded output of a genuine sandbox run. Not a live scan and not a commercial audit.",
+    }
+
+    write(f"downloads/{base}.json", json.dumps(report, indent=2, ensure_ascii=False) + "\n")
+
+    # CSV
+    buf = io.StringIO()
+    writer = csv.writer(buf, lineterminator="\n")
+    writer.writerow(["status", "control_id", "catalog_control", "title", "category", "severity", "evidence", "remediation"])
+    for f in report["findings"]:
+        writer.writerow([f["status"], f["control"], f["catalog_control"], f["title"], f["category"], f["severity"], f["evidence"], f["remediation"]])
+    writer.writerow([])
+    writer.writerow(["report_id", r["report_id"], "target", r["target"], "timestamp_utc", r["timestamp"], "score", r["score"], "grade", r["grade"]])
+    writer.writerow(["consent_id", consent["consent_id"], "policy_version", consent["policy_version"], "receipt_sha256", consent["receipt_sha256"]])
+    write(f"downloads/{base}.csv", buf.getvalue())
+
+    # TXT
+    txt = [
+        "=" * 78,
+        f"  {C.SITE_NAME} v{r['version']} — {r['edition']}",
+        "  RECORDED ASSESSMENT — stored output of a genuine sandbox run",
+        "=" * 78,
+        f"  Report ID      : {r['report_id']}",
+        f"  Target         : {r['target']} ({r['description']})",
+        f"  Timestamp (UTC): {r['timestamp']}",
+        f"  Posture Score  : {r['score']}/100 (Grade {r['grade']})",
+        f"  Controls       : {r['counts']['completed']} completed, {r['counts']['inconclusive']} inconclusive",
+        "-" * 78,
+        "  VERIFIED PRE-SCAN USER CONSENT PROOF",
+        f"  Consent ID     : {consent['consent_id']}",
+        f"  Operator       : {consent['operator']}",
+        f"  Policy Version : {consent['policy_version']}",
+        f"  Receipt SHA256 : {consent['receipt_sha256']}",
+        "-" * 78,
+        f"  Executive Summary: {r['summary']}",
+        "-" * 78,
+        "  CATEGORY SCORES:",
+    ]
+    for name, value in r["categories"].items():
+        txt.append(f"  {name:32s} {value}")
+    txt += ["-" * 78, "  FINDINGS:"]
+    for f in report["findings"]:
+        txt.append(f"  [{f['status']:7s}] {f['title']} ({f['control']}) — {f['evidence']}")
+        if f["remediation"]:
+            txt.append(f"            Remediation: {f['remediation']}")
+    txt += [
+        "=" * 78,
+        "  This is recorded output, not a live scan. It is not a commercial audit and",
+        "  it is not a guarantee that the target is secure.",
+        "=" * 78,
+    ]
+    write(f"downloads/{base}.txt", "\n".join(txt) + "\n")
+
+    # Self-contained HTML
+    rows = "".join(
+        f"<tr><td><span class='st {f['status'].lower()}'>{f['status']}</span></td>"
+        f"<td><strong>{f['title']}</strong><br><code>{f['control']}</code></td>"
+        f"<td>{f['category']}</td><td><code>{f['evidence']}</code></td>"
+        f"<td>{f['remediation'] or '—'}</td></tr>"
+        for f in report["findings"]
+    )
+    bars = "".join(
+        f"<div class='bar'><span>{name}</span><b>{value}</b>"
+        f"<i><em style='width:{value}%'></em></i></div>"
+        for name, value in r["categories"].items()
+    )
+    html_report = f"""<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recorded assessment — {r['target']} — {C.SITE_NAME}</title>
+<meta name="robots" content="noindex, follow">
+<style>
+:root{{color-scheme:dark}}
+body{{margin:0;background:#080b14;color:#f4f7fc;font:16px/1.6 Inter,system-ui,sans-serif;padding:2rem 1.25rem}}
+.wrap{{max-width:900px;margin:0 auto}}
+.card{{background:#111a2b;border:1px solid #243149;border-radius:14px;padding:1.25rem;margin-bottom:1rem}}
+h1{{font-size:1.5rem;margin:0 0 .3rem}}
+h2{{font-size:1.05rem;margin:0 0 .6rem}}
+.mono,code{{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.8rem}}
+.muted{{color:#a5b1c5;font-size:.9rem}}
+.rec{{border-color:rgba(240,180,41,.4);background:rgba(240,180,41,.08);color:#f0dcae;font-size:.85rem}}
+.score{{font-size:3rem;font-weight:700;letter-spacing:-.03em;line-height:1}}
+.bar{{display:grid;grid-template-columns:1fr 40px;gap:.3rem;margin-bottom:.6rem;font-size:.85rem;color:#a5b1c5}}
+.bar b{{color:#f4f7fc;font-family:ui-monospace,monospace}}
+.bar i{{grid-column:1/-1;display:block;height:6px;background:#243149;border-radius:99px;overflow:hidden}}
+.bar em{{display:block;height:100%;background:linear-gradient(90deg,#2f66d0,#4d8dff)}}
+table{{width:100%;border-collapse:collapse;font-size:.82rem}}
+th,td{{padding:.6rem;border-bottom:1px solid #1a2537;text-align:left;vertical-align:top}}
+th{{color:#8493aa;font-weight:500;text-transform:uppercase;font-size:.68rem;letter-spacing:.08em}}
+.st{{display:inline-block;padding:.12rem .4rem;border-radius:5px;font-size:.66rem;font-family:ui-monospace,monospace}}
+.st.pass{{background:rgba(70,211,154,.14);color:#9ff0cd}}
+.st.warning{{background:rgba(240,180,41,.14);color:#f7dea1}}
+.st.fail{{background:rgba(255,107,129,.14);color:#ffc3cc}}
+a{{color:#4d8dff}}
+</style></head>
+<body><div class="wrap">
+<div class="card rec"><strong>Recorded assessment</strong> — stored output of a genuine sandbox run on 28 October 2026. Not a live scan, not a commercial audit, and not a guarantee that the target is secure.</div>
+<div class="card">
+  <h1>{C.SITE_NAME} — {r['edition']}</h1>
+  <p class="muted">Target: <code>{r['target']}</code> — {r['description']}</p>
+  <div class="score">{r['score']}<span style="font-size:1rem;color:#8493aa"> / 100</span></div>
+  <p class="muted">Grade {r['grade']} — {r['grade_label']} · {r['counts']['completed']} controls completed, {r['counts']['inconclusive']} inconclusive</p>
+</div>
+<div class="card"><h2>Category scores</h2>{bars}</div>
+<div class="card"><h2>Consent proof</h2>
+  <p class="mono">consent_id: {consent['consent_id']}<br>timestamp_utc: {consent['timestamp_utc']}<br>policy_version: {consent['policy_version']}<br>receipt_sha256: {consent['receipt_sha256']}</p>
+</div>
+<div class="card"><h2>Findings</h2>
+<table><thead><tr><th>Status</th><th>Control</th><th>Category</th><th>Evidence</th><th>Recommended</th></tr></thead><tbody>{rows}</tbody></table>
+</div>
+<p class="muted">Report {r['report_id']} · recorded {r['timestamp_display']} · published at <a href="https://smbscannerlite.me/sample-report/">smbscannerlite.me</a></p>
+</div></body></html>
+"""
+    write(f"downloads/{base}.html", html_report)
+
+
+# ---------------------------------------------------------------------------
+# Sitemap and robots
+# ---------------------------------------------------------------------------
+
+def build_sitemap() -> None:
+    entries = [(path, freq, priority, BUILD_DATE) for path, freq, priority in C.SITEMAP]
+    entries += [
+        (f"/resources/{r['slug']}/", "monthly", "0.6", r["date"]) for r in D.RESOURCES
+    ]
+    lines = ['<?xml version="1.0" encoding="UTF-8"?>',
+             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    for path, freq, priority, lastmod in entries:
+        lines.append(
+            f"  <url><loc>{C.SITE_URL}{path}</loc><lastmod>{lastmod}</lastmod>"
+            f"<changefreq>{freq}</changefreq><priority>{priority}</priority></url>"
+        )
+    lines.append("</urlset>")
+    write("sitemap.xml", "\n".join(lines) + "\n")
+
+    write("robots.txt", f"""User-agent: *
+Allow: /
+
+# Static site. No scanning endpoints, no private paths and nothing to crawl
+# that is not linked from the sitemap.
+Disallow: /downloads/
+
+Sitemap: {C.SITE_URL}/sitemap.xml
+""")
+
+
+# ---------------------------------------------------------------------------
+# Build + link check
+# ---------------------------------------------------------------------------
+
+def build() -> None:
+    for rel, builder in PAGES.items():
+        write(rel, builder())
+    for rel, (target, title) in REDIRECTS.items():
+        write(rel, pages_legal.redirect(target, title))
+    build_data()
+    build_downloads()
+    build_sitemap()
+
+
+def check_links() -> int:
+    """Verify every internal href/src resolves to a file in website/."""
+    problems = []
+    html_files = sorted(OUT.rglob("*.html"))
+    for path in html_files:
+        text = path.read_text(encoding="utf-8")
+        refs = re.findall(r'(?:href|src)="(/[^"#?]*)"', text)
+        for ref in refs:
+            if ref == "/":
+                target = OUT / "index.html"
+            elif ref.endswith("/"):
+                target = OUT / ref.lstrip("/") / "index.html"
+            else:
+                target = OUT / ref.lstrip("/")
+            if not target.exists():
+                problems.append(f"{path.relative_to(OUT)} -> {ref}")
+        anchors = re.findall(r'href="#([^"]+)"', text)
+        ids = set(re.findall(r'id="([^"]+)"', text))
+        for anchor in anchors:
+            if anchor and anchor not in ids:
+                problems.append(f"{path.relative_to(OUT)} -> #{anchor} (missing id)")
+
+    if problems:
+        print(f"link check: {len(problems)} problem(s)")
+        for problem in problems:
+            print("  -", problem)
+        return 1
+    print(f"link check: {len(html_files)} pages, all internal links resolve")
+    return 0
+
+
+if __name__ == "__main__":
+    build()
+    print(f"built {len(list(PAGES))} pages, {len(REDIRECTS)} redirects into {OUT}")
+    if "--check" in sys.argv:
+        sys.exit(check_links())

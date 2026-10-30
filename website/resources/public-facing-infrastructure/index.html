@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mapping public-facing infrastructure without overstepping — SMB Scanner Lite Knowledge Base</title>
+<meta name="description" content="How to build an inventory of what your organisation exposes, what passive sources exist, and where authorisation stops being optional." />
+<link rel="canonical" href="https://smbscannerlite.me/resources/public-facing-infrastructure/" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta name="author" content="Muhammad Atif" />
+<meta name="theme-color" content="#080B14" />
+<meta name="generator" content="SMB Scanner Lite static site builder" />
+<meta property="og:site_name" content="SMB Scanner Lite" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Mapping public-facing infrastructure without overstepping — SMB Scanner Lite Knowledge Base" />
+<meta property="og:description" content="How to build an inventory of what your organisation exposes, what passive sources exist, and where authorisation stops being optional." />
+<meta property="og:url" content="https://smbscannerlite.me/resources/public-facing-infrastructure/" />
+<meta property="og:image" content="https://smbscannerlite.me/og-image.png" />
+<meta property="og:image:alt" content="SMB Scanner Lite — a dark navy assessment report showing a posture score of 86 out of 100, grade B, with evidence-backed findings." />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Mapping public-facing infrastructure without overstepping — SMB Scanner Lite Knowledge Base" />
+<meta name="twitter:description" content="How to build an inventory of what your organisation exposes, what passive sources exist, and where authorisation stops being optional." />
+<meta name="twitter:image" content="https://smbscannerlite.me/og-image.png" />
+<link rel="icon" href="/logo.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/logo.svg" />
+<link rel="alternate" type="application/json" href="/data/recorded-assessment.json" title="Recorded assessment data (JSON)" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/styles.css" />
+
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","headline":"Mapping public-facing infrastructure without overstepping","description":"How to build an inventory of what your organisation exposes, what passive sources exist, and where authorisation stops being optional.","datePublished":"2026-10-26","dateModified":"2026-10-26","author":{"@type":"Person","name":"Muhammad Atif","url":"https://github.com/muhammad-atif-161"},"publisher":{"@type":"Organization","name":"SMB Scanner Lite","url":"https://smbscannerlite.me"},"mainEntityOfPage":"https://smbscannerlite.me/resources/public-facing-infrastructure/","articleSection":"Web and infrastructure"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://smbscannerlite.me/"},{"@type":"ListItem","position":2,"name":"Knowledge Base","item":"https://smbscannerlite.me/resources/"},{"@type":"ListItem","position":3,"name":"Mapping public-facing infrastructure without overstepping"}]}]}</script>
+<noscript><style>.reveal{opacity:1;transform:none}</style></noscript>
+</head>
+<body class="">
+
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="nav" data-nav>
+  <div class="wrap nav-inner">
+    <a class="brand" href="/" aria-label="SMB Scanner Lite home">
+      <img src="/logo.svg" width="32" height="32" alt="" />
+      <span class="brand-text">SMB Scanner <span class="brand-lite">Lite</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="/">Overview</a><a href="/capabilities/">Capabilities</a><a href="/sample-report/">Sample Report</a><a href="/methodology/">Methodology</a><a href="/faq/">FAQ</a><a href="/contact/">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="btn btn-primary btn-sm" href="/demo/"><svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5.5 13h5L10 21l7.5-10h-5L13 3z"/></svg><span>Try the Demo</span></a>
+      <button class="nav-toggle" type="button" data-nav-toggle aria-label="Open menu" aria-expanded="false" aria-controls="nav-panel">
+        <span data-nav-open><svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></span>
+        <span data-nav-close hidden><svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="nav-panel" id="nav-panel" data-nav-panel hidden>
+  <nav class="nav-panel-links" aria-label="Mobile">
+    <a href="/">Overview</a><a href="/capabilities/">Capabilities</a><a href="/sample-report/">Sample Report</a><a href="/methodology/">Methodology</a><a href="/faq/">FAQ</a><a href="/contact/">Contact</a>
+  </nav>
+  <div class="nav-panel-foot">
+    <a class="btn btn-primary" href="/demo/"><svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5.5 13h5L10 21l7.5-10h-5L13 3z"/></svg><span>Try the Demo</span></a>
+    <a class="btn btn-ghost" href="/request-assessment/">Request an assessment</a>
+  </div>
+</div>
+<main id="main">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/resources/">Knowledge Base</a></li><li><span aria-current="page">Mapping public-facing infrastructure without overstepping</span></li></ol></nav>
+
+<article>
+  <header class="article-head">
+    <div class="wrap">
+      <p class="eyebrow">Web and infrastructure</p>
+      <h1>Mapping public-facing infrastructure without overstepping</h1>
+      <p class="lede">How to build an inventory of what your organisation exposes, what passive sources exist, and where authorisation stops being optional.</p>
+      <div class="article-meta">
+        <span>Published 2026-10-26</span>
+        <span>8 min read</span>
+        <span>SMB Scanner Lite knowledge base</span>
+      </div>
+    </div>
+  </header>
+  <div class="wrap">
+    <div class="article-layout">
+      <div class="prose">
+        <h2 id="inventory">You cannot assess what you have not inventoried</h2><p>Most organisations know their primary domain and their website. Fewer can list every subdomain, every public IP address and every service listening on them. That inventory is the foundation of any external assessment, and it is usually the first output of one.</p><p>Start with what is authoritative: the DNS zone file from your DNS provider, the public IP ranges from your hosting provider, and the certificate transparency logs for your domain, which reveal hostnames that were issued certificates even if you have forgotten them.</p><h2 id="sources">Passive sources worth knowing</h2><p>Certificate transparency logs are public by design: every publicly trusted certificate is recorded, so searching them for your domain surfaces historical hostnames. Search engine indexes reveal pages that were meant to be unlisted. Job postings reveal technology stacks. None of this requires touching the organisation's infrastructure.</p><p>Passive sources are also useful for the reverse case: understanding what an attacker could learn about you without any active probing at all.</p><h2 id="authorisation">Where authorisation stops being optional</h2><p>Passive research is generally benign. Active probing is not: connecting to a host, requesting a URL or completing a protocol handshake is traffic to a system someone else may own.</p><p>If the infrastructure is yours, you are the authorisation. If it belongs to a client, get it in writing, scoped to specific hosts and a specific window. If it belongs to your hosting provider, their acceptable-use policy applies on top of your own permission.</p><p>SMB Scanner Lite's public edition avoids the question entirely by restricting itself to five reserved test domains. There is no legitimate reason for a public demo to connect to arbitrary hosts.</p><h2 id="shadow">Shadow infrastructure is the hard part</h2><p>A marketing landing page stood up by an agency, a staging environment with a default password, an old intranet still resolving &mdash; these are the systems that never appear in the inventory because nobody considered them part of it.</p><p>External assessment is particularly good at surfacing them, because it observes what is reachable rather than what is documented. That is also why findings occasionally produce the response "we did not know that existed", which is the most valuable result an assessment can deliver.</p><h2 id="scope">Scoping an assessment defensibly</h2><p>Write down the domains and IP ranges in scope, the exclusions, the time window, the vantage points and the contact who can authorise stopping. Include what will happen if something in scope turns out to belong to a third party.</p><p>For a small business that inventory may be five lines long. The discipline still matters: it is the difference between an assessment and unauthorised scanning.</p><h2 id="continue">Where to go next</h2><p>The <a href="/methodology/">methodology</a> describes how SMB Scanner Lite turns observations into findings. The <a href="/capabilities/">capability catalog</a> lists which controls address exposed services, and the <a href="/responsible-use/">responsible use</a> page covers authorisation in more detail.</p>
+        <div class="callout mt-4">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6l7-3z"/><path d="M9 12.2l2.2 2.2L15.4 10"/></svg>
+          <div><p><strong>See how this is measured.</strong> SMB Scanner Lite evaluates these controls from outside and attaches the observation behind every conclusive finding. <a href="/capabilities/">Browse the 22-control catalog</a> or inspect the <a href="/sample-report/">recorded assessment</a>.</p></div>
+        </div>
+      </div>
+      <aside class="article-aside">
+        <nav class="toc" aria-label="On this page">
+          <h2>On this page</h2>
+          <ol><li><a href="#inventory">You cannot assess what you have not inventoried</a></li><li><a href="#sources">Passive sources worth knowing</a></li><li><a href="#authorisation">Where authorisation stops being optional</a></li><li><a href="#shadow">Shadow infrastructure is the hard part</a></li><li><a href="#scope">Scoping an assessment defensibly</a></li><li><a href="#continue">Where to go next</a></li></ol>
+        </nav>
+        <div class="card">
+          <h3 style="font-size:0.95rem">Questions about your own domain?</h3>
+          <p class="small">A private assessment covers the full catalog, after scope and written authorisation are agreed.</p>
+          <a class="tlink mt-1" href="/request-assessment/">Request an assessment <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</article>
+
+<section class="section section--alt">
+  <div class="wrap">
+    <div class="section-head"><p class="eyebrow">Keep reading</p><h2>Related articles</h2></div>
+    <div class="resource-grid">
+<a class="resource-card" href="/resources/external-security-posture-assessment/">
+  <span class="component-tag mono">Fundamentals</span>
+  <h3>External security posture assessment: what it measures and what it cannot</h3>
+  <span class="resource-meta"><span>9 min read</span></span>
+</a>
+<a class="resource-card" href="/resources/smb-cybersecurity-basics/">
+  <span class="component-tag mono">Fundamentals</span>
+  <h3>SMB cybersecurity: where small businesses are actually exposed</h3>
+  <span class="resource-meta"><span>8 min read</span></span>
+</a>
+<a class="resource-card" href="/resources/spf-dkim-dmarc/">
+  <span class="component-tag mono">Email authentication</span>
+  <h3>SPF, DKIM and DMARC: how email authentication actually works</h3>
+  <span class="resource-meta"><span>11 min read</span></span>
+</a></div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand-col">
+        <a class="foot-brand" href="/">
+          <img src="/logo.svg" width="30" height="30" alt="" />
+          <span>SMB Scanner <span class="brand-lite">Lite</span></span>
+        </a>
+        <p class="foot-desc">An evidence-first external security posture assessment for small and medium businesses. 22 controls, a 0&ndash;100 score and an A&ndash;F grade &mdash; with the observation behind every conclusive finding. The public edition is restricted to five approved test domains.</p>
+        <p class="foot-meta"><span class="mono">v5.2.0</span> &middot; Public Sandbox Edition</p>
+        <a class="foot-mail" href="mailto:contact@smbscannerlite.me"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M4 8.5l8 5.5 8-5.5"/></svg><span>contact@smbscannerlite.me</span></a>
+      </div>
+      <div class="foot-col"><h3>Product</h3><ul><li><a href="/">Overview</a></li><li><a href="/capabilities/">Capabilities</a></li><li><a href="/demo/">Recorded Demo</a></li><li><a href="/sample-report/">Sample Report</a></li><li><a href="/methodology/">Methodology</a></li></ul></div><div class="foot-col"><h3>Resources</h3><ul><li><a href="/docs/">Documentation</a></li><li><a href="/resources/">Knowledge Base</a></li><li><a href="/resources/#guides">Technical Guides</a></li><li><a href="/validation/">Validation Record</a></li><li><a href="https://github.com/muhammad-atif-161/smb-scanner-lite" rel="noopener" target="_blank">GitHub</a></li></ul></div><div class="foot-col"><h3>Legal</h3><ul><li><a href="/privacy/">Privacy Policy</a></li><li><a href="/terms/">Terms of Use</a></li><li><a href="/responsible-use/">Responsible Use</a></li><li><a href="/limitations/">Assessment Limitations</a></li></ul></div><div class="foot-col"><h3>Business</h3><ul><li><a href="/contact/">Contact</a></li><li><a href="/request-assessment/">Request an Assessment</a></li><li><a href="/acquisition/">Project Acquisition</a></li><li><a href="/about/">About the Project</a></li></ul></div>
+    </div>
+    <div class="foot-bottom">
+      <p>&copy; <span data-year>2026</span> Muhammad Atif &middot; SMB Scanner Lite &middot; Built in Rawalpindi, Pakistan.</p>
+      <p class="foot-bottom-links">
+        <a href="/privacy/">Privacy</a>
+        <a href="/terms/">Terms</a>
+        <a href="/responsible-use/">Responsible use</a>
+        <a href="https://github.com/muhammad-atif-161/smb-scanner-lite" rel="noopener" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </div>
+</footer>
+<div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="false"></div>
+<script src="/config.js"></script>
+<script src="/site.js" defer></script>
+</body>
+</html>

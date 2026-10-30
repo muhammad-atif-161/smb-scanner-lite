@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Validation &amp; Trust — Reproducible Test Record | SMB Scanner Lite</title>
+<meta name="description" content="The published validation record for SMB Scanner Lite: five reproducible unit tests covering the allowlist, consent and hash chain, plus the recorded assessment, documented methodology and stated limits." />
+<link rel="canonical" href="https://smbscannerlite.me/validation/" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta name="author" content="Muhammad Atif" />
+<meta name="theme-color" content="#080B14" />
+<meta name="generator" content="SMB Scanner Lite static site builder" />
+<meta property="og:site_name" content="SMB Scanner Lite" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Validation &amp; Trust — Reproducible Test Record | SMB Scanner Lite" />
+<meta property="og:description" content="The published validation record for SMB Scanner Lite: five reproducible unit tests covering the allowlist, consent and hash chain, plus the recorded assessment, documented methodology and stated limits." />
+<meta property="og:url" content="https://smbscannerlite.me/validation/" />
+<meta property="og:image" content="https://smbscannerlite.me/og-image.png" />
+<meta property="og:image:alt" content="SMB Scanner Lite — a dark navy assessment report showing a posture score of 86 out of 100, grade B, with evidence-backed findings." />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Validation &amp; Trust — Reproducible Test Record | SMB Scanner Lite" />
+<meta name="twitter:description" content="The published validation record for SMB Scanner Lite: five reproducible unit tests covering the allowlist, consent and hash chain, plus the recorded assessment, documented methodology and stated limits." />
+<meta name="twitter:image" content="https://smbscannerlite.me/og-image.png" />
+<link rel="icon" href="/logo.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/logo.svg" />
+<link rel="alternate" type="application/json" href="/data/recorded-assessment.json" title="Recorded assessment data (JSON)" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/styles.css" />
+
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://smbscannerlite.me/"},{"@type":"ListItem","position":2,"name":"Validation & Trust"}]}]}</script>
+<noscript><style>.reveal{opacity:1;transform:none}</style></noscript>
+</head>
+<body class="">
+
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="nav" data-nav>
+  <div class="wrap nav-inner">
+    <a class="brand" href="/" aria-label="SMB Scanner Lite home">
+      <img src="/logo.svg" width="32" height="32" alt="" />
+      <span class="brand-text">SMB Scanner <span class="brand-lite">Lite</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="/">Overview</a><a href="/capabilities/">Capabilities</a><a href="/sample-report/">Sample Report</a><a href="/methodology/">Methodology</a><a href="/faq/">FAQ</a><a href="/contact/">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="btn btn-primary btn-sm" href="/demo/"><svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5.5 13h5L10 21l7.5-10h-5L13 3z"/></svg><span>Try the Demo</span></a>
+      <button class="nav-toggle" type="button" data-nav-toggle aria-label="Open menu" aria-expanded="false" aria-controls="nav-panel">
+        <span data-nav-open><svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></span>
+        <span data-nav-close hidden><svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="nav-panel" id="nav-panel" data-nav-panel hidden>
+  <nav class="nav-panel-links" aria-label="Mobile">
+    <a href="/">Overview</a><a href="/capabilities/">Capabilities</a><a href="/sample-report/">Sample Report</a><a href="/methodology/">Methodology</a><a href="/faq/">FAQ</a><a href="/contact/">Contact</a>
+  </nav>
+  <div class="nav-panel-foot">
+    <a class="btn btn-primary" href="/demo/"><svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5.5 13h5L10 21l7.5-10h-5L13 3z"/></svg><span>Try the Demo</span></a>
+    <a class="btn btn-ghost" href="/request-assessment/">Request an assessment</a>
+  </div>
+</div>
+<main id="main">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><span aria-current="page">Validation &amp; Trust</span></li></ol></nav>
+
+<div class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">Validation &amp; trust</p>
+    <h1>Credibility from evidence, not from badges.</h1>
+    <p class="lede">There are no customer logos, review scores or usage statistics on this page, because none are held with documented permission. What is published instead can be checked: a test record you can reproduce, a documented method, real sample evidence and an explicit list of limits.</p>
+    <div class="hero-actions"><a class="btn btn-primary" href="/validation/#test-record"><svg class="btn-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M8.2 12.3l2.5 2.5 5-5.4"/></svg><span>Jump to the test record</span></a><a class="btn btn-ghost" href="https://github.com/muhammad-atif-161/smb-scanner-lite" rel="noopener" target="_blank"><svg class="btn-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><path d="M20 4l-8.5 8.5"/><path d="M18 14v4.5A2.5 2.5 0 0115.5 21h-9A2.5 2.5 0 014 18.5v-9A2.5 2.5 0 016.5 7H11"/></svg><span>Run the tests yourself</span></a></div>
+  </div>
+</div>
+
+<section class="section section--tight">
+  <div class="wrap">
+    <div class="notice notice--accent reveal">
+      <svg class="notice-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5"/><circle cx="12" cy="7.8" r="0.9" fill="currentColor" stroke="none"/></svg>
+      <div class="notice-body"><strong>What this page does not do</strong><p>It does not invent customer proof. It does not publish a test count that cannot be reproduced. A larger internal validation register is maintained in the private repository; its contents and results are not published here, and no figure from it is claimed on this site.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--flush" id="test-record">
+  <div class="wrap">
+    <div class="section-head reveal" data-align="left"><p class="eyebrow">1 &amp;middot; Test record</p><h2>The public sandbox suite, test by test.</h2><p class="section-lede">Five tests, all reproducible from the public repository, covering the boundaries that matter most: the five-domain allowlist, out-of-scope rejection, mandatory consent, hash-chain integrity and command-line enforcement.</p></div>
+
+    <div class="grid g2 mt-2" style="align-items:start">
+      <div class="card reveal">
+        <div class="row" style="justify-content:space-between"><span class="tag">last recorded run</span><span class="status-badge status-pass">all passing</span></div>
+        <h3 class="mt-2" style="margin-bottom:0.2rem">Ran 5 tests in 0.031s — OK</h3>
+        <p class="small muted">Executed 30 October 2026, 14:01 UTC &middot; CPython 3.11.2 on Linux</p>
+        <div class="evidence mt-1"><span class="val">PYTHONPATH=src python3 -m unittest discover -s tests -v</span><button class="copy" type="button" data-copy="PYTHONPATH=src python3 -m unittest discover -s tests -v">Copy</button></div>
+        <p class="faint tiny mt-2">The log line below is the literal tail of that run. The blocked-target message is expected output from the negative test, not an error.</p>
+        <div class="evidence"><span class="val">test_cli_enforces_sandbox_and_consent ... ERROR: TARGET BLOCKED ('unauthorized-domain.com') ... ok
+test_consent_proof_hash_chain_and_sandbox_report ... ok
+test_exactly_five_public_sandbox_domains_allowed ... ok
+test_non_sandbox_domains_and_ips_are_blocked ... ok
+test_scan_requires_explicit_user_consent ... ok
+
+Ran 5 tests in 0.031s
+
+OK</span></div>
+      </div>
+      <div class="reveal">
+        <ul class="trust-list">
+          <li><strong>Scope of the record</strong>The five tests in <span class="mono">tests/test_sandbox.py</span> plus the recorded assessment output. Nothing else is presented as validated.</li>
+          <li><strong>What the tests protect</strong>The restriction is the product. These tests fail if the allowlist widens, if consent becomes optional, or if the hash chain stops chaining.</li>
+          <li><strong>What they do not prove</strong>That every control in the private engine behaves correctly, or that any third-party infrastructure was tested. Those claims are not made.</li>
+          <li><strong>Roadmap, stated as roadmap</strong>Expanding the published suite into a larger regression register is planned work, not completed work.</li>
+        </ul>
+        <div class="row mt-2">
+          <a class="tlink" href="https://github.com/muhammad-atif-161/smb-scanner-lite/blob/main/tests/test_sandbox.py" rel="noopener" target="_blank">Read the test source <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><path d="M20 4l-8.5 8.5"/><path d="M18 14v4.5A2.5 2.5 0 0115.5 21h-9A2.5 2.5 0 014 18.5v-9A2.5 2.5 0 016.5 7H11"/></svg></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-wrap mt-3 reveal">
+      <table>
+        <caption>Recorded run: 30 October 2026, 14:01 UTC. Every row is a live unit test in the public repository, not a manual checklist item.</caption>
+        <thead><tr><th scope="col">Test</th><th scope="col">Objective</th><th scope="col">Expected result</th><th scope="col">Status</th><th scope="col">Notes</th></tr></thead>
+        <tbody><tr><th scope='row'><span class='mono'>T-01</span><br><span class='mono tiny'>test_exactly_five_public_sandbox_domains_allowed</span></th><td>Prove the allowlist is exactly the five approved public testing domains and that normalisation (scheme, port, path) cannot widen it.</td><td>ALLOWED_SANDBOX_DOMAINS equals the five approved names; normalize_sandbox_target(&#x27;https://&lt;domain&gt;:443/path&#x27;) returns the bare domain.</td><td><span class="status-badge status-pass">Pass</span></td><td class='tiny'>Covers [[:port]] and path stripping. A sixth name cannot be introduced without failing this test.</td></tr><tr><th scope='row'><span class='mono'>T-02</span><br><span class='mono tiny'>test_non_sandbox_domains_and_ips_are_blocked</span></th><td>Confirm every out-of-scope target raises SandboxRestrictionError before any network call.</td><td>google.com, github.com, sub.example.com, 192.168.1.1, 8.8.8.8, localhost and an empty string all raise SandboxRestrictionError.</td><td><span class="status-badge status-pass">Pass</span></td><td class='tiny'>Subdomain look-alikes and raw IPs are covered, not just unrelated domains.</td></tr><tr><th scope='row'><span class='mono'>T-03</span><br><span class='mono tiny'>test_scan_requires_explicit_user_consent</span></th><td>Confirm a consent receipt cannot be recorded when the policy was not accepted or no operator identity was supplied.</td><td>Both calls raise ConsentRequiredError and no ledger file is written.</td><td><span class="status-badge status-pass">Pass</span></td><td class='tiny'>Consent is a precondition of the receipt itself, not a field inside a report.</td></tr><tr><th scope='row'><span class='mono'>T-04</span><br><span class='mono tiny'>test_consent_proof_hash_chain_and_sandbox_report</span></th><td>Verify the SHA-256 hash chain links consecutive receipts and that a report embeds the receipt it was authorised by.</td><td>Second receipt&#x27;s prev_receipt_hash equals the first receipt&#x27;s receipt_sha256; verify_consent_log returns (True, 2); report consent_id matches the receipt.</td><td><span class="status-badge status-pass">Pass</span></td><td class='tiny'>This is the tamper-evidence claim in the privacy policy, tested rather than asserted.</td></tr><tr><th scope='row'><span class='mono'>T-05</span><br><span class='mono tiny'>test_cli_enforces_sandbox_and_consent</span></th><td>Confirm the command-line surface cannot bypass the runtime restriction.</td><td>Blocked domain returns exit code 2; approved domain with consent returns exit code 0.</td><td><span class="status-badge status-pass">Pass</span></td><td class='tiny'>The restriction lives in the runtime, so the CLI inherits it rather than implementing its own check.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="wrap">
+    <div class="section-head reveal" data-align="left"><p class="eyebrow">2 &amp;middot; Technical methodology</p><h2>The method is documented, not implied.</h2><p class="section-lede">Measurement, statuses, scoring weights, grade bands, evidence handling and the boundary of the method are published in full on the methodology page.</p></div>
+    <div class="grid g3">
+      <div class="card reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12s3.5-6.5 9.5-6.5S21.5 12 21.5 12s-3.5 6.5-9.5 6.5S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <h3>What is observed</h3>
+        <p>Public DNS records, mail authentication policy, TLS negotiation, HTTP response headers and protocol-level reachability of defined high-risk ports. Nothing authenticated.</p>
+        <a class="tlink mt-1" href="/methodology/">Methodology <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17a8.5 8.5 0 1116 0"/><path d="M12 17l4-5"/></svg></div>
+        <h3>How it is scored</h3>
+        <p>Weighted over conclusive controls: pass full credit, warning partial, fail none, inconclusive excluded. Category weights and grade bands are published.</p>
+        <a class="tlink mt-1" href="/methodology/#scoring">Scoring <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6.5h11M9 12h11M9 17.5h11"/><path d="M4 6.5l1 1 1.6-1.6"/><path d="M4 12l1 1 1.6-1.6"/><path d="M4 17.5l1 1 1.6-1.6"/></svg></div>
+        <h3>The control catalog</h3>
+        <p>All 22 controls documented with what each evaluates, why it matters, an example of its evidence, and whether the public sandbox actually runs it.</p>
+        <a class="tlink mt-1" href="/capabilities/">Catalog <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head reveal" data-align="left"><p class="eyebrow">3 &amp;middot; Sample evidence</p><h2>A result you can inspect line by line.</h2><p class="section-lede">The recorded assessment of example.com is published in full: score, grade, eight findings, the evidence behind each one and the metadata of the run.</p></div>
+    <div class="grid g2" style="align-items:start">
+      <div class="card reveal">
+        <div class="recorded-banner" style="margin-bottom:0.6rem"><span class="dot"></span><span><b>Recorded</b> 28 Oct 2026</span></div>
+        <div class="row" style="justify-content:space-between;align-items:flex-end">
+          <div>
+            <span class="mono faint tiny">POSTURE SCORE</span>
+            <p style="font-family:var(--font-head);font-size:2.4rem;font-weight:600;margin:0;letter-spacing:-0.04em">86<span class="faint" style="font-size:1rem"> / 100</span></p>
+          </div>
+          <span class="grade-badge"><b>B</b><span>Grade</span></span>
+        </div>
+        <div class="bars"><div class="bar"><div class="bar-head"><span>DNS &amp; Domain Hygiene</span><b>95</b></div><div class="bar-track"><span class="bar-fill" style="width:95%"></span></div></div><div class="bar"><div class="bar-head"><span>E-mail Authentication</span><b>92</b></div><div class="bar-track"><span class="bar-fill" style="width:92%"></span></div></div><div class="bar"><div class="bar-head"><span>Transport Security (TLS)</span><b>90</b></div><div class="bar-track"><span class="bar-fill" style="width:90%"></span></div></div><div class="bar"><div class="bar-head"><span>Web Security Headers</span><b>68</b></div><div class="bar-track"><span class="bar-fill bar-fill--warn" style="width:68%"></span></div></div></div>
+        <div class="row mt-2"><a class="btn btn-ghost" href="/sample-report/"><svg class="btn-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg><span>Open the report</span></a></div>
+      </div>
+      <div class="card reveal">
+        <h3>Evidence, verbatim</h3>
+        <p class="small muted">Three lines from the recorded run. Copy one and re-run the equivalent query from outside your network.</p>
+        <div class="evidence"><span class="val">v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s</span><button class="copy" type="button" data-copy="v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s">Copy</button></div>
+        <div class="evidence" style="margin-top:.4rem"><span class="val">v=spf1 -all (strict no-mail policy for reserved domain).</span><button class="copy" type="button" data-copy="v=spf1 -all (strict no-mail policy for reserved domain).">Copy</button></div>
+        <div class="evidence" style="margin-top:.4rem"><span class="val">Zone signed with validated RRSIG and parent DS delegation.</span><button class="copy" type="button" data-copy="Zone signed with validated RRSIG and parent DS delegation.">Copy</button></div>
+        <p class="faint tiny mt-2">The recorded run also showed two warnings: missing HSTS and missing Content-Security-Policy. They are published as warnings, not omitted.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt">
+  <div class="wrap">
+    <div class="section-head reveal" data-align="left"><p class="eyebrow">4 &amp;middot; Privacy and safety</p><h2>What the site and the tool each do with data.</h2><p class="section-lede">This website is static. The sandbox runs on your machine. Neither sells data, and consent is recorded locally before any run.</p></div>
+    <div class="grid g2">
+      <div class="card reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6l7-3z"/><path d="M9 12.2l2.2 2.2L15.4 10"/></svg></div>
+        <h3>The website</h3>
+        <ul class="card-list">
+          <li>No analytics, no advertising pixels, no tracking cookies</li>
+          <li>No account, no login, no newsletter list</li>
+          <li>Enquiry form fields are used to reply to that enquiry only</li>
+          <li>The demo loads static stored data; it never contacts a target</li>
+        </ul>
+        <a class="tlink mt-1" href="/privacy/">Privacy policy <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon card-icon--cyan"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="9.5" rx="2.5"/><path d="M8 10.5V8a4 4 0 018 0v2.5"/></svg></div>
+        <h3>The sandbox</h3>
+        <ul class="card-list">
+          <li>Five approved domains, enforced before any network request</li>
+          <li>Consent receipt written locally, chained by SHA-256</li>
+          <li>Read-only checks; no login, no payload, no exploitation</li>
+          <li>Reports stay on the machine that produced them</li>
+        </ul>
+        <a class="tlink mt-1" href="/responsible-use/">Responsible use <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+    <div class="callout mt-3 reveal">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5l8.5 15h-17l8.5-15z"/><path d="M12 10v4"/><circle cx="12" cy="16.6" r="0.9" fill="currentColor" stroke="none"/></svg>
+      <div><p><strong>Authorisation is not optional.</strong> The full engine is for domains you own or have written permission to assess. The MIT licence on the published code governs the software; it does not grant permission to test third-party infrastructure.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head reveal" data-align="left"><p class="eyebrow">5 &amp;middot; Product limitations</p><h2>What it cannot establish, written down.</h2><p class="section-lede">A security product that only describes its strengths is not giving you a usable picture. The limitations page states the boundary of the evidence in plain language.</p></div>
+    <div class="grid g2">
+      <div class="card reveal">
+        <h3>Structural limits</h3>
+        <ul class="card-list">
+          <li>No visibility behind authentication or inside the network</li>
+          <li>No proof that a weakness is exploitable</li>
+          <li>No ability to detect compromise, past or present</li>
+          <li>No coverage of people, process or physical security</li>
+        </ul>
+        <a class="tlink mt-1" href="/limitations/">Full limitations <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="card reveal">
+        <h3>Honest status of the project</h3>
+        <ul class="card-list">
+          <li>No published customer base, and none claimed</li>
+          <li>No revenue claims, no usage statistics</li>
+          <li>Public sandbox is a demonstration edition, not a service</li>
+          <li>Assessment capacity is arranged directly and reviewed manually</li>
+        </ul>
+        <a class="tlink mt-1" href="/acquisition/">Project status and acquisition <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta-band reveal">
+      <div class="cta-band-text">
+        <h2>Reproduce the record, then judge the product.</h2>
+        <p>The test suite and the recorded assessment are both public. That is the point.</p>
+      </div>
+      <div class="cta-band-actions">
+        <a class="btn btn-primary" href="/docs/"><svg class="btn-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg><span>Install the sandbox</span></a>
+        <a class="btn btn-ghost" href="/contact/"><span>Ask a technical question</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand-col">
+        <a class="foot-brand" href="/">
+          <img src="/logo.svg" width="30" height="30" alt="" />
+          <span>SMB Scanner <span class="brand-lite">Lite</span></span>
+        </a>
+        <p class="foot-desc">An evidence-first external security posture assessment for small and medium businesses. 22 controls, a 0&ndash;100 score and an A&ndash;F grade &mdash; with the observation behind every conclusive finding. The public edition is restricted to five approved test domains.</p>
+        <p class="foot-meta"><span class="mono">v5.2.0</span> &middot; Public Sandbox Edition</p>
+        <a class="foot-mail" href="mailto:contact@smbscannerlite.me"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M4 8.5l8 5.5 8-5.5"/></svg><span>contact@smbscannerlite.me</span></a>
+      </div>
+      <div class="foot-col"><h3>Product</h3><ul><li><a href="/">Overview</a></li><li><a href="/capabilities/">Capabilities</a></li><li><a href="/demo/">Recorded Demo</a></li><li><a href="/sample-report/">Sample Report</a></li><li><a href="/methodology/">Methodology</a></li></ul></div><div class="foot-col"><h3>Resources</h3><ul><li><a href="/docs/">Documentation</a></li><li><a href="/resources/">Knowledge Base</a></li><li><a href="/resources/#guides">Technical Guides</a></li><li><a href="/validation/">Validation Record</a></li><li><a href="https://github.com/muhammad-atif-161/smb-scanner-lite" rel="noopener" target="_blank">GitHub</a></li></ul></div><div class="foot-col"><h3>Legal</h3><ul><li><a href="/privacy/">Privacy Policy</a></li><li><a href="/terms/">Terms of Use</a></li><li><a href="/responsible-use/">Responsible Use</a></li><li><a href="/limitations/">Assessment Limitations</a></li></ul></div><div class="foot-col"><h3>Business</h3><ul><li><a href="/contact/">Contact</a></li><li><a href="/request-assessment/">Request an Assessment</a></li><li><a href="/acquisition/">Project Acquisition</a></li><li><a href="/about/">About the Project</a></li></ul></div>
+    </div>
+    <div class="foot-bottom">
+      <p>&copy; <span data-year>2026</span> Muhammad Atif &middot; SMB Scanner Lite &middot; Built in Rawalpindi, Pakistan.</p>
+      <p class="foot-bottom-links">
+        <a href="/privacy/">Privacy</a>
+        <a href="/terms/">Terms</a>
+        <a href="/responsible-use/">Responsible use</a>
+        <a href="https://github.com/muhammad-atif-161/smb-scanner-lite" rel="noopener" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </div>
+</footer>
+<div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="false"></div>
+<script src="/config.js"></script>
+<script src="/site.js" defer></script>
+</body>
+</html>
