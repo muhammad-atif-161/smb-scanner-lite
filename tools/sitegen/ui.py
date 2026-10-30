@@ -230,7 +230,7 @@ def footer_html() -> str:
         </a>
         <p class="foot-desc">An evidence-first external security posture assessment for small and medium businesses. 22 controls, a 0&ndash;100 score and an A&ndash;F grade &mdash; with the observation behind every conclusive finding. The public edition is restricted to five approved test domains.</p>
         <p class="foot-meta"><span class="mono">v{C.PRODUCT_VERSION}</span> &middot; {e(C.EDITION)}</p>
-        <a class="foot-mail" href="mailto:{C.CONTACT_EMAIL}">{icon('mail', 16)}<span>{e(C.CONTACT_EMAIL)}</span></a>
+        <div class="foot-mails">{''.join(f'<a class="foot-mail" href="mailto:{e(address)}">{icon("mail", 16)}<span>{e(address)}</span></a>' for address in C.CONTACT_EMAILS)}</div>
       </div>
       {''.join(columns)}
     </div>

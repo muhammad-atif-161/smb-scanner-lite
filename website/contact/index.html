@@ -88,8 +88,16 @@
         
 <form class="form" data-enquiry-form data-form-kind="contact" novalidate>
   <div class="form-grid">
-    <div class="field"><label for="name">Your name<span class="req" aria-hidden="true">*</span></label><input class="input" id="name" name="name" type="text" placeholder="First and last name" autocomplete="name" data-required data-label="Your name" /></div><div class="field"><label for="email">Email address<span class="req" aria-hidden="true">*</span></label><input class="input" id="email" name="email" type="email" placeholder="name@company.com" autocomplete="email" data-required data-label="Email address" /></div><div class="field"><label for="enquiryType">Enquiry type<span class="req" aria-hidden="true">*</span></label><select class="select" id="enquiryType" name="enquiryType" data-required data-label="Enquiry type"><option value="Product question">Product question</option><option value="Assessment request">Assessment request</option><option value="Technical enquiry">Technical enquiry</option><option value="Project acquisition">Project acquisition</option><option value="Other enquiry">Other enquiry</option></select></div><div class="field field--full"><label for="message">Message</label><textarea class="textarea" id="message" name="message" rows="5" placeholder="What would you like to know, or what are you trying to assess?"></textarea></div>
+    <div class="field"><label for="name">Your name<span class="req" aria-hidden="true">*</span></label><input class="input" id="name" name="name" type="text" placeholder="First and last name" autocomplete="name" data-required data-label="Your name" /></div><div class="field"><label for="email">Email address<span class="req" aria-hidden="true">*</span></label><input class="input" id="email" name="email" type="email" placeholder="name@company.com" autocomplete="email" data-required data-label="Email address" /></div><div class="field"><label for="company">Company</label><input class="input" id="company" name="company" type="text" placeholder="Business name" autocomplete="organization" /></div><div class="field"><label for="domain">Business domain</label><input class="input" id="domain" name="domain" type="text" placeholder="yourbusiness.com" autocomplete="" /><span class="field-hint">The public domain you want assessed. No www. or path needed.</span></div><div class="field"><label for="enquiryType">Enquiry type<span class="req" aria-hidden="true">*</span></label><select class="select" id="enquiryType" name="enquiryType" data-required data-label="Enquiry type"><option value="Product question">Product question</option><option value="Assessment request">Assessment request</option><option value="Technical enquiry">Technical enquiry</option><option value="Project acquisition">Project acquisition</option><option value="Other enquiry">Other enquiry</option></select></div><div class="field field--full"><label for="message">Message</label><textarea class="textarea" id="message" name="message" rows="5" placeholder="What would you like to know, or what are you trying to assess?"></textarea></div>
     
+<div class="field field--full">
+  <label for="contact-authorised">Are you authorised to request an assessment of this domain?</label>
+  <select class="select" id="contact-authorised" name="authorised">
+    <option value="no" selected>No &mdash; this is a question, not an assessment request</option>
+    <option value="yes">Yes &mdash; I own the domain or am authorised to request an assessment</option>
+  </select>
+  <span class="field-hint">Answering &ldquo;no&rdquo; is fine. An assessment is only arranged after ownership or written authorisation is confirmed.</span>
+</div>
   </div>
   <div class="hp" aria-hidden="true">
     <label for="contact-gotcha">Leave this field empty</label>
@@ -108,7 +116,7 @@
     <div class="card-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M4 8.5l8 5.5 8-5.5"/></svg></div>
     <h3>Direct email</h3>
     <p>Prefer your own mail client? Write to the address below and include the same details.</p>
-    <p><a class="tlink" href="mailto:contact@smbscannerlite.me">contact@smbscannerlite.me</a></p>
+    <p class="stack-tight"><a class="tlink" href="mailto:myself.atiff@gmail.com">myself.atiff@gmail.com</a></p>
   </div>
   <div class="card">
     <div class="card-icon card-icon--cyan"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></div>
@@ -146,7 +154,7 @@
 
     <div class="notice notice--accent mt-3 reveal">
       <svg class="notice-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6l7-3z"/><path d="M9 12.2l2.2 2.2L15.4 10"/></svg>
-      <div class="notice-body"><strong>How delivery works on a static site</strong><p>This website has no backend. The form validates your message and then either delivers it to the maintainer's form endpoint or opens your mail client with the enquiry composed &mdash; whichever is configured. If your mail client does not open, write to <a href="mailto:contact@smbscannerlite.me">contact@smbscannerlite.me</a> directly. Nothing is stored on this website.</p></div>
+      <div class="notice-body"><strong>How delivery works on a static site</strong><p>This website has no backend. The form validates your message and then either delivers it to the maintainer's form endpoint or opens your mail client with the enquiry composed &mdash; whichever is configured. If your mail client does not open, write to <a href="mailto:myself.atiff@gmail.com">myself.atiff@gmail.com</a> directly. Nothing is stored on this website.</p></div>
     </div>
   </div>
 </section>
@@ -163,7 +171,7 @@
         </a>
         <p class="foot-desc">An evidence-first external security posture assessment for small and medium businesses. 22 controls, a 0&ndash;100 score and an A&ndash;F grade &mdash; with the observation behind every conclusive finding. The public edition is restricted to five approved test domains.</p>
         <p class="foot-meta"><span class="mono">v5.2.0</span> &middot; Public Sandbox Edition</p>
-        <a class="foot-mail" href="mailto:myself.atiff@gmail.com"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M4 8.5l8 5.5 8-5.5"/></svg><span>contact@smbscannerlite.me</span></a>
+        <div class="foot-mails"><a class="foot-mail" href="mailto:myself.atiff@gmail.com"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M4 8.5l8 5.5 8-5.5"/></svg><span>myself.atiff@gmail.com</span></a></div>
       </div>
       <div class="foot-col"><h3>Product</h3><ul><li><a href="/">Overview</a></li><li><a href="/capabilities/">Capabilities</a></li><li><a href="/demo/">Recorded Demo</a></li><li><a href="/sample-report/">Sample Report</a></li><li><a href="/methodology/">Methodology</a></li></ul></div><div class="foot-col"><h3>Resources</h3><ul><li><a href="/docs/">Documentation</a></li><li><a href="/resources/">Knowledge Base</a></li><li><a href="/resources/#guides">Technical Guides</a></li><li><a href="/validation/">Validation Record</a></li><li><a href="https://github.com/muhammad-atif-161/smb-scanner-lite" rel="noopener" target="_blank">GitHub</a></li></ul></div><div class="foot-col"><h3>Legal</h3><ul><li><a href="/privacy/">Privacy Policy</a></li><li><a href="/terms/">Terms of Use</a></li><li><a href="/responsible-use/">Responsible Use</a></li><li><a href="/limitations/">Assessment Limitations</a></li></ul></div><div class="foot-col"><h3>Business</h3><ul><li><a href="/contact/">Contact</a></li><li><a href="/request-assessment/">Request an Assessment</a></li><li><a href="/acquisition/">Project Acquisition</a></li><li><a href="/about/">About the Project</a></li></ul></div>
     </div>

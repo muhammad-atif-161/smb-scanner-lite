@@ -1,0 +1,82 @@
+name: Change contact email
+
+# Change the address published across the whole website without editing code.
+#
+# Actions tab -> "Change contact email" -> Run workflow -> type the address.
+# The workflow updates site.contact.json, rebuilds every page and
+# website/config.js, commits the result, and then triggers the Pages deploy
+# (a push made with GITHUB_TOKEN does not fire `on: push` workflows, so the
+# deploy is dispatched explicitly).
+
+on:
+  workflow_dispatch:
+    inputs:
+      email:
+        description: "New primary contact email"
+        required: true
+        type: string
+      endpoint:
+        description: "Form POST endpoint (leave blank to keep the current one)"
+        required: false
+        type: string
+      clear_endpoint:
+        description: "Remove the form endpoint so forms use the visitor's mail client"
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: "contact-email"
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Update contact settings and rebuild
+        env:
+          NEW_EMAIL: ${{ inputs.email }}
+          NEW_ENDPOINT: ${{ inputs.endpoint }}
+          CLEAR_ENDPOINT: ${{ inputs.clear_endpoint }}
+        run: |
+          set -e
+          ARGS=(--email "$NEW_EMAIL")
+          if [ -n "$NEW_ENDPOINT" ]; then
+            ARGS+=(--endpoint "$NEW_ENDPOINT")
+          fi
+          if [ "$CLEAR_ENDPOINT" = "true" ]; then
+            ARGS+=(--clear-endpoint)
+          fi
+          python3 tools/set_contact.py "${ARGS[@]}"
+
+      - name: Commit and push
+        env:
+          NEW_EMAIL: ${{ inputs.email }}
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Update contact email to ${NEW_EMAIL} and rebuild site"
+            git push
+          fi
+
+      - name: Trigger Pages deployment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy-pages.yml --ref main

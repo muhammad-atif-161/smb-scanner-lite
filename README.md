@@ -60,17 +60,35 @@ python3 tools/build_site.py --check
 | `tools/sitegen/pages_*.py` | Page templates grouped by audience |
 | `website/styles.css` | Midnight Intelligence design system (single stylesheet) |
 | `website/site.js` | Navigation, tabs, disclosures, recorded-demo explorer, forms |
-| `website/config.js` | Runtime config read by the browser (contact email, form endpoint) |
+| `website/config.js` | **Generated** runtime config read by the browser (do not edit by hand) |
+| `site.contact.json` | Single source of truth for the contact email and form endpoint |
+| `tools/set_contact.py` | One-command helper that edits the JSON and rebuilds the site |
 
 ### Configuration you may need to change
 
-- **Contact email** — set in `tools/sitegen/config.py` (`CONTACT_EMAIL`) *and*
-  `website/config.js` (`contactEmail`), then rebuild. Both must match.
-- **Form delivery** — the site is static. Forms post to `formEndpoint` in
-  `website/config.js` when it is set (any endpoint accepting a JSON POST, such as
-  Formspree or Web3Forms). When it is empty, the form composes the enquiry in the
-  visitor's mail client and opens it, addressed to the contact email. Neither path
-  stores anything on the website.
+- **Contact email** — one file only: `site.contact.json`. Do not edit
+  `website/config.js` or any page; both are generated from it.
+
+  ```bash
+  python3 tools/set_contact.py --show                    # what is published now
+  python3 tools/set_contact.py --email you@example.com   # change it + rebuild
+  python3 tools/set_contact.py --add-email team@example.com
+  python3 tools/set_contact.py --endpoint https://formspree.io/f/xxxxxxx
+  python3 tools/set_contact.py --clear-endpoint          # fall back to the mail client
+  ```
+
+  It updates the footer, contact page, privacy policy, terms, about page,
+  acquisition page, structured data and `website/config.js` in one pass, then runs
+  the internal link check.
+
+  You can also do it from the browser: **Actions → “Change contact email” → Run
+  workflow**, enter the address, and the workflow commits the rebuild and triggers
+  the Pages deployment. Nothing else needs to change.
+
+- **Form delivery** — the site is static. When `form_endpoint` is set (currently a
+  Formspree endpoint) the enquiry forms POST to it; when it is empty they compose
+  the message in the visitor's mail client instead. Neither path stores data on the
+  website. The endpoint lives in the same JSON, so it moves with the address.
 - **Acquisition price and listing** — `tools/site/config.py` and the acquisition
   page template; keep them consistent with the marketplace listing.
 

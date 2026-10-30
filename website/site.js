@@ -538,7 +538,7 @@
     if (payload.domain) lines.push("Domain: " + payload.domain);
     lines.push("Enquiry type: " + payload.enquiryType);
     lines.push("Submitted from: " + window.location.href);
-    if (payload.authorised) lines.push("Authorisation confirmed: yes");
+    if (payload.authorised) lines.push("Authorisation: " + payload.authorised);
     lines.push("", "Message:", payload.message);
     var body = lines.join("\n").slice(0, 1800);
     return "mailto:" + encodeURIComponent(email) + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
@@ -616,15 +616,33 @@
         return;
       }
 
+      // "authorised" is a yes/no select on the contact form and a required
+      // confirmation checkbox on the assessment form. Normalise both to yes/no
+      // so the delivered enquiry always states the answer explicitly.
+      var authEl = form.querySelector("[name='authorised']");
+      var authorised = "not answered";
+      if (authEl) {
+        if (authEl.type === "checkbox") {
+          authorised = authEl.checked ? "yes" : "no";
+        } else {
+          authorised = String(authEl.value || "no").toLowerCase() === "yes" ? "yes" : "no";
+        }
+      }
+
+      function fieldValue(name) {
+        var el = form.querySelector("[name='" + name + "']");
+        return el ? String(el.value || "").trim() : "";
+      }
+
       var payload = {
         kind: form.getAttribute("data-form-kind") || "enquiry",
-        name: form.querySelector("[name='name']").value.trim(),
-        email: form.querySelector("[name='email']").value.trim(),
-        company: (form.querySelector("[name='company']") || {}).value ? form.querySelector("[name='company']").value.trim() : "",
-        domain: (form.querySelector("[name='domain']") || {}).value ? form.querySelector("[name='domain']").value.trim() : "",
-        enquiryType: (form.querySelector("[name='enquiryType']") || {}).value || "General enquiry",
-        message: form.querySelector("[name='message']").value.trim(),
-        authorised: Boolean(form.querySelector("[name='authorised']") && form.querySelector("[name='authorised']").checked),
+        name: fieldValue("name"),
+        email: fieldValue("email"),
+        company: fieldValue("company"),
+        domain: fieldValue("domain"),
+        enquiryType: fieldValue("enquiryType") || "General enquiry",
+        message: fieldValue("message"),
+        authorised: authorised,
         page: window.location.pathname
       };
 
@@ -641,7 +659,9 @@
               ? "It has been delivered. You will receive a reply at " + esc(payload.email) + " once it has been reviewed."
               : "Your mail application should have opened with the enquiry filled in. Press send there to complete the handover — nothing is stored on this website.") +
             "</p><p class=\"tiny\">Prefer email? Write directly to <a href=\"mailto:" + esc(CFG.contactEmail) + "\">" + esc(CFG.contactEmail) + "</a>. Assessment requests are reviewed manually; nothing is scanned automatically.</p>";
-          status.scrollIntoView({ block: "nearest", behavior: reduced ? "auto" : "smooth" });
+          if (typeof status.scrollIntoView === "function") {
+            status.scrollIntoView({ block: "nearest", behavior: reduced ? "auto" : "smooth" });
+          }
         }
       }
 
