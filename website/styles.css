@@ -3406,3 +3406,17 @@ table caption {
     box-shadow: none;
   }
 }
+
+/* --------------------------------------------------------------------------
+   Blog
+   --------------------------------------------------------------------------
+   `.card-title` exists for card headings that appear before the first section
+   heading on a page (cluster hubs, the blog index). They have to be `h2` to
+   keep the document outline sequential, but they should read at card-heading
+   size rather than section-heading size. */
+
+.card-title {
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.35;
+}

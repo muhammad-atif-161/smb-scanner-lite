@@ -5,6 +5,7 @@ from __future__ import annotations
 from . import config as C
 from . import data as D
 from . import schema as structured
+from . import pages_blog  # noqa: F401  (used by _practical)
 from .ui import btn, cta_band, e, icon, layout, section_head
 
 # ---------------------------------------------------------------------------
@@ -338,6 +339,14 @@ def resources_index() -> str:
   </div>
 </section>
 
+<section class="section">
+  <div class="wrap">
+    {section_head("Blog", "Prefer a sequence to follow?", "The knowledge base explains how a control works. The blog covers what to do about it: a rollout order for DMARC, a fifteen-check website routine, and a walkthrough of an assessment report.")}
+    {pages_blog.post_cards(pages_blog.B.latest(3))}
+    <div class="row mt-3">{btn('/blogs/', 'All blog guides', 'ghost', 'arrow')}</div>
+  </div>
+</section>
+
 {cta_band("Want to see the method applied to a real domain?", "The recorded assessment shows every finding with its evidence, score and timestamp.", ("/demo/", "Open the recorded assessment"), ("/sample-report/", "Read the sample report"))}
 """
     return layout(
@@ -359,6 +368,48 @@ def resources_index() -> str:
             ]
         },
     )
+
+
+# Practical counterparts: the blog answers "what do I do, in what order", which
+# is a different intention from "how does this work". Linking the two keeps the
+# cluster honest instead of making the articles compete for the same query.
+PRACTICAL = {
+    "spf-dkim-dmarc": (
+        "spf-dkim-dmarc-explained",
+        "set-up-dmarc-without-breaking-email",
+        "business-email-marked-as-spam",
+    ),
+    "dnssec-explained": ("dns-security-for-small-businesses",),
+    "security-misconfigurations": ("external-website-security-checks",),
+    "smb-cybersecurity-basics": ("small-business-cybersecurity-guide",),
+    "external-security-posture-assessment": (
+        "what-is-a-security-posture-assessment",
+        "assessment-vs-penetration-test",
+    ),
+    "understanding-posture-scores": ("how-to-read-your-security-report",),
+    "assessment-methodology": (
+        "check-your-external-security-posture-free",
+        "how-to-read-your-security-report",
+    ),
+    "public-facing-infrastructure": ("external-website-security-checks",),
+}
+
+
+def _practical(slug: str) -> str:
+    picks = PRACTICAL.get(slug, ())
+    if not picks:
+        return ""
+    links = "".join(
+        f'<li><a href="{pages_blog.B.post_url(pages_blog.B.BY_SLUG[item])}">'
+        f'{e(pages_blog.B.BY_SLUG[item]["title"])}</a></li>'
+        for item in picks
+    )
+    return f"""
+        <div class="card mt-4">
+          <h2 class="card-title">The practical version</h2>
+          <p class="small">This article explains the mechanism. The blog covers the sequence: what to check, in what order, and what to do with the answer.</p>
+          <ul class="small mt-1">{links}</ul>
+        </div>"""
 
 
 def article(slug: str) -> str:
@@ -387,6 +438,7 @@ def article(slug: str) -> str:
           {icon('shield', 20)}
           <div><p><strong>See how this is measured.</strong> SMB Scanner Lite evaluates these controls from outside and attaches the observation behind every conclusive finding. <a href="/capabilities/">Browse the 22-control catalog</a> or inspect the <a href="/sample-report/">recorded assessment</a>.</p></div>
         </div>
+        {_practical(slug)}
       </div>
       <aside class="article-aside">
         <nav class="toc" aria-label="On this page">

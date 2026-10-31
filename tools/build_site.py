@@ -28,6 +28,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from sitegen import config as C  # noqa: E402
 from sitegen import data as D  # noqa: E402
 from sitegen import pages_home, pages_legal, pages_product, pages_resources  # noqa: E402
+from sitegen import pages_blog  # noqa: E402
+from sitegen import blog as blog_posts  # noqa: E402
 from sitegen import pages_contact, pages_trust  # noqa: E402
 from sitegen import audit as A  # noqa: E402
 from sitegen import ui  # noqa: E402
@@ -65,12 +67,23 @@ for res in D.RESOURCES:
         lambda slug=res["slug"]: pages_resources.article(slug)
     )
 
+# Blog: index, one hub per cluster, one page per post.
+PAGES["blogs/index.html"] = pages_blog.index
+for _cluster in blog_posts.CLUSTERS:
+    PAGES[f"blogs/{_cluster}/index.html"] = (
+        lambda slug=_cluster: pages_blog.cluster(slug)
+    )
+for _post in blog_posts.POSTS:
+    PAGES[f"blogs/{_post['slug']}/index.html"] = (
+        lambda slug=_post["slug"]: pages_blog.post(slug)
+    )
+
 # Legacy URLs kept alive as static redirects (GitHub Pages has no rewrites).
 REDIRECTS = {
     "checks/index.html": ("/capabilities/", "Capabilities"),
     "how/index.html": ("/docs/", "Documentation"),
     "ethics/index.html": ("/responsible-use/", "Responsible use"),
-    "blog/index.html": ("/resources/", "Knowledge base"),
+    "blog/index.html": ("/blogs/", "Blog"),
     "blog/no-claim-without-evidence/index.html": ("/resources/assessment-methodology/", "Assessment methodology"),
     "blog/why-email-locks-matter/index.html": ("/resources/spf-dkim-dmarc/", "SPF, DKIM and DMARC"),
     "blog/exposed-smb-and-rdp/index.html": ("/resources/security-misconfigurations/", "Security misconfigurations"),
@@ -341,6 +354,10 @@ def build_sitemap() -> None:
     entries = [(path, freq, priority, BUILD_DATE) for path, freq, priority in C.SITEMAP]
     entries += [
         (f"/resources/{r['slug']}/", "monthly", "0.6", r["date"]) for r in D.RESOURCES
+    ]
+    entries += [
+        (f"/blogs/{post['slug']}/", "monthly", "0.7", post["updated"])
+        for post in blog_posts.all_posts()
     ]
     lines = ['<?xml version="1.0" encoding="UTF-8"?>',
              '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']

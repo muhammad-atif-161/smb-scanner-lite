@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8" />
+<script>document.documentElement.className=document.documentElement.className.replace("no-js","js");</script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>How to check your external security posture for free</title>
+<meta name="description" content="A twenty-five minute routine you can run yourself, what to write down, and the honest limits of a manual pass compared with a scored assessment." />
+<link rel="canonical" href="https://smbscannerlite.me/blogs/check-your-external-security-posture-free/" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+<meta name="author" content="Muhammad Atif" />
+<meta name="theme-color" content="#080B14" />
+<meta name="generator" content="SMB Scanner Lite static site builder" />
+<meta property="og:site_name" content="SMB Scanner Lite" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="How to check your external security posture for free" />
+<meta property="og:description" content="A twenty-five minute routine you can run yourself, what to write down, and the honest limits of a manual pass compared with a scored assessment." />
+<meta property="og:url" content="https://smbscannerlite.me/blogs/check-your-external-security-posture-free/" />
+<meta property="og:image" content="https://smbscannerlite.me/og-image.png" />
+<meta property="og:image:alt" content="SMB Scanner Lite — a dark navy assessment report showing a posture score of 86 out of 100, grade B, with evidence-backed findings." />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="How to check your external security posture for free" />
+<meta name="twitter:description" content="A twenty-five minute routine you can run yourself, what to write down, and the honest limits of a manual pass compared with a scored assessment." />
+<meta name="twitter:image" content="https://smbscannerlite.me/og-image.png" />
+<link rel="icon" href="/logo.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+<link rel="alternate" type="application/json" href="/data/recorded-assessment.json" title="Recorded assessment data (JSON)" />
+<link rel="stylesheet" href="/styles.css?v=7aa65b7e" />
+<link rel="preload" href="/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/space-grotesk-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
+
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://smbscannerlite.me/#organization","name":"SMB Scanner Lite","url":"https://smbscannerlite.me","logo":{"@type":"ImageObject","url":"https://smbscannerlite.me/logo-512.png","width":512,"height":512},"email":"myself.atiff@gmail.com","founder":{"@type":"Person","name":"Muhammad Atif","url":"https://github.com/muhammad-atif-161"},"description":"An evidence-first external security posture assessment product for small and medium businesses, published as a restricted public sandbox edition.","sameAs":["https://github.com/muhammad-atif-161/smb-scanner-lite","https://github.com/muhammad-atif-161"]},{"@type":"WebSite","@id":"https://smbscannerlite.me/#website","name":"SMB Scanner Lite","url":"https://smbscannerlite.me","description":"Evidence-first external security posture assessment for small and medium businesses.","inLanguage":"en","publisher":{"@id":"https://smbscannerlite.me/#organization"}},{"@type":"WebPage","@id":"https://smbscannerlite.me/blogs/check-your-external-security-posture-free/#webpage","url":"https://smbscannerlite.me/blogs/check-your-external-security-posture-free/","name":"How to check your external security posture for free","description":"A twenty-five minute routine you can run yourself, what to write down, and the honest limits of a manual pass compared with a scored assessment.","isPartOf":{"@id":"https://smbscannerlite.me/#website"},"inLanguage":"en","breadcrumb":{"@id":"https://smbscannerlite.me/blogs/check-your-external-security-posture-free/#breadcrumb"},"mainEntity":{"@id":"https://smbscannerlite.me/blogs/check-your-external-security-posture-free/#article"}},{"@type":"BlogPosting","@id":"https://smbscannerlite.me/blogs/check-your-external-security-posture-free/#article","headline":"How to check your company's external security posture for free","description":"A twenty-five minute routine you can run yourself, what to write down, and the honest limits of a manual pass compared with a scored assessment.","datePublished":"2026-10-31","dateModified":"2026-10-31","author":{"@type":"Person","name":"Muhammad Atif","url":"https://github.com/muhammad-atif-161"},"publisher":{"@id":"https://smbscannerlite.me/#organization"},"mainEntityOfPage":{"@id":"https://smbscannerlite.me/blogs/check-your-external-security-posture-free/#webpage"},"inLanguage":"en","articleSection":"Assessment and scoring","wordCount":735,"timeRequired":"PT4M","isAccessibleForFree":true,"isPartOf":{"@type":"Blog","name":"Assessment and scoring — SMB Scanner Lite blog","url":"https://smbscannerlite.me/blogs/assessment/"}},{"@type":"BreadcrumbList","@id":"https://smbscannerlite.me/blogs/check-your-external-security-posture-free/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://smbscannerlite.me/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://smbscannerlite.me/blogs/"},{"@type":"ListItem","position":3,"name":"Assessment and scoring","item":"https://smbscannerlite.me/blogs/assessment/"},{"@type":"ListItem","position":4,"name":"How to check your company's external security posture for free"}]}]}</script>
+</head>
+<body class="">
+
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="nav" data-nav>
+  <div class="wrap nav-inner">
+    <a class="brand" href="/" aria-label="SMB Scanner Lite home">
+      <img src="/logo.svg" width="32" height="32" alt="" />
+      <span class="brand-text">SMB Scanner <span class="brand-lite">Lite</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="/">Overview</a><a href="/capabilities/">Capabilities</a><a href="/sample-report/">Sample Report</a><a href="/methodology/">Methodology</a><a href="/blogs/" aria-current="page">Blog</a><a href="/faq/">FAQ</a><a href="/contact/">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="btn btn-primary btn-sm" href="/demo/"><svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5.5 13h5L10 21l7.5-10h-5L13 3z"/></svg><span>Try the Demo</span></a>
+      <button class="nav-toggle" type="button" data-nav-toggle aria-label="Open menu" aria-expanded="false" aria-controls="nav-panel">
+        <span data-nav-open><svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></span>
+        <span data-nav-close hidden><svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>
+      </button>
+    </div>
+  </div>
+</header>
+<div class="nav-panel" id="nav-panel" data-nav-panel hidden>
+  <nav class="nav-panel-links" aria-label="Mobile">
+    <a href="/">Overview</a><a href="/capabilities/">Capabilities</a><a href="/sample-report/">Sample Report</a><a href="/methodology/">Methodology</a><a href="/blogs/" aria-current="page">Blog</a><a href="/faq/">FAQ</a><a href="/contact/">Contact</a>
+  </nav>
+  <div class="nav-panel-foot">
+    <a class="btn btn-primary" href="/demo/"><svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5.5 13h5L10 21l7.5-10h-5L13 3z"/></svg><span>Try the Demo</span></a>
+    <a class="btn btn-ghost" href="/request-assessment/">Request an assessment</a>
+  </div>
+</div>
+<main id="main">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/blogs/">Blog</a></li><li><a href="/blogs/assessment/">Assessment and scoring</a></li><li><span aria-current="page">How to check your company&#x27;s external security posture for free</span></li></ol></nav>
+
+<article>
+  <header class="article-head">
+    <div class="wrap">
+      <p class="eyebrow">Blog &middot; Assessment and scoring</p>
+      <h1>How to check your company&#x27;s external security posture for free</h1>
+      <p class="lede">You can establish a real baseline on your own domain without spending anything. What you cannot do for free is compare this quarter with last quarter, consistently, across every domain you own.</p>
+      <div class="article-meta">
+        <span>By Muhammad Atif</span>
+        <span>Published 31 October 2026</span>
+        
+        <span>4 min read</span>
+      </div>
+    </div>
+  </header>
+  <div class="wrap">
+    <div class="article-layout">
+      <div class="prose">
+        <div class="callout">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6.5h11M9 12h11M9 17.5h11"/><path d="M4 6.5l1 1 1.6-1.6"/><path d="M4 12l1 1 1.6-1.6"/><path d="M4 17.5l1 1 1.6-1.6"/></svg>
+          <div>
+            <p><strong>The short version</strong></p>
+            <ul><li>Six commands and two browser checks cover the highest-consequence controls on your own domain.</li><li>Record the observation, not just the verdict &mdash; the observation is what makes next quarter comparable.</li><li>Do this only on domains you own or administer.</li><li>Manual passes drift in method; a scored assessment exists to stop exactly that.</li></ul>
+          </div>
+        </div>
+        
+<p>There are three free routes, and they are not equivalent. The first is a manual pass on your
+own domain: fastest, most educational, no account required. The second is reading a published
+example report to understand what a scored assessment contains &mdash; this project publishes a
+recorded one for <code>example.com</code>. The third is a free tier of some commercial scanner,
+which usually trades coverage or history for the price.</p>
+<p>Start with the first. It takes about twenty-five minutes and it will change how you read
+every other report you receive.</p>
+
+<h2 id="the-routine">The routine</h2>
+<p>Run these against your own domain from a machine outside your office network. The difference
+matters: a firewall rule that blocks the office does not block a customer.</p>
+<pre><code># 1. mail authentication policy
+dig +short TXT yourdomain.com
+dig +short TXT _dmarc.yourdomain.com
+
+# 2. DNS integrity
+dig +short DS yourdomain.com
+dig +short CAA yourdomain.com
+
+# 3. mail routing
+dig +short MX yourdomain.com
+
+# 4. web transport and headers
+curl -sSIL https://yourdomain.com | grep -iE 'strict-transport|content-security|x-frame|x-content-type|referrer-policy|permissions-policy|^server|^location'</code></pre>
+<p>Then two things a terminal will not tell you: whether the certificate covers the hostname you
+actually use (open the site in a browser and read the padlock details), and whether any
+subdomain still points at a service you have closed (check each CNAME you know about, and see
+<a href="/blogs/external-website-security-checks/">the fifteen-check list</a> for the detail).</p>
+
+<h2 id="what-to-write-down">What to write down</h2>
+<p>The observation is the deliverable. A verdict without one cannot be compared later, and
+"DMARC was fine in March" is not a finding. Keep a table like this one, one row per control:</p>
+<div class="table-wrap">
+<table>
+<caption>A manual baseline that survives contact with next quarter. The observation column is the important one.</caption>
+<thead><tr><th scope="col">Control</th><th scope="col">Observation</th><th scope="col">Verdict</th><th scope="col">Owner</th><th scope="col">Checked</th></tr></thead>
+<tbody>
+<tr><td>SPF</td><td><code>v=spf1 include:_spf.google.com ~all</code></td><td>Warning &mdash; soft fail</td><td>IT</td><td>2026-10-31</td></tr>
+<tr><td>DMARC</td><td>No record returned</td><td>Fail</td><td>IT</td><td>2026-10-31</td></tr>
+<tr><td>DNSSEC</td><td><code>DS</code> returned, RRSIG present</td><td>Pass</td><td>IT</td><td>2026-10-31</td></tr>
+<tr><td>HSTS</td><td>Header absent</td><td>Fail</td><td>Web</td><td>2026-10-31</td></tr>
+<tr><td>Certificate</td><td>Valid, covers apex and www, expires in 61 days</td><td>Pass</td><td>Web</td><td>2026-10-31</td></tr>
+</tbody>
+</table>
+</div>
+<p>Five rows is a legitimate baseline. Ten is better. What matters is that the same rows are
+checked the same way next time.</p>
+
+<h2 id="what-to-fix-first">What to fix first</h2>
+<p>Order by consequence, not by the number of items. A domain that anyone can forge will be used
+for invoice fraud against your customers; a missing <code>Permissions-Policy</code> header will
+not. In practice the order is almost always: DMARC enforcement, exposed remote access, then
+certificate and redirect hygiene, then headers.</p>
+<p>Two of those are DNS edits and one is a firewall rule. That is the honest shape of external
+posture work at this size &mdash; unglamorous, and done in an afternoon.</p>
+
+<h2 id="what-free-cannot-give-you">What free cannot give you</h2>
+<ul>
+<li><strong>Consistency.</strong> Two people checking by hand will classify the same soft SPF
+record differently. A score needs a fixed rule.</li>
+<li><strong>Weighting.</strong> Deciding whether a missing CSP matters more than a weak DMARC
+policy is a judgement call you will make differently every quarter.</li>
+<li><strong>History.</strong> Without a stored, comparable result, drift is invisible.</li>
+<li><strong>Coverage.</strong> Every subdomain, every domain, every time &mdash; repeatedly, and
+without forgetting one.</li>
+<li><strong>An artefact.</strong> If a customer or insurer asks for evidence, a spreadsheet you
+maintain is weaker than a timestamped report with quoted observations.</li>
+</ul>
+<p>If your situation is one domain, checked quarterly, by one person, manual is genuinely enough.
+The case for a tool starts when there are multiple domains, more than one person, or an external
+party asking for proof.</p>
+
+<h2 id="try-it-on-a-domain-that-is-not-yours">Try it on a domain that is not yours</h2>
+<p>The public sandbox behind this site runs against five allowlisted domains:
+<code>example.com</code>, <code>example.org</code>, <code>example.net</code>,
+<code>scanme.nmap.org</code> and <code>badssl.com</code>. You cannot point it at your own domain
+&mdash; that restriction is deliberate and documented on
+<a href="/limitations/">limitations</a>, because a public scanner that will point anywhere is a
+weapon with a form on the front. What it is good for is seeing the method: the
+<a href="/demo/">recorded assessment</a> shows eight concluded controls with quoted evidence and
+a score of 86/100, grade B, including two warnings you can read and verify yourself.</p>
+<p>A private assessment of your own domain runs under a written scope and consent record. If you
+want that, the <a href="/request-assessment/">request form</a> is the way in; if you would rather
+do the twenty-five minutes yourself, the table above is the whole method.</p>
+
+<h2 id="what-smb-scanner-lite-checks-here">What SMB Scanner Lite checks here</h2>
+<p>These are the controls from this area that the assessment evaluates from outside, without
+credentials and without touching anything private. Each one returns a status and, for every
+conclusive result, the record, header or handshake that produced it.</p>
+
+<div class="table-wrap">
+  <table>
+    <caption>Read-only checks from the 22-control catalog. Every conclusive result quotes the observation behind it.</caption>
+    <thead><tr><th scope="col">Control</th><th scope="col">What is evaluated</th></tr></thead>
+    <tbody><tr><th scope="row">22 controls, five categories</th><td>DNS, email authentication, TLS, browser headers and service exposure, each weighted 1-5.</td></tr><tr><th scope="row">Four statuses</th><td>Pass, warning, fail and inconclusive, with inconclusive excluded from the score rather than counted as failure.</td></tr><tr><th scope="row">Evidence on every finding</th><td>The record, header or handshake that produced the result, quoted so it can be re-checked.</td></tr><tr><th scope="row">Grade bands</th><td>A 90-100, B 80-89, C 65-79, D 50-64, F below 50, applied to the weighted mean.</td></tr></tbody>
+  </table>
+</div>
+<p class="small">Only assess domains you own or are authorised to test &mdash; see
+<a href="/responsible-use/">responsible use</a>. The published
+<a href="/demo/">recorded assessment</a> shows how a result and its evidence appear in a report,
+and the <a href="/capabilities/">control catalog</a> lists all 22 controls with their weights.
+Reference detail for this topic lives in <a href="/resources/external-security-posture-assessment/">External security posture assessment: what it measures</a>.</p>
+      </div>
+      
+<aside class="article-aside">
+  <nav class="toc" aria-label="On this page">
+    <h2>On this page</h2>
+    <ol><li><a href="#the-routine">The routine</a></li><li><a href="#what-to-write-down">What to write down</a></li><li><a href="#what-to-fix-first">What to fix first</a></li><li><a href="#what-free-cannot-give-you">What free cannot give you</a></li><li><a href="#try-it-on-a-domain-that-is-not-yours">Try it on a domain that is not yours</a></li><li><a href="#what-smb-scanner-lite-checks-here">What SMB Scanner Lite checks here</a></li></ol>
+  </nav>
+  <div class="card">
+    <div class="card-icon card-icon--cyan"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/><path d="M12 4v2M12 18v2M4 12h2M18 12h2"/></svg></div>
+    <h3 style="font-size:0.95rem">Check your own domain</h3>
+    <p class="small">A private assessment covers the full catalog, after scope and written authorisation are agreed. The public sandbox is limited to five allowlisted test domains.</p>
+    <a class="tlink mt-1" href="/request-assessment/">Request an assessment <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
+  </div>
+  <div class="card">
+    <div class="card-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2 2 0 016 3.5h13v15H6a2 2 0 00-2 2v-15z"/><path d="M19 18.5v3H6a2 2 0 01-2-2"/></svg></div>
+    <h3 style="font-size:0.95rem">Assessment and scoring cluster</h3>
+    <p class="small">All guides in this area, plus the technical reference article.</p>
+    <a class="tlink" href="/blogs/assessment/">Browse the cluster <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
+    <a class="tlink mt-1" href="/resources/external-security-posture-assessment/">Reference: the mechanics <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a>
+  </div>
+</aside>
+    </div>
+  </div>
+</article>
+
+<section class="section section--alt">
+  <div class="wrap">
+    <div class="section-head"><p class="eyebrow">Keep reading</p><h2>Related guides</h2></div>
+    <div class="resource-grid">
+<a class="resource-card reveal" href="/blogs/what-is-a-security-posture-assessment/">
+  <span class="component-tag mono">Assessment and scoring</span>
+  <h3>What is a security posture assessment?</h3>
+  <p>A working definition, the five categories an external assessment can actually measure, and eight questions to ask before you buy one from anybody.</p>
+  <span class="resource-meta"><span>31 October 2026</span><span>4 min read</span></span>
+</a>
+<a class="resource-card reveal" href="/blogs/how-to-read-your-security-report/">
+  <span class="component-tag mono">Assessment and scoring</span>
+  <h3>How to read your SMB Scanner Lite report</h3>
+  <p>A guided tour of the report: metadata and consent record, the score and its arithmetic, evidence strings, inconclusive results, and the order to fix things in.</p>
+  <span class="resource-meta"><span>31 October 2026</span><span>4 min read</span></span>
+</a></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <p class="small muted">735 words &middot; published 31 October 2026 &middot; part of the
+    <a href="/blogs/assessment/">assessment and scoring cluster</a>. Next scheduled review: 31 October 2027.
+    Spotted an error? <a href="/contact/">Tell the maintainer</a> &mdash; corrections are published rather than quietly applied.</p>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta-band reveal">
+      <div class="cta-band-text">
+        <h2>Check your own domain's external posture.</h2>
+        <p>The full catalog, a 0&ndash;100 score and the evidence behind every conclusive finding. Scope and written authorisation first; see the responsible-use policy.</p>
+      </div>
+      <div class="cta-band-actions">
+        <a class="btn btn-primary" href="/request-assessment/"><svg class="btn-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg><span>Request an assessment</span></a>
+        <a class="btn btn-ghost" href="/demo/"><span>Open the recorded assessment</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand-col">
+        <a class="foot-brand" href="/">
+          <img src="/logo.svg" width="30" height="30" alt="" />
+          <span>SMB Scanner <span class="brand-lite">Lite</span></span>
+        </a>
+        <p class="foot-desc">An evidence-first external security posture assessment for small and medium businesses. 22 controls, a 0&ndash;100 score and an A&ndash;F grade &mdash; with the observation behind every conclusive finding. The public edition is restricted to five approved test domains.</p>
+        <p class="foot-meta"><span class="mono">v5.2.0</span> &middot; Public Sandbox Edition</p>
+        <div class="foot-mails"><a class="foot-mail" href="mailto:myself.atiff@gmail.com"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M4 8.5l8 5.5 8-5.5"/></svg><span>myself.atiff@gmail.com</span></a></div>
+      </div>
+      <div class="foot-col"><h3>Product</h3><ul><li><a href="/">Overview</a></li><li><a href="/capabilities/">Capabilities</a></li><li><a href="/demo/">Recorded Demo</a></li><li><a href="/sample-report/">Sample Report</a></li><li><a href="/methodology/">Methodology</a></li></ul></div><div class="foot-col"><h3>Resources</h3><ul><li><a href="/docs/">Documentation</a></li><li><a href="/blogs/">Blog</a></li><li><a href="/resources/">Knowledge Base</a></li><li><a href="/resources/#guides">Technical Guides</a></li><li><a href="/validation/">Validation Record</a></li><li><a href="https://github.com/muhammad-atif-161/smb-scanner-lite" rel="noopener" target="_blank">GitHub</a></li></ul></div><div class="foot-col"><h3>Legal</h3><ul><li><a href="/privacy/">Privacy Policy</a></li><li><a href="/terms/">Terms of Use</a></li><li><a href="/responsible-use/">Responsible Use</a></li><li><a href="/limitations/">Assessment Limitations</a></li></ul></div><div class="foot-col"><h3>Business</h3><ul><li><a href="/contact/">Contact</a></li><li><a href="/request-assessment/">Request an Assessment</a></li><li><a href="/acquisition/">Project Acquisition</a></li><li><a href="/about/">About the Project</a></li></ul></div>
+    </div>
+    <div class="foot-bottom">
+      <p>&copy; <span data-year>2026</span> Muhammad Atif &middot; SMB Scanner Lite &middot; Built in Rawalpindi, Pakistan.</p>
+      <p class="foot-bottom-links">
+        <a href="/privacy/">Privacy</a>
+        <a href="/terms/">Terms</a>
+        <a href="/responsible-use/">Responsible use</a>
+        <a href="https://github.com/muhammad-atif-161/smb-scanner-lite" rel="noopener" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </div>
+</footer>
+<div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="false"></div>
+<script src="/config.js?v=89b4112b" defer></script>
+<script src="/site.js?v=a379dac5" defer></script>
+</body>
+</html>

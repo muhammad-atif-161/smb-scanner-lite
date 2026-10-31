@@ -282,3 +282,74 @@ def faq_entity(questions) -> list:
         }
         for question, answer in questions
     ]
+
+
+# ---------------------------------------------------------------------------
+# Blog
+# ---------------------------------------------------------------------------
+# BlogPosting is deliberately modelled on `article()` so that editorial pages
+# behave the same wherever they live. Two differences are intentional:
+#
+# * `author` is a Person (the maintainer), not the Organisation. A named,
+#   verifiable byline is what the schema.org guidance asks for, and there is a
+#   real person behind these posts.
+# * `image` is omitted. Google's Article guidance treats it as required for the
+#   rich result, but the site has one social card rather than a per-post image,
+#   and attaching an unrelated picture would make the markup claim something the
+#   page does not show. Eligibility is documented in docs/blog-2026-10.md.
+
+def blog_posting(path: str, headline: str, description: str, published: str,
+                 modified: str, section: str, word_count: int,
+                 cluster_path: str, cluster_name: str) -> dict:
+    """One blog post."""
+    minutes = max(1, round(word_count / 210))
+    return {
+        "@type": "BlogPosting",
+        "@id": page_url(path) + "#article",
+        "headline": headline,
+        "description": description,
+        "datePublished": published,
+        "dateModified": modified or published,
+        "author": {"@type": "Person", "name": C.AUTHOR, "url": C.AUTHOR_URL},
+        "publisher": {"@id": ORG_ID},
+        "mainEntityOfPage": {"@id": page_url(path) + PAGE_SUFFIX},
+        "inLanguage": "en",
+        "articleSection": section,
+        "wordCount": word_count,
+        "timeRequired": f"PT{minutes}M",
+        "isAccessibleForFree": True,
+        "isPartOf": {
+            "@type": "Blog",
+            "name": f"{cluster_name} — SMB Scanner Lite blog",
+            "url": page_url(cluster_path),
+        },
+    }
+
+
+def blog_collection(path: str, name: str, description: str, posts) -> dict:
+    """A Blog node listing its posts.
+
+    ``posts`` is an iterable of ``(headline, path, description, published)``.
+    The entries are written inline rather than as ``{"@id": ...}`` references:
+    each post lives on its own page, and a bare reference would dangle in the
+    single-page @graph this site publishes (the audit fails on that).
+    """
+    return {
+        "@type": "Blog",
+        "@id": page_url(path) + "#blog",
+        "name": name,
+        "description": description,
+        "url": page_url(path),
+        "isPartOf": {"@id": SITE_ID},
+        "inLanguage": "en",
+        "blogPost": [
+            {
+                "@type": "BlogPosting",
+                "headline": headline,
+                "url": page_url(post_path),
+                "description": post_description,
+                "datePublished": published,
+            }
+            for headline, post_path, post_description, published in posts
+        ],
+    }
