@@ -78,6 +78,8 @@ request. Title/description length is reported as a warning, not an error.
 | `tools/sitegen/config.py` | Site identity, navigation, footer, sitemap, contact address |
 | `tools/sitegen/data.py` | 22-control catalog, recorded assessment data, FAQ, resources |
 | `tools/sitegen/pages_*.py` | Page templates grouped by audience |
+| `tools/sitegen/blog/` | Blog content: cluster definitions plus one module per cluster (five modules, ten posts so far) |
+| `tools/sitegen/pages_blog.py` | Blog index, cluster hubs and the article template (TOC, byline, control block) |
 | `tools/sitegen/schema.py` | Structured data: site entities, page nodes, article/report builders (no merchant markup) |
 | `tools/sitegen/audit.py` | Static audit run by `--audit`: structured data, head tags, headings, labels, links, sitemap |
 | `website/styles.css` | Midnight Intelligence design system (single stylesheet, self-hosted `@font-face`) |
@@ -87,7 +89,21 @@ request. Title/description length is reported as a warning, not an error.
 | `site.contact.json` | Single source of truth for the contact email and form endpoint |
 | `tools/set_contact.py` | One-command helper that edits the JSON and rebuilds the site |
 | `docs/structured-data.md` | Which schema types are published, which are refused, and why |
+| `docs/blog-2026-10.md` | Blog architecture, editorial standard, verification record and outstanding items |
 | `docs/technical-seo-remediation-2026-10.md` | Audit, plan and verification record for the 2026 SEO/performance work |
+
+### Blog
+
+`/blogs/` is the practical layer of the site; `/resources/` stays the technical
+reference. Ten posts sit in five clusters (email security, DNS, website/TLS, SMB
+basics, assessment and scoring), each with a hub at `/blogs/<cluster>/` that lists
+its guides, the controls they map to, and the reference article behind them. Posts
+link to their hub, their reference article and two related posts; reference
+articles link back to their practical counterparts.
+
+Adding a post means one dictionary in `tools/sitegen/blog/<cluster>.py` and a
+rebuild — no template edit. `docs/blog-2026-10.md` has the field list, the editorial
+rules, the structured-data notes and the verification commands.
 
 ### Configuration you may need to change
 
@@ -131,12 +147,20 @@ request. Title/description length is reported as a warning, not an error.
   CLI/test suite remains unchanged.
 - The 65-control "validation register" is not claimed. `validation/` publishes the
   five reproducible tests that actually exist in `tests/test_sandbox.py`.
+- Blog posts follow the same evidence rule as the rest of the site: no invented
+  statistics, incidents, customer stories or author credentials; commands instead
+  of generalities; a stated limit next to every capability; a link to
+  `/responsible-use/`; and the real byline from `config.AUTHOR`. Each post ends
+  with a visible "What SMB Scanner Lite checks here" block so the product claim
+  and the page content cannot drift apart. See `docs/blog-2026-10.md`.
 
 ### Legacy URLs
 
 `/checks/`, `/how/`, `/ethics/` and the old `/blog/` entries are kept as static
 redirect pages (meta refresh + canonical) so existing links and search results do
-not break. GitHub Pages does not support server-side redirects.
+not break. GitHub Pages does not support server-side redirects. The legacy
+`/blog/` index now redirects to the live section at `/blogs/`; the three old
+`/blog/<article>/` paths still redirect to their `/resources/` articles.
 
 ---
 

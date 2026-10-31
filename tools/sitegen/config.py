@@ -93,6 +93,7 @@ NAV = (
     ("capabilities", "Capabilities", "/capabilities/"),
     ("report", "Sample Report", "/sample-report/"),
     ("methodology", "Methodology", "/methodology/"),
+    ("blog", "Blog", "/blogs/"),
     ("faq", "FAQ", "/faq/"),
     ("contact", "Contact", "/contact/"),
 )
@@ -112,6 +113,7 @@ FOOTER_COLUMNS = (
         "Resources",
         (
             ("Documentation", "/docs/"),
+            ("Blog", "/blogs/"),
             ("Knowledge Base", "/resources/"),
             ("Technical Guides", "/resources/#guides"),
             ("Validation Record", "/validation/"),
@@ -151,6 +153,12 @@ SITEMAP = (
     ("/faq/", "monthly", "0.7"),
     ("/docs/", "monthly", "0.7"),
     ("/resources/", "weekly", "0.7"),
+    ("/blogs/", "weekly", "0.8"),
+    ("/blogs/email-security/", "weekly", "0.6"),
+    ("/blogs/dns-security/", "monthly", "0.6"),
+    ("/blogs/website-security/", "monthly", "0.6"),
+    ("/blogs/smb-basics/", "monthly", "0.6"),
+    ("/blogs/assessment/", "monthly", "0.6"),
     ("/limitations/", "yearly", "0.6"),
     ("/responsible-use/", "yearly", "0.6"),
     ("/about/", "yearly", "0.6"),
