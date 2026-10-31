@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
 <meta charset="utf-8" />
+<script>document.documentElement.className=document.documentElement.className.replace("no-js","js");</script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Knowledge Base — External Security, DNS, Email and Assessment Method</title>
 <meta name="description" content="Original technical guides on external security posture assessment, SMB exposure, SPF/DKIM/DMARC, DNSSEC, public-facing infrastructure, misconfigurations and how to read a posture score." />
@@ -25,15 +26,13 @@
 <meta name="twitter:description" content="Original technical guides on external security posture assessment, SMB exposure, SPF/DKIM/DMARC, DNSSEC, public-facing infrastructure, misconfigurations and how to read a posture score." />
 <meta name="twitter:image" content="https://smbscannerlite.me/og-image.png" />
 <link rel="icon" href="/logo.svg" type="image/svg+xml" />
-<link rel="apple-touch-icon" href="/logo.svg" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
 <link rel="alternate" type="application/json" href="/data/recorded-assessment.json" title="Recorded assessment data (JSON)" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/styles.css" />
+<link rel="stylesheet" href="/styles.css?v=1c96a59c" />
+<link rel="preload" href="/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/space-grotesk-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
 
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"CollectionPage","name":"SMB Scanner Lite knowledge base","hasPart":[{"@type":"Article","headline":"External security posture assessment: what it measures and what it cannot","url":"https://smbscannerlite.me/resources/external-security-posture-assessment/","datePublished":"2026-10-30"},{"@type":"Article","headline":"SMB cybersecurity: where small businesses are actually exposed","url":"https://smbscannerlite.me/resources/smb-cybersecurity-basics/","datePublished":"2026-10-29"},{"@type":"Article","headline":"SPF, DKIM and DMARC: how email authentication actually works","url":"https://smbscannerlite.me/resources/spf-dkim-dmarc/","datePublished":"2026-10-28"},{"@type":"Article","headline":"DNSSEC in plain terms: what it protects and what it does not","url":"https://smbscannerlite.me/resources/dnssec-explained/","datePublished":"2026-10-27"},{"@type":"Article","headline":"Mapping public-facing infrastructure without overstepping","url":"https://smbscannerlite.me/resources/public-facing-infrastructure/","datePublished":"2026-10-26"},{"@type":"Article","headline":"Six security misconfigurations that are visible from outside","url":"https://smbscannerlite.me/resources/security-misconfigurations/","datePublished":"2026-10-25"},{"@type":"Article","headline":"How to read a 0-100 security posture score honestly","url":"https://smbscannerlite.me/resources/understanding-posture-scores/","datePublished":"2026-10-24"},{"@type":"Article","headline":"External assessment methodology: scope, evidence and limits","url":"https://smbscannerlite.me/resources/assessment-methodology/","datePublished":"2026-10-23"}]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://smbscannerlite.me/"},{"@type":"ListItem","position":2,"name":"Knowledge Base"}]}]}</script>
-<noscript><style>.reveal{opacity:1;transform:none}</style></noscript>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://smbscannerlite.me/#organization","name":"SMB Scanner Lite","url":"https://smbscannerlite.me","logo":{"@type":"ImageObject","url":"https://smbscannerlite.me/logo-512.png","width":512,"height":512},"email":"myself.atiff@gmail.com","founder":{"@type":"Person","name":"Muhammad Atif","url":"https://github.com/muhammad-atif-161"},"description":"An evidence-first external security posture assessment product for small and medium businesses, published as a restricted public sandbox edition.","sameAs":["https://github.com/muhammad-atif-161/smb-scanner-lite","https://github.com/muhammad-atif-161"]},{"@type":"WebSite","@id":"https://smbscannerlite.me/#website","name":"SMB Scanner Lite","url":"https://smbscannerlite.me","description":"Evidence-first external security posture assessment for small and medium businesses.","inLanguage":"en","publisher":{"@id":"https://smbscannerlite.me/#organization"}},{"@type":"CollectionPage","@id":"https://smbscannerlite.me/resources/#webpage","url":"https://smbscannerlite.me/resources/","name":"Knowledge Base — External Security, DNS, Email and Assessment Method","description":"Original technical guides on external security posture assessment, SMB exposure, SPF/DKIM/DMARC, DNSSEC, public-facing infrastructure, misconfigurations and how to read a posture score.","isPartOf":{"@id":"https://smbscannerlite.me/#website"},"inLanguage":"en","breadcrumb":{"@id":"https://smbscannerlite.me/resources/#breadcrumb"},"hasPart":[{"@type":"Article","headline":"External security posture assessment: what it measures and what it cannot","url":"https://smbscannerlite.me/resources/external-security-posture-assessment/","datePublished":"2026-10-30"},{"@type":"Article","headline":"SMB cybersecurity: where small businesses are actually exposed","url":"https://smbscannerlite.me/resources/smb-cybersecurity-basics/","datePublished":"2026-10-29"},{"@type":"Article","headline":"SPF, DKIM and DMARC: how email authentication actually works","url":"https://smbscannerlite.me/resources/spf-dkim-dmarc/","datePublished":"2026-10-28"},{"@type":"Article","headline":"DNSSEC in plain terms: what it protects and what it does not","url":"https://smbscannerlite.me/resources/dnssec-explained/","datePublished":"2026-10-27"},{"@type":"Article","headline":"Mapping public-facing infrastructure without overstepping","url":"https://smbscannerlite.me/resources/public-facing-infrastructure/","datePublished":"2026-10-26"},{"@type":"Article","headline":"Six security misconfigurations that are visible from outside","url":"https://smbscannerlite.me/resources/security-misconfigurations/","datePublished":"2026-10-25"},{"@type":"Article","headline":"How to read a 0-100 security posture score honestly","url":"https://smbscannerlite.me/resources/understanding-posture-scores/","datePublished":"2026-10-24"},{"@type":"Article","headline":"External assessment methodology: scope, evidence and limits","url":"https://smbscannerlite.me/resources/assessment-methodology/","datePublished":"2026-10-23"}]},{"@type":"BreadcrumbList","@id":"https://smbscannerlite.me/resources/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://smbscannerlite.me/"},{"@type":"ListItem","position":2,"name":"Knowledge Base"}]}]}</script>
 </head>
 <body class="">
 
@@ -209,7 +208,7 @@
   </div>
 </footer>
 <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="false"></div>
-<script src="/config.js"></script>
-<script src="/site.js" defer></script>
+<script src="/config.js?v=89b4112b" defer></script>
+<script src="/site.js?v=a379dac5" defer></script>
 </body>
 </html>

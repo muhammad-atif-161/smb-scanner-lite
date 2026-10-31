@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from . import config as C
 from . import data as D
+from . import schema as structured
 from . import snippets as S
 from .ui import btn, cta_band, e, icon, layout, notice, section_head
 
@@ -65,11 +66,6 @@ def contact() -> str:
   </div>
 </section>
 """
-    contact_schema = {
-        "@type": "ContactPage",
-        "name": "Contact SMB Scanner Lite",
-        "description": "Contact the maintainer about the product, a private assessment, a technical enquiry or the project acquisition.",
-    }
     return layout(
         "/contact/",
         "Contact — SMB Scanner Lite",
@@ -77,7 +73,7 @@ def contact() -> str:
         body,
         active="contact",
         crumbs=crumbs,
-        schema=contact_schema,
+        page_type="ContactPage",
     )
 
 
@@ -200,11 +196,7 @@ def request_assessment() -> str:
         "Request an authorised external security assessment of a domain you own. Reviewed manually, no automatic scanning, written authorisation agreed before any assessment runs.",
         body,
         crumbs=crumbs,
-        schema={
-            "@type": "ContactPage",
-            "name": "Request an assessment",
-            "description": "Request a private, authorised external security posture assessment from SMB Scanner Lite.",
-        },
+        page_type="ContactPage",
     )
 
 
@@ -449,18 +441,15 @@ def acquisition() -> str:
         body,
         crumbs=crumbs,
         noindex=False,
-        schema={
-            "@type": "Product",
-            "name": "SMB Scanner Lite — complete project acquisition",
-            "description": "A documented external security posture assessment platform: 22 controls, scoring model, reporting, consent system, website and test suite, transferred as a complete software project.",
-            "brand": {"@type": "Organization", "name": C.SITE_NAME},
-            "offers": {
-                "@type": "Offer",
-                "price": "2999",
-                "priceCurrency": "USD",
-                "availability": "https://schema.org/InStock",
-                "url": C.SITE_URL + "/acquisition/",
-                "description": "One-off acquisition of the complete project, negotiable. Not a subscription.",
-            },
-        },
+        # This page offers a whole software project for sale: it is not a retail
+        # product listing, and it has no shipping, no return policy and no
+        # customer reviews. The Product/Offer markup that used to be published
+        # here described it as one, which is what produced the Search Console
+        # merchant-listing and product-snippet requests for image,
+        # shippingDetails, hasMerchantReturnPolicy, brand, review and
+        # aggregateRating. None of those can be answered truthfully, so the
+        # merchant markup was removed rather than completed. The page keeps a
+        # WebPage node naming the software it is about; the price stays in the
+        # visible copy, where it is already stated with its terms.
+        page_extra={"about": structured.software_ref()},
     )

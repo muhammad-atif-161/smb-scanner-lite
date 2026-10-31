@@ -11,6 +11,7 @@ import html
 import json
 
 from . import config as C
+from . import schema as structured
 
 
 # ---------------------------------------------------------------------------
@@ -88,6 +89,27 @@ def jsonld(data: object) -> str:
     )
 
 
+# ---------------------------------------------------------------------------
+# Versioned static assets
+# ---------------------------------------------------------------------------
+# GitHub Pages serves every file with `cache-control: max-age=600` and does not
+# allow custom headers, so a deploy can leave a visitor on a stale stylesheet
+# for up to ten minutes. The builder therefore appends a short content hash to
+# the CSS/JS/configuration URLs: when a file changes, its URL changes, and the
+# browser fetches it immediately instead of reusing the cached copy.
+_ASSET_VERSIONS: dict[str, str] = {}
+
+
+def set_asset_versions(mapping: dict[str, str]) -> None:
+    _ASSET_VERSIONS.clear()
+    _ASSET_VERSIONS.update(mapping)
+
+
+def asset(path: str) -> str:
+    version = _ASSET_VERSIONS.get(path)
+    return f"{path}?v={version}" if version else path
+
+
 def btn(href: str, label: str, variant: str = "primary", icon_name: str = "", external: bool = False) -> str:
     classes = f"btn btn-{variant}"
     icon_html = icon(icon_name, 18, "btn-icon") if icon_name else ""
@@ -128,16 +150,6 @@ def breadcrumbs(items) -> str:
         + "".join(parts)
         + "</ol></nav>"
     )
-
-
-def crumb_schema(items) -> dict:
-    elements = []
-    for i, (label, href) in enumerate(items, start=1):
-        node = {"@type": "ListItem", "position": i, "name": label}
-        if href:
-            node["item"] = C.SITE_URL + href
-        elements.append(node)
-    return {"@type": "BreadcrumbList", "itemListElement": elements}
 
 
 def cta_band(title: str, text: str, primary=("/demo/", "Open the recorded demo"), secondary=("/sample-report/", "View a sample report")) -> str:
@@ -257,6 +269,8 @@ def layout(
     active: str = "",
     crumbs=None,
     schema=None,
+    page_type: str = "WebPage",
+    page_extra: dict | None = None,
     og_type: str = "website",
     noindex: bool = False,
     extra_head: str = "",
@@ -268,19 +282,27 @@ def layout(
     )
     og_image = f"{C.SITE_URL}/og-image.png"
 
-    graph = []
-    if schema:
-        graph.extend(schema if isinstance(schema, list) else [schema])
-    if crumbs:
-        graph.append(crumb_schema(crumbs))
-
-    schema_html = jsonld({"@context": "https://schema.org", "@graph": graph}) if graph else ""
+    # One @graph per page: site entities, a page node typed to the page's role,
+    # page-specific nodes, and a BreadcrumbList only where breadcrumbs are
+    # rendered. See tools/sitegen/schema.py for the rules and the reasoning.
+    schema_html = jsonld(
+        structured.graph(
+            path,
+            title,
+            description,
+            kind=page_type,
+            extras=schema,
+            crumbs=crumbs,
+            page_extra=page_extra,
+        )
+    )
     crumb_html = breadcrumbs(crumbs) if crumbs else ""
 
     return f"""<!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
 <meta charset="utf-8" />
+<script>document.documentElement.className=document.documentElement.className.replace("no-js","js");</script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>{e(title)}</title>
 <meta name="description" content="{e(description)}" />
@@ -304,15 +326,13 @@ def layout(
 <meta name="twitter:description" content="{e(description)}" />
 <meta name="twitter:image" content="{og_image}" />
 <link rel="icon" href="/logo.svg" type="image/svg+xml" />
-<link rel="apple-touch-icon" href="/logo.svg" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
 <link rel="alternate" type="application/json" href="/data/recorded-assessment.json" title="Recorded assessment data (JSON)" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/styles.css" />
+<link rel="stylesheet" href="{asset('/styles.css')}" />
+<link rel="preload" href="/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/space-grotesk-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
 {extra_head}
 {schema_html}
-<noscript><style>.reveal{{opacity:1;transform:none}}</style></noscript>
 </head>
 <body class="{body_class}">
 {nav_html(active)}
@@ -321,8 +341,8 @@ def layout(
 {body}
 </main>
 {footer_html()}
-<script src="/config.js"></script>
-<script src="/site.js" defer></script>
+<script src="{asset('/config.js')}" defer></script>
+<script src="{asset('/site.js')}" defer></script>
 </body>
 </html>
 """

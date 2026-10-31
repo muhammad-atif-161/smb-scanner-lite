@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
 <meta charset="utf-8" />
+<script>document.documentElement.className=document.documentElement.className.replace("no-js","js");</script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Privacy Policy — SMB Scanner Lite</title>
 <meta name="description" content="What the SMB Scanner Lite website and sandbox do with data: no tracking, no analytics, form fields used only to reply, locally stored hash-chained consent receipts, and the five-domain restriction." />
@@ -25,15 +26,13 @@
 <meta name="twitter:description" content="What the SMB Scanner Lite website and sandbox do with data: no tracking, no analytics, form fields used only to reply, locally stored hash-chained consent receipts, and the five-domain restriction." />
 <meta name="twitter:image" content="https://smbscannerlite.me/og-image.png" />
 <link rel="icon" href="/logo.svg" type="image/svg+xml" />
-<link rel="apple-touch-icon" href="/logo.svg" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
 <link rel="alternate" type="application/json" href="/data/recorded-assessment.json" title="Recorded assessment data (JSON)" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/styles.css" />
+<link rel="stylesheet" href="/styles.css?v=1c96a59c" />
+<link rel="preload" href="/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/space-grotesk-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
 
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://smbscannerlite.me/"},{"@type":"ListItem","position":2,"name":"Privacy Policy"}]}]}</script>
-<noscript><style>.reveal{opacity:1;transform:none}</style></noscript>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://smbscannerlite.me/#organization","name":"SMB Scanner Lite","url":"https://smbscannerlite.me","logo":{"@type":"ImageObject","url":"https://smbscannerlite.me/logo-512.png","width":512,"height":512},"email":"myself.atiff@gmail.com","founder":{"@type":"Person","name":"Muhammad Atif","url":"https://github.com/muhammad-atif-161"},"description":"An evidence-first external security posture assessment product for small and medium businesses, published as a restricted public sandbox edition.","sameAs":["https://github.com/muhammad-atif-161/smb-scanner-lite","https://github.com/muhammad-atif-161"]},{"@type":"WebSite","@id":"https://smbscannerlite.me/#website","name":"SMB Scanner Lite","url":"https://smbscannerlite.me","description":"Evidence-first external security posture assessment for small and medium businesses.","inLanguage":"en","publisher":{"@id":"https://smbscannerlite.me/#organization"}},{"@type":"WebPage","@id":"https://smbscannerlite.me/privacy/#webpage","url":"https://smbscannerlite.me/privacy/","name":"Privacy Policy — SMB Scanner Lite","description":"What the SMB Scanner Lite website and sandbox do with data: no tracking, no analytics, form fields used only to reply, locally stored hash-chained consent receipts, and the five-domain restriction.","isPartOf":{"@id":"https://smbscannerlite.me/#website"},"inLanguage":"en","breadcrumb":{"@id":"https://smbscannerlite.me/privacy/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://smbscannerlite.me/privacy/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://smbscannerlite.me/"},{"@type":"ListItem","position":2,"name":"Privacy Policy"}]}]}</script>
 </head>
 <body class="">
 
@@ -72,7 +71,7 @@
   <div class="wrap">
     <p class="eyebrow">Privacy policy</p>
     <h1>What this site and this tool do with data.</h1>
-    <p class="lede">Effective 30 October 2026 &middot; policy version <span class="mono">2026.10-sandbox-v1</span> &middot; maintainer Muhammad Atif. Written to describe what the published edition actually does, not what a template says it might.</p>
+    <p class="lede">Effective 31 October 2026 &middot; policy version <span class="mono">2026.10-sandbox-v2</span> &middot; maintainer Muhammad Atif. Written to describe what the published edition actually does, not what a template says it might.</p>
     <div class="hero-actions"><a class="btn btn-primary" href="/responsible-use/"><svg class="btn-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6l7-3z"/><path d="M9 12.2l2.2 2.2L15.4 10"/></svg><span>Responsible use</span></a><a class="btn btn-ghost" href="/limitations/"><span>Assessment limitations</span></a></div>
   </div>
 </div>
@@ -120,7 +119,7 @@
       </ul>
 
       <h2 id="fonts">6. Third-party requests made by your browser</h2>
-      <p>The website loads its three typefaces from Google Fonts. That request discloses your IP address and user agent to Google under its privacy terms. No other third-party assets are loaded: there are no CDN scripts, no embedded videos, no social widgets and no tracking beacons. If you prefer to avoid that request, block <span class="mono">fonts.googleapis.com</span> and <span class="mono">fonts.gstatic.com</span>; the site falls back to system fonts and remains fully usable.</p>
+      <p>None, on a normal page view. Every asset the site needs, including its three typefaces, is served from this domain: there is no Google Fonts request, no CDN script, no embedded video, no social widget and no tracking beacon. Loading the site therefore discloses your IP address to GitHub Pages as the host, and to nobody else. If you block the font files, the site falls back to your system fonts and remains fully usable and readable.</p>
 
       <h2 id="authorisation">7. Authorisation requirements</h2>
       <p>You may only assess domains you own or have explicit written permission to assess. The MIT licence on the published code governs the software; it does not grant permission to test third-party infrastructure. Requests for a private assessment must include a confirmation of ownership or authority, which is verified before any work is agreed.</p>
@@ -186,7 +185,7 @@
   </div>
 </footer>
 <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="false"></div>
-<script src="/config.js"></script>
-<script src="/site.js" defer></script>
+<script src="/config.js?v=89b4112b" defer></script>
+<script src="/site.js?v=a379dac5" defer></script>
 </body>
 </html>

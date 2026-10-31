@@ -13,6 +13,8 @@ upload with no build step on the runner.
 from __future__ import annotations
 
 import csv
+import hashlib
+import html as html_mod
 import io
 import json
 import re
@@ -27,6 +29,8 @@ from sitegen import config as C  # noqa: E402
 from sitegen import data as D  # noqa: E402
 from sitegen import pages_home, pages_legal, pages_product, pages_resources  # noqa: E402
 from sitegen import pages_contact, pages_trust  # noqa: E402
+from sitegen import audit as A  # noqa: E402
+from sitegen import ui  # noqa: E402
 
 OUT = ROOT / "website"
 BUILD_DATE = date.today().isoformat()
@@ -84,8 +88,12 @@ def write(rel: str, content: str) -> Path:
 # Recorded assessment data (single source of truth for the demo)
 # ---------------------------------------------------------------------------
 
-def build_config_js() -> None:
-    """Generate website/config.js from site.contact.json (single source of truth)."""
+def config_js_source() -> str:
+    """Return the generated website/config.js body.
+
+    Kept separate from writing so that the file's content hash is known before
+    the pages that reference it are rendered (asset URL versioning below).
+    """
     payload = {
         "siteName": C.SITE_NAME,
         "siteUrl": C.SITE_URL,
@@ -114,7 +122,12 @@ def build_config_js() -> None:
         "   ========================================================================== */\n"
         "window.SMB_CONFIG = " + json.dumps(payload, indent=2, ensure_ascii=False) + ";\n"
     )
-    write("config.js", js)
+    return js
+
+
+def build_config_js() -> None:
+    """Write website/config.js (generated from site.contact.json)."""
+    write("config.js", config_js_source())
 
 
 def build_data() -> None:
@@ -251,15 +264,22 @@ def build_downloads() -> None:
     write(f"downloads/{base}.txt", "\n".join(txt) + "\n")
 
     # Self-contained HTML
+    # The standalone report is a real HTML document, so every value taken from
+    # the recorded data is escaped rather than interpolated raw (evidence
+    # strings legitimately contain "&", and they are the visitor's copy of a
+    # security report, not markup).
+    def esc(value: object) -> str:
+        return html_mod.escape(str(value), quote=False)
+
     rows = "".join(
-        f"<tr><td><span class='st {f['status'].lower()}'>{f['status']}</span></td>"
-        f"<td><strong>{f['title']}</strong><br><code>{f['control']}</code></td>"
-        f"<td>{f['category']}</td><td><code>{f['evidence']}</code></td>"
-        f"<td>{f['remediation'] or '—'}</td></tr>"
+        f"<tr><td><span class='st {esc(f['status'].lower())}'>{esc(f['status'])}</span></td>"
+        f"<td><strong>{esc(f['title'])}</strong><br><code>{esc(f['control'])}</code></td>"
+        f"<td>{esc(f['category'])}</td><td><code>{esc(f['evidence'])}</code></td>"
+        f"<td>{esc(f['remediation'] or '—')}</td></tr>"
         for f in report["findings"]
     )
     bars = "".join(
-        f"<div class='bar'><span>{name}</span><b>{value}</b>"
+        f"<div class='bar'><span>{esc(name)}</span><b>{esc(value)}</b>"
         f"<i><em style='width:{value}%'></em></i></div>"
         for name, value in r["categories"].items()
     )
@@ -295,19 +315,19 @@ a{{color:#4d8dff}}
 <body><div class="wrap">
 <div class="card rec"><strong>Recorded assessment</strong> — stored output of a genuine sandbox run on 28 October 2026. Not a live scan, not a commercial audit, and not a guarantee that the target is secure.</div>
 <div class="card">
-  <h1>{C.SITE_NAME} — {r['edition']}</h1>
-  <p class="muted">Target: <code>{r['target']}</code> — {r['description']}</p>
+  <h1>{esc(C.SITE_NAME)} — {esc(r['edition'])}</h1>
+  <p class="muted">Target: <code>{esc(r['target'])}</code> — {esc(r['description'])}</p>
   <div class="score">{r['score']}<span style="font-size:1rem;color:#8493aa"> / 100</span></div>
   <p class="muted">Grade {r['grade']} — {r['grade_label']} · {r['counts']['completed']} controls completed, {r['counts']['inconclusive']} inconclusive</p>
 </div>
 <div class="card"><h2>Category scores</h2>{bars}</div>
 <div class="card"><h2>Consent proof</h2>
-  <p class="mono">consent_id: {consent['consent_id']}<br>timestamp_utc: {consent['timestamp_utc']}<br>policy_version: {consent['policy_version']}<br>receipt_sha256: {consent['receipt_sha256']}</p>
+  <p class="mono">consent_id: {esc(consent['consent_id'])}<br>timestamp_utc: {esc(consent['timestamp_utc'])}<br>policy_version: {esc(consent['policy_version'])}<br>receipt_sha256: {esc(consent['receipt_sha256'])}</p>
 </div>
 <div class="card"><h2>Findings</h2>
 <table><thead><tr><th>Status</th><th>Control</th><th>Category</th><th>Evidence</th><th>Recommended</th></tr></thead><tbody>{rows}</tbody></table>
 </div>
-<p class="muted">Report {r['report_id']} · recorded {r['timestamp_display']} · published at <a href="https://smbscannerlite.me/sample-report/">smbscannerlite.me</a></p>
+<p class="muted">Report {esc(r['report_id'])} · recorded {esc(r['timestamp_display'])} · published at <a href="https://smbscannerlite.me/sample-report/">smbscannerlite.me</a></p>
 </div></body></html>
 """
     write(f"downloads/{base}.html", html_report)
@@ -348,6 +368,8 @@ Sitemap: {C.SITE_URL}/sitemap.xml
 # ---------------------------------------------------------------------------
 
 def build() -> None:
+    # Asset versions must be known before the pages that reference them render.
+    apply_asset_versions()
     for rel, builder in PAGES.items():
         write(rel, builder())
     for rel, (target, title) in REDIRECTS.items():
@@ -356,6 +378,34 @@ def build() -> None:
     build_data()
     build_downloads()
     build_sitemap()
+
+
+# ---------------------------------------------------------------------------
+# Static asset versioning
+# ---------------------------------------------------------------------------
+
+def digest(data: str | bytes) -> str:
+    if isinstance(data, str):
+        data = data.encode("utf-8")
+    return hashlib.sha256(data).hexdigest()[:8]
+
+
+def apply_asset_versions() -> dict[str, str]:
+    """Version the unhashed, long-lived asset URLs.
+
+    GitHub Pages always answers with `cache-control: max-age=600` and offers no
+    way to change it, so a stale stylesheet or script can survive a deploy for
+    up to ten minutes. Appending a content hash to the URL makes the address of
+    the file change whenever its contents change, which keeps the ten-minute
+    window harmless without pretending the TTL can be extended.
+    """
+    versions = {
+        "/styles.css": digest((OUT / "styles.css").read_bytes()),
+        "/site.js": digest((OUT / "site.js").read_bytes()),
+        "/config.js": digest(config_js_source()),
+    }
+    ui.set_asset_versions(versions)
+    return versions
 
 
 def check_links() -> int:
@@ -392,5 +442,9 @@ def check_links() -> int:
 if __name__ == "__main__":
     build()
     print(f"built {len(list(PAGES))} pages, {len(REDIRECTS)} redirects into {OUT}")
+    status = 0
     if "--check" in sys.argv:
-        sys.exit(check_links())
+        status = check_links()
+    if "--audit" in sys.argv:
+        status = A.run(OUT, C, D, PAGES, REDIRECTS) or status
+    sys.exit(status)

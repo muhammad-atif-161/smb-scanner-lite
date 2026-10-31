@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from . import config as C
 from . import data as D
+from . import schema as structured
 from . import snippets as S
 from .ui import btn, cta_band, e, icon, layout, notice, section_head
 
@@ -141,20 +142,18 @@ def capabilities() -> str:
         active="capabilities",
         crumbs=crumbs,
         schema=[
-            {
-                "@type": "ItemList",
-                "name": "SMB Scanner Lite security control catalog",
-                "numberOfItems": len(D.CONTROLS),
-                "itemListElement": [
+            structured.item_list(
+                "/capabilities/",
+                "SMB Scanner Lite security control catalog",
+                [
                     {
-                        "@type": "ListItem",
                         "position": c["num"],
                         "name": c["name"],
                         "description": c["evaluates"],
                     }
                     for c in D.CONTROLS
                 ],
-            }
+            )
         ],
     )
 
@@ -350,13 +349,14 @@ def sample_report() -> str:
         body,
         active="report",
         crumbs=crumbs,
-        schema={
-            "@type": "Report",
-            "name": "SMB Scanner Lite recorded assessment of example.com",
-            "about": "External security posture assessment",
-            "datePublished": C.RECORDED_DATE,
-            "author": {"@type": "Organization", "name": C.SITE_NAME, "url": C.SITE_URL},
-        },
+        schema=structured.report(
+            "/sample-report/",
+            "SMB Scanner Lite recorded assessment of example.com",
+            "Recorded external security posture assessment of example.com: score 86/100, "
+            "grade B, eight findings with evidence and the consent proof behind the run.",
+            C.RECORDED_DATE,
+        ),
+        page_extra={"mainEntity": {"@id": structured.page_url("/sample-report/") + "#report"}},
     )
 
 
@@ -561,13 +561,17 @@ def methodology() -> str:
         body,
         active="methodology",
         crumbs=crumbs,
-        schema={
-            "@type": "TechArticle",
-            "headline": "SMB Scanner Lite assessment methodology",
-            "about": "External security posture assessment",
-            "author": {"@type": "Organization", "name": C.SITE_NAME},
-            "datePublished": "2026-10-28",
-            "dateModified": "2026-10-30",
+        schema=structured.tech_article(
+            "/methodology/",
+            "SMB Scanner Lite assessment methodology",
+            "What is observed, how pass, warning, fail and inconclusive are assigned, how the "
+            "weighted 0-100 score and A-F grades are calculated, and the limits of external "
+            "assessment.",
+            "2026-10-28",
+            "2026-10-30",
+        ),
+        page_extra={
+            "mainEntity": {"@id": structured.page_url("/methodology/") + "#article"}
         },
     )
 
@@ -743,13 +747,10 @@ def demo() -> str:
         body,
         active="",
         crumbs=crumbs,
-        schema={
-            "@type": "SoftwareApplication",
-            "name": C.SITE_NAME + " recorded assessment demo",
-            "applicationCategory": "SecurityApplication",
-            "operatingSystem": "Any modern browser",
-            "description": "A recorded SMB Scanner Lite assessment published as static data, restricted to five approved test domains.",
-        },
+        # The demo page publishes a recording of an assessment; it does not
+        # distribute an application, so it gets a plain WebPage node with the
+        # software it demonstrates as its subject.
+        page_extra={"about": structured.software_ref()},
     )
 
 
@@ -881,11 +882,13 @@ pip install -e .</span></div>
         "Installation, command reference, output formats and consent-ledger handling for the restricted SMB Scanner Lite public sandbox edition. Five approved test domains, no arbitrary scanning.",
         body,
         crumbs=crumbs,
-        schema={
-            "@type": "TechArticle",
-            "headline": "SMB Scanner Lite documentation",
-            "about": "Installing and running the restricted sandbox edition",
-            "author": {"@type": "Organization", "name": C.SITE_NAME},
-            "dateModified": "2026-10-30",
-        },
+        schema=structured.tech_article(
+            "/docs/",
+            "SMB Scanner Lite documentation",
+            "Installing and running the restricted public sandbox edition: five approved test "
+            "domains, consent receipts and no arbitrary scanning.",
+            "2026-10-28",
+            "2026-10-30",
+        ),
+        page_extra={"mainEntity": {"@id": structured.page_url("/docs/") + "#article"}},
     )

@@ -4,8 +4,9 @@ from __future__ import annotations
 
 from . import config as C
 from . import data as D
+from . import schema as structured
 from . import snippets as S
-from .ui import btn, cta_band, e, icon, jsonld, layout, section_head
+from .ui import btn, cta_band, e, icon, layout, section_head
 
 TEST_RUN = {
     "command": "PYTHONPATH=src python3 -m unittest discover -s tests -v",
@@ -264,17 +265,17 @@ def faq() -> str:
 
 {cta_band("Still unsure whether this fits your situation?", "Ask a direct question. There is no sales sequence and no automatic scan.", ("/contact/", "Contact the maintainer"), ("/request-assessment/", "Request an assessment"))}
 """
-    faq_schema = {
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": q[0].replace("&ndash;", "-"),
-                "acceptedAnswer": {"@type": "Answer", "text": q[2].replace("&ndash;", "-").replace("<strong>", "").replace("</strong>", "")},
-            }
-            for q in D.FAQ
-        ],
-    }
+    # FAQPage is still valid structured data for visible question/answer pairs,
+    # but Google has limited FAQ rich results to authoritative government and
+    # health sites. The markup is kept because it accurately describes content
+    # that is on the page; no rich result is expected from it.
+    faq_main_entity = structured.faq_entity(
+        (
+            q[0].replace("&ndash;", "-"),
+            q[2].replace("&ndash;", "-").replace("<strong>", "").replace("</strong>", ""),
+        )
+        for q in D.FAQ
+    )
     return layout(
         "/faq/",
         "FAQ — SMB Scanner Lite Security Posture Assessment",
@@ -282,7 +283,8 @@ def faq() -> str:
         body,
         active="faq",
         crumbs=crumbs,
-        schema=faq_schema,
+        page_type="FAQPage",
+        page_extra={"mainEntity": faq_main_entity},
     )
 
 
@@ -541,9 +543,8 @@ def about() -> str:
         "Why SMB Scanner Lite exists, who it is for, what is published and what stays private, and the honest status of the project.",
         body,
         crumbs=crumbs,
-        schema={
-            "@type": "AboutPage",
-            "name": "About SMB Scanner Lite",
-            "mainEntity": {"@type": "Person", "name": C.AUTHOR, "url": C.AUTHOR_URL},
+        page_type="AboutPage",
+        page_extra={
+            "mainEntity": {"@type": "Person", "name": C.AUTHOR, "url": C.AUTHOR_URL}
         },
     )
