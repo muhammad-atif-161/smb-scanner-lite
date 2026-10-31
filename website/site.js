@@ -80,14 +80,39 @@
 
   /* ------------------------------------------------------------------------
      Sticky navigation + mobile panel
+     ------------------------------------------------------------------------
+     The scrolled state used to be driven by a scroll listener that read
+     window.scrollY on every event (Lighthouse attributed a forced reflow to
+     that read). An 8px sentinel at the top of the document gives the same
+     result from an IntersectionObserver, with no layout read in script and no
+     work per scroll event. The scroll listener only remains as a fallback for
+     browsers without IntersectionObserver, and it reads scroll position once
+     per event and writes only when the state actually changes.
      ---------------------------------------------------------------------- */
   var nav = $(".nav");
   if (nav) {
-    var syncNav = function () {
-      nav.classList.toggle("is-scrolled", window.scrollY > 8);
+    var navScrolled = false;
+    var applyNavState = function (scrolled) {
+      if (scrolled === navScrolled) return;
+      navScrolled = scrolled;
+      nav.classList.toggle("is-scrolled", scrolled);
     };
-    syncNav();
-    window.addEventListener("scroll", syncNav, { passive: true });
+
+    if ("IntersectionObserver" in window) {
+      var sentinel = document.createElement("div");
+      sentinel.className = "scroll-sentinel";
+      sentinel.setAttribute("aria-hidden", "true");
+      document.body.insertBefore(sentinel, document.body.firstChild);
+      new IntersectionObserver(function (entries) {
+        applyNavState(!entries[entries.length - 1].isIntersecting);
+      }, { threshold: 0 }).observe(sentinel);
+    } else {
+      var syncNav = function () {
+        applyNavState(window.pageYOffset > 8);
+      };
+      syncNav();
+      window.addEventListener("scroll", syncNav, { passive: true });
+    }
   }
 
   var toggle = $("[data-nav-toggle]");
@@ -124,7 +149,9 @@
       if (event.key === "Escape" && !panel.hidden) setNav(false);
     });
     window.addEventListener("resize", function () {
-      if (window.innerWidth > 1080 && !panel.hidden) setNav(false);
+      /* Test the cheap state first: when the panel is closed there is no need
+         to read innerWidth (which can force a layout) at all. */
+      if (!panel.hidden && window.innerWidth > 1080) setNav(false);
     });
   }
 
@@ -145,11 +172,10 @@
         }
       });
     }, { rootMargin: "0px 0px -8% 0px", threshold: 0.1 });
-    reveals.forEach(function (el) {
-      var siblings = el.parentNode ? Array.prototype.indexOf.call(el.parentNode.children, el) : 0;
-      el.style.setProperty("--reveal-delay", Math.min(siblings * 45, 240) + "ms");
-      revealObserver.observe(el);
-    });
+    /* The stagger itself lives in CSS (`.reveal:nth-child(n)`); writing a
+       custom property per element here meant hundreds of inline style writes
+       before first paint. This loop now only registers observers. */
+    reveals.forEach(function (el) { revealObserver.observe(el); });
   }
 
   /* ------------------------------------------------------------------------

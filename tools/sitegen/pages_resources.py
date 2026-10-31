@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from . import config as C
 from . import data as D
+from . import schema as structured
 from .ui import btn, cta_band, e, icon, layout, section_head
 
 # ---------------------------------------------------------------------------
@@ -345,13 +346,17 @@ def resources_index() -> str:
         "Original technical guides on external security posture assessment, SMB exposure, SPF/DKIM/DMARC, DNSSEC, public-facing infrastructure, misconfigurations and how to read a posture score.",
         body,
         crumbs=crumbs,
-        schema={
-            "@type": "CollectionPage",
-            "name": "SMB Scanner Lite knowledge base",
+        page_type="CollectionPage",
+        page_extra={
             "hasPart": [
-                {"@type": "Article", "headline": r["title"], "url": C.SITE_URL + f"/resources/{r['slug']}/", "datePublished": r["date"]}
+                {
+                    "@type": "Article",
+                    "headline": r["title"],
+                    "url": C.SITE_URL + f"/resources/{r['slug']}/",
+                    "datePublished": r["date"],
+                }
                 for r in D.RESOURCES
-            ],
+            ]
         },
     )
 
@@ -406,15 +411,14 @@ def article(slug: str) -> str:
         body,
         og_type="article",
         crumbs=crumbs,
-        schema={
-            "@type": "Article",
-            "headline": meta["title"],
-            "description": meta["desc"],
-            "datePublished": meta["date"],
-            "dateModified": meta["date"],
-            "author": {"@type": "Person", "name": C.AUTHOR, "url": C.AUTHOR_URL},
-            "publisher": {"@type": "Organization", "name": C.SITE_NAME, "url": C.SITE_URL},
-            "mainEntityOfPage": C.SITE_URL + f"/resources/{slug}/",
-            "articleSection": D.RESOURCE_CATEGORIES[meta["cat"]],
+        schema=structured.article(
+            f"/resources/{slug}/",
+            meta["title"],
+            meta["desc"],
+            meta["date"],
+            section=D.RESOURCE_CATEGORIES[meta["cat"]],
+        ),
+        page_extra={
+            "mainEntity": {"@id": structured.page_url(f"/resources/{slug}/") + "#article"}
         },
     )

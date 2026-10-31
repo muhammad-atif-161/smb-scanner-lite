@@ -1,6 +1,7 @@
 /* ==========================================================================
    SMB Scanner Lite — Midnight Intelligence design system
    --------------------------------------------------------------------------
+   0.  Self-hosted typefaces
    1.  Tokens
    2.  Reset and base
    3.  Typography and utilities
@@ -27,6 +28,115 @@
    24. Responsive
    25. Reduced motion and print
    ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   0. Self-hosted typefaces
+   --------------------------------------------------------------------------
+   Inter, JetBrains Mono and Space Grotesk are served from this origin as
+   pre-subset "latin" WOFF2 files. Self-hosting removes the third-party
+   fonts.googleapis.com stylesheet from the render-blocking request chain and
+   means no visitor IP address is disclosed to a font CDN.
+
+   All three families are licensed under the SIL Open Font License 1.1, which
+   permits redistribution; the copyright notices and full licence text are
+   published at /fonts/OFL.txt. The files are unmodified Fontsource 5.2.8
+   builds. Only the weights the design actually uses are declared:
+
+     Inter            400, 500, 600   (body copy, UI, buttons)
+     Space Grotesk    500, 600, 700   (headings, brand)
+     JetBrains Mono   400, 500        (code, evidence, metadata)
+
+   `font-display: swap` matches the previous Google Fonts behaviour: text is
+   painted immediately in the fallback stack and upgraded when the face
+   arrives, so no text is hidden behind a font download.
+   -------------------------------------------------------------------------- */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/inter-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/inter-latin-500-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/inter-latin-600-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/space-grotesk-latin-500-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/space-grotesk-latin-600-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/space-grotesk-latin-700-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/jetbrains-mono-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/jetbrains-mono-latin-500-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
 
 /* --------------------------------------------------------------------------
    1. Tokens
@@ -463,6 +573,19 @@ hr {
   background: rgba(8, 11, 20, 0.9);
   border-bottom-color: var(--border-soft);
   box-shadow: 0 18px 40px -32px rgba(0, 0, 0, 1);
+}
+
+/* Invisible 8px marker pinned to the top of the document. site.js watches it
+   with an IntersectionObserver instead of reading window.scrollY on every
+   scroll event, so the sticky-header state costs no layout reads at all. */
+.scroll-sentinel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 8px;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 .nav-inner {
@@ -2943,23 +3066,49 @@ table caption {
 
 /* --------------------------------------------------------------------------
    23. Reveal and motion
+   --------------------------------------------------------------------------
+   Stagger is expressed in CSS rather than by writing an inline custom
+   property on every element from JavaScript: the previous site.js loop wrote a
+   `--reveal-delay` style to every `.reveal` element before first paint, which
+   invalidated style for the whole document on load. These nth-child rules give
+   the same 45ms-per-sibling stagger (capped at 240ms) with zero script work.
    -------------------------------------------------------------------------- */
+/* The hidden start state is scoped to `.js`, which the inline bootstrap in
+   <head> puts on <html>. Without JavaScript (disabled, blocked, or the script
+   failed to load) the class never appears and every section is simply visible:
+   content must never depend on a script to become readable. */
 .reveal {
-  opacity: 0;
-  transform: translateY(14px);
   transition: opacity 0.55s var(--ease), transform 0.55s var(--ease);
   transition-delay: var(--reveal-delay, 0ms);
 }
 
-.reveal.is-visible {
+.js .reveal {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+.reveal:nth-child(2) { --reveal-delay: 45ms; }
+.reveal:nth-child(3) { --reveal-delay: 90ms; }
+.reveal:nth-child(4) { --reveal-delay: 135ms; }
+.reveal:nth-child(5) { --reveal-delay: 180ms; }
+.reveal:nth-child(6) { --reveal-delay: 225ms; }
+.reveal:nth-child(n + 7) { --reveal-delay: 240ms; }
+
+.js .reveal.is-visible {
   opacity: 1;
   transform: none;
 }
 
+/* The hero is the only animated content above the fold, so it must never be
+   invisible while an animation, a script or a font download completes. The
+   entrance is now a transform-only rise: the first paint already contains the
+   headline and lede at full opacity, which is what Largest Contentful Paint
+   measures. Previous versions started at `opacity: 0`, so the largest text on
+   the page waited for the animation (and, before that, for the render-blocking
+   font stylesheet) before it could be counted as painted. */
 .hero-rise {
-  opacity: 0;
   transform: translateY(12px);
-  animation: rise 0.7s var(--ease) forwards;
+  animation: rise 0.7s var(--ease) both;
 }
 
 .hero-rise:nth-child(2) { animation-delay: 0.06s; }
@@ -2967,8 +3116,14 @@ table caption {
 .hero-rise:nth-child(4) { animation-delay: 0.18s; }
 .hero-rise.is-late { animation-delay: 0.2s; }
 
+/* The logo and navigation are not animated at all: they paint with the first
+   frame so the header never depends on JavaScript. */
+
+/* Transform-only: the element is fully opaque in every frame, so the entrance
+   never delays the paint of the content it decorates. */
 @keyframes rise {
-  to { opacity: 1; transform: none; }
+  from { transform: translateY(12px); }
+  to { transform: none; }
 }
 
 .hover-lift {

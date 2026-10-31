@@ -50,7 +50,27 @@ python3 tools/build_site.py
 
 # Rebuild and verify that every internal link resolves
 python3 tools/build_site.py --check
+
+# Rebuild, check links, and run the static SEO / accessibility / structured-data audit
+python3 tools/build_site.py --check --audit
 ```
+
+The audit fails the build on anything that would be wrong for a crawler or a
+visitor: a `Product`/`Offer`/`AggregateRating` node appearing again, a relative
+or dangling `@id`, a canonical that disagrees with the sitemap, a missing
+`alt`, an unlabelled form field, a heading level skip, a third-party font
+request. Title/description length is reported as a warning, not an error.
+
+### Assets, fonts and caching
+
+- The three typefaces (Inter, Space Grotesk, JetBrains Mono) are **self-hosted**
+  from `website/fonts/` under the SIL OFL 1.1; there is no request to Google
+  Fonts and no third-party preconnect. See `website/fonts/OFL.txt`.
+- GitHub Pages serves everything with `cache-control: max-age=600` and cannot be
+  configured, so the builder appends a content hash to the CSS/JS/config URLs
+  (`/styles.css?v=c8f893d1`). Editing a file changes its URL immediately on the
+  next build; old cached copies can never be served after a deploy.
+- Nothing in `website/` is edited by hand. Change the template, then rebuild.
 
 | Path | Purpose |
 |------|---------|
@@ -58,11 +78,16 @@ python3 tools/build_site.py --check
 | `tools/sitegen/config.py` | Site identity, navigation, footer, sitemap, contact address |
 | `tools/sitegen/data.py` | 22-control catalog, recorded assessment data, FAQ, resources |
 | `tools/sitegen/pages_*.py` | Page templates grouped by audience |
-| `website/styles.css` | Midnight Intelligence design system (single stylesheet) |
+| `tools/sitegen/schema.py` | Structured data: site entities, page nodes, article/report builders (no merchant markup) |
+| `tools/sitegen/audit.py` | Static audit run by `--audit`: structured data, head tags, headings, labels, links, sitemap |
+| `website/styles.css` | Midnight Intelligence design system (single stylesheet, self-hosted `@font-face`) |
 | `website/site.js` | Navigation, tabs, disclosures, recorded-demo explorer, forms |
+| `website/fonts/` | Self-hosted latin WOFF2 faces + `OFL.txt` (SIL Open Font License 1.1) |
 | `website/config.js` | **Generated** runtime config read by the browser (do not edit by hand) |
 | `site.contact.json` | Single source of truth for the contact email and form endpoint |
 | `tools/set_contact.py` | One-command helper that edits the JSON and rebuilds the site |
+| `docs/structured-data.md` | Which schema types are published, which are refused, and why |
+| `docs/technical-seo-remediation-2026-10.md` | Audit, plan and verification record for the 2026 SEO/performance work |
 
 ### Configuration you may need to change
 
@@ -98,6 +123,10 @@ python3 tools/build_site.py --check
   report ID and scanner version. It is labelled "recorded", never "live".
 - No testimonials, customer logos, review scores, revenue figures or usage
   statistics are published, because none are held with documented permission.
+  The same rule applies to structured data: there is no `Review`,
+  `AggregateRating` or `Offer` markup anywhere, and no `Product` markup on the
+  acquisition page — a project sale is not a retail product with shipping and
+  returns. See `docs/structured-data.md`.
 - The five-domain allowlist is stated wherever the demo appears, and the public
   CLI/test suite remains unchanged.
 - The 65-control "validation register" is not claimed. `validation/` publishes the

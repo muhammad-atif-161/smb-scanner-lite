@@ -64,7 +64,10 @@ FORM_ENDPOINT = CONTACT["form_endpoint"]
 
 PRODUCT_VERSION = "5.2.0"
 EDITION = "Public Sandbox Edition"
-POLICY_VERSION = "2026.10-sandbox-v1"
+# Bumped when the privacy policy text changes. v2 (31 October 2026) records the
+# removal of the third-party Google Fonts request: the site now serves every
+# asset, including its typefaces, from its own origin.
+POLICY_VERSION = "2026.10-sandbox-v2"
 BUILD_VERSION = "2026.10"
 
 # Recorded assessment metadata (genuine sandbox capture, see website/data).

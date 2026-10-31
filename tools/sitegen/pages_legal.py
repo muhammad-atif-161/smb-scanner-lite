@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 from . import config as C
-from .ui import btn, e, icon, layout
+from .ui import asset, btn, e, icon, layout
 
-EFFECTIVE = "30 October 2026"
+EFFECTIVE = "31 October 2026"
 
 
 def privacy() -> str:
@@ -63,7 +63,7 @@ def privacy() -> str:
       </ul>
 
       <h2 id="fonts">6. Third-party requests made by your browser</h2>
-      <p>The website loads its three typefaces from Google Fonts. That request discloses your IP address and user agent to Google under its privacy terms. No other third-party assets are loaded: there are no CDN scripts, no embedded videos, no social widgets and no tracking beacons. If you prefer to avoid that request, block <span class="mono">fonts.googleapis.com</span> and <span class="mono">fonts.gstatic.com</span>; the site falls back to system fonts and remains fully usable.</p>
+      <p>None, on a normal page view. Every asset the site needs, including its three typefaces, is served from this domain: there is no Google Fonts request, no CDN script, no embedded video, no social widget and no tracking beacon. Loading the site therefore discloses your IP address to GitHub Pages as the host, and to nobody else. If you block the font files, the site falls back to your system fonts and remains fully usable and readable.</p>
 
       <h2 id="authorisation">7. Authorisation requirements</h2>
       <p>You may only assess domains you own or have explicit written permission to assess. The MIT licence on the published code governs the software; it does not grant permission to test third-party infrastructure. Requests for a private assessment must include a confirmation of ownership or authority, which is verified before any work is agreed.</p>
@@ -136,7 +136,7 @@ def terms() -> str:
       <p>The project aims to be accurate and to state its limits. It does not warrant that documentation, control definitions or sample data remain current. Content may change without notice; the recorded assessment is dated so that its age is always visible.</p>
 
       <h2 id="third-party">7. Third-party services and links</h2>
-      <p>This site relies on GitHub Pages for hosting and Google Fonts for typefaces, and it links to external resources including the public repository and a marketplace listing. Those services are governed by their own terms and privacy policies.</p>
+      <p>This site relies on GitHub Pages for hosting and serves its own fonts and scripts; no third-party stylesheet or script is loaded. It links out to external resources, including the public repository and a marketplace listing, which are governed by their own terms and privacy policies.</p>
 
       <h2 id="ip">8. Intellectual property</h2>
       <p>The project name, website design, documentation and the private engine remain the property of the author, except where the MIT licence applies to published code. The acquisition page describes the terms under which the complete project may transfer.</p>
@@ -232,7 +232,7 @@ def redirect(target: str, title: str) -> str:
 <meta name="robots" content="noindex, follow" />
 <link rel="canonical" href="{url}" />
 <meta http-equiv="refresh" content="0; url={target}" />
-<link rel="stylesheet" href="/styles.css" />
+<link rel="stylesheet" href="{asset('/styles.css')}" />
 </head>
 <body>
 <main id="main" class="wrap section">

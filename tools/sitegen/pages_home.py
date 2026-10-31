@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from . import config as C
 from . import data as D
+from . import schema as structured
 from . import snippets as S
 from .ui import btn, cta_band, e, icon, layout, pill, section_head
 
@@ -170,50 +171,10 @@ def build() -> str:
         "behind every conclusive finding. Explore a recorded assessment."
     )
 
-    schema = [
-        {
-            "@type": "WebSite",
-            "@id": C.SITE_URL + "/#website",
-            "name": C.SITE_NAME,
-            "url": C.SITE_URL,
-            "description": "Evidence-first external security posture assessment for small and medium businesses.",
-            "inLanguage": "en",
-            "publisher": {"@id": C.SITE_URL + "/#organization"},
-        },
-        {
-            "@type": "Organization",
-            "@id": C.SITE_URL + "/#organization",
-            "name": C.SITE_NAME,
-            "url": C.SITE_URL,
-            "logo": C.SITE_URL + "/logo.svg",
-            "email": C.CONTACT_EMAIL,
-            "founder": {"@type": "Person", "name": C.AUTHOR, "url": C.AUTHOR_URL},
-            "description": "An evidence-first external security posture assessment product for small and medium businesses, published as a restricted public sandbox edition.",
-            "sameAs": [C.REPO_URL, C.AUTHOR_URL],
-        },
-        {
-            "@type": "SoftwareApplication",
-            "@id": C.SITE_URL + "/#software",
-            "name": C.SITE_NAME,
-            "applicationCategory": "SecurityApplication",
-            "applicationSubCategory": "External security posture assessment",
-            "operatingSystem": "Cross-platform (Python 3.10+), web demo in any modern browser",
-            "softwareVersion": C.PRODUCT_VERSION,
-            "url": C.SITE_URL,
-            "author": {"@type": "Person", "name": C.AUTHOR, "url": C.AUTHOR_URL},
-            "publisher": {"@id": C.SITE_URL + "/#organization"},
-            "description": "Evaluates 22 publicly observable security controls, produces a 0-100 posture score and an A-F grade, and attaches the evidence behind every conclusive finding. The public edition is restricted to five approved test domains.",
-            "featureList": [
-                "22 external security controls across DNS, email authentication, TLS, browser headers and service exposure",
-                "0-100 weighted posture score with A-F grading",
-                "Evidence string attached to every conclusive finding",
-                "HTML, JSON, CSV and TXT report formats",
-                "Hash-chained pre-scan consent receipts",
-                "Restricted public sandbox edition with a five-domain allowlist",
-            ],
-            "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD", "description": "Public sandbox edition, restricted to five approved test domains."},
-        },
-    ]
+    # The homepage is where the software itself is the subject: one page
+    # node (WebPage) whose mainEntity is the SoftwareApplication entity.
+    # No price/offer node is published - see tools/sitegen/schema.py.
+    schema = [structured.software_application()]
 
     body = f"""
 <section class="hero">
@@ -420,4 +381,5 @@ def build() -> str:
         body,
         active="home",
         schema=schema,
+        page_extra={"mainEntity": {"@id": structured.SOFTWARE_ID}},
     )
