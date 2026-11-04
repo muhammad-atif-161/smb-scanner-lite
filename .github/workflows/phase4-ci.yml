@@ -17,6 +17,7 @@ on:
       - "tools/build_site.py"
       - "site.saas.json"
       - "tests/scan_frontend.test.mjs"
+      - "tests/test_relaunch_content.py"
       - ".github/workflows/deploy-pages.yml"
       - ".github/workflows/phase4-ci.yml"
 
@@ -39,6 +40,8 @@ jobs:
           node-version: "24"
       - name: Build static site, check links and SEO/accessibility
         run: python3 tools/build_site.py --check --audit
+      - name: Validate online-service positioning and original editorial content
+        run: python3 -m unittest discover -s tests -p test_relaunch_content.py -v
       - name: Test phase 4 API client without network
         run: node --test tests/scan_frontend.test.mjs
       - name: Ensure portal is closed by default
