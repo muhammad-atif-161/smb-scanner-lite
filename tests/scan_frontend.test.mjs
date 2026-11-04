@@ -74,7 +74,7 @@ test("invalid IDs, tokens, and recovery sessions rejected before network",async(
     network++;
     return Response.json({});
   });
-  await assert.rejects(client.status("../secret",token));
+  assert.throws(()=>client.status("../secret",token));
   await assert.rejects(client.status(id,"not-a-token"));
   assert.equal(network,0);
   assert.equal(parseSession('{"id":"evil"}'),null);
