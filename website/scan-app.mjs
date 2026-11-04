@@ -277,6 +277,8 @@ function startPortal() {
   }
 }
 if (typeof document !== "undefined") {
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded",startPortal,{once:true});
-  else startPortal();
+  // DOMContentLoaded follows all deferred site config scripts. A module in
+  // <head> must not read SMB_CONFIG before the generated config.js is ready.
+  if (document.readyState === "complete") startPortal();
+  else document.addEventListener("DOMContentLoaded", startPortal, { once:true });
 }
