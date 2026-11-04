@@ -39,6 +39,19 @@ Any other target is rejected before any network request is made.
 
 ## Website (smbscannerlite.me)
 
+### Phase 4 self-service portal (currently OFF)
+
+The Phase 4 `/scan/` customer portal is generated from `tools/sitegen/pages_saas.py`
+and served as part of the static website. It can talk to the separate private
+Cloudflare Workers + D1 backend when enabled. **It is disabled and noindex by
+default** in `site.saas.json`, so it cannot request or dispatch customer scans.
+The existing recorded sandbox and manual assessment request remain functional.
+
+Deployment now rebuilds the site and runs link/SEO/accessibility checks before
+uploading the generated `website/` artifact. The browser has no GitHub or
+Cloudflare service credentials; only the public API origin is added when ready.
+See [Phase 4 rollout notes](docs/phase4-saas-portal.md).
+
 The public site lives in `website/` and is deployed to GitHub Pages by
 `.github/workflows/deploy-pages.yml` (static upload, no build step on the runner).
 It is generated from a small, dependency-free Python builder so that navigation,
