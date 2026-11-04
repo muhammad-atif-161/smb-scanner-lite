@@ -1,385 +1,233 @@
-"""Homepage."""
+"""Evidence-first homepage — editorial product narrative.
 
+The public site shows a genuine recorded sandbox result. The separate
+owner-verified SaaS service is strictly scoped to DNS/email, and is never
+marketed as the complete 22-control catalog.
+"""
 from __future__ import annotations
 
 from . import config as C
 from . import data as D
 from . import schema as structured
 from . import snippets as S
-from .ui import btn, cta_band, e, icon, layout, pill, section_head
+from .ui import btn, e, icon, layout, section_head
 
 
-def _capability_cards() -> str:
-    cards = []
-    for cat in D.CATEGORIES:
-        controls = D.controls_in(cat["key"])
-        recorded = len([c for c in controls if c["recorded"]])
-        sample = "".join(f"<li>{e(c['name'])}</li>" for c in controls[:3])
-        cards.append(f"""
-<article class="card reveal">
-  <div class="card-icon">{icon(cat['icon'], 20)}</div>
-  <span class="card-num mono">{len(controls):02d}</span>
-  <h3>{e(cat['name'])}</h3>
-  <p>{e(cat['intro'])}</p>
-  <ul class="card-list">{sample}</ul>
-  <span class="component-tag mono" style="margin-top:auto">{recorded} in the recorded run</span>
+def _capabilities() -> str:
+    panels = []
+    for index, cat in enumerate(D.CATEGORIES, 1):
+        count = len(D.controls_in(cat["key"]))
+        panels.append(f"""
+<article class="home-capability">
+  <span class="index">0{index} / {count} controls</span>
+  <h3>{e(cat["name"])}</h3>
+  <p>{e(cat["intro"])}</p>
 </article>""")
-    return f'<div class="grid g3 reveal-group">{"".join(cards)}</div>'
+    return '<div class="home-capability-grid">' + "".join(panels) + "</div>"
 
 
-def _overview() -> str:
-    items = [
-        ("eye", "What a stranger can see", "An outsider cannot read your policies, your firewall rules or your backups. They can see your DNS, your published mail policy, your TLS handshake, your response headers and whether certain services answer. That view is what this assessment measures."),
-        ("list", "Findings with evidence attached", "Every conclusive finding quotes the record, header or handshake that produced it. There is no score without an observation behind it, and no observation is presented as an exploit."),
-        ("scale", "A shared language for priority", "The 0&ndash;100 score and A&ndash;F grade exist so an owner, an IT administrator and a consultant can agree on what to fix first &mdash; not so anyone can claim a business is secure."),
-    ]
-    cards = "".join(f"""
-<article class="card reveal">
-  <div class="card-icon">{icon(i, 20)}</div>
-  <h3>{title}</h3>
-  <p>{text}</p>
-</article>""" for i, title, text in items)
-    return f'<div class="grid g3">{cards}</div>'
-
-
-def _owner_risks() -> str:
-    rows = [
-        ("mail", "Fraudulent email that looks like it came from you", "Email authentication checks show whether a stranger can send invoices, password-reset messages or customer emails in your name."),
-        ("server", "Remote access or file shares left open to the internet", "Network exposure checks look for high-risk services such as SMB file sharing and Remote Desktop that answer from the public internet."),
-        ("shield", "Failing a customer or vendor security questionnaire", "The assessment produces a clear score, grade and evidence you can attach when a customer asks how you protect your public-facing systems."),
-        ("alert", "An embarrassing public security surprise", "DNS, TLS and header checks surface common configuration gaps before they become public incidents or lost deals."),
-    ]
-    cards = "".join(f"""
-<article class="card reveal">
-  <div class="card-icon">{icon(i, 20)}</div>
-  <h3>{title}</h3>
-  <p>{text}</p>
-</article>""" for i, title, text in rows)
-    return f"""
-<div class="callout reveal" style="margin-bottom:1.5rem">
-  {icon('user', 20)}
-  <div><p><strong>For non-technical owners.</strong> You do not need to know DNS, TLS or security headers to use this. The checks answer four practical questions most small-business owners actually care about.</p></div>
-</div>
-<div class="grid g2">{cards}</div>"""
+def _principles() -> str:
+    principles = (
+        ("01", "Only what we can observe",
+         "Public DNS records, mail policy, TLS handshakes and service responses can be measured. Internal security, staff behaviour and exploitability cannot be inferred from them."),
+        ("02", "The status follows the evidence",
+         "Pass, warning, fail and inconclusive are distinct outcomes. Failed requests and timeouts never turn into made-up findings."),
+        ("03", "The result has a boundary",
+         "Every assessment states its target, timestamp, coverage and limitations. A posture score is a prioritisation tool, not a certification."),
+    )
+    return '<div class="home-lines">' + "".join(f"""
+<article class="home-line"><span>{number}</span>
+  <div><h3>{heading}</h3><p>{body}</p></div>
+</article>""" for number, heading, body in principles) + "</div>"
 
 
 def _steps() -> str:
-    steps = [
-        ("Select an authorised target", "An assessment needs a domain you own or are permitted to assess. The public edition is limited to five reserved testing domains; a private assessment starts with written authorisation."),
-        ("Run the read-only checks", "DNS, mail authentication records, TLS handshakes, HTTP headers and protocol-level service probes. No login, no payload, no exploitation."),
-        ("Collect the evidence", "Each check stores what it observed and the status it reached &mdash; pass, warning, fail or inconclusive. A timeout is never converted into a failure."),
-        ("Review score and report", "A weighted 0&ndash;100 score, an A&ndash;F grade, findings ordered by severity, and a report you can read as HTML, JSON, CSV or TXT."),
-    ]
-    return '<div class="steps reveal">' + "".join(f"""
-<div class="step">
-  <span class="step-marker">{i:02d}</span>
-  <h3>{title}</h3>
-  <p>{text}</p>
-</div>""" for i, (title, text) in enumerate(steps, start=1)) + "</div>"
-
-
-def _sample_tabs() -> str:
-    record = D.RECORDED[D.RECORDED_DEFAULT]
-    tabs = [("Summary", "0"), ("Findings", "1"), ("Evidence", "2")]
-    tab_html = "".join(
-        f'<button class="tab" type="button" role="tab" id="home-tab-{i}" aria-controls="home-panel-{i}" '
-        f'aria-selected="{"true" if i == "0" else "false"}" tabindex="{0 if i == "0" else -1}">{label}</button>'
-        for label, i in tabs
+    steps = (
+        ("01 / Authorise", "Confirm ownership",
+         "Only request assessments of domains you control or are explicitly authorised to test. The self-service workflow uses a DNS TXT challenge before a scan is permitted."),
+        ("02 / Measure", "Run the scoped checks",
+         "Current automated jobs inspect public DNS and email-authentication policy only. The broader catalog and private assessments are separate, with scope agreed first."),
+        ("03 / Review", "Read the findings",
+         "Get a score, grade and a concise preview. Full evidence is private; it is not released by the website until a secure payment flow exists."),
     )
-    evidence = "".join(
-        f'<div class="evidence"><span class="val">{e(f["evidence"])}</span><button class="copy" type="button" data-copy="{e(f["evidence"])}">Copy</button></div>'
-        for f in record["findings"]
-    )
-    return f"""
-<div class="panel reveal" data-score-card data-score="{record["score"]}">
-  <div class="panel-head">
-    <h3>{e(record["report_id"])}</h3>
-    <span class="tag">{e(record["target"])} &middot; recorded</span>
-  </div>
-  <div data-tabs="home">
-    <div class="tabs" role="tablist" aria-label="Sample report sections">{tab_html}</div>
-    <div class="tab-panel" role="tabpanel" id="home-panel-0" aria-labelledby="home-tab-0">
-      <div class="score-panel">
-        <div class="gauge" data-gauge style="--v:{record["score"]}">
-          <div class="gauge-inner">
-            <span class="gauge-value" data-score-value>{record["score"]}</span>
-            <span class="gauge-label">Posture score</span>
-            <span class="gauge-grade">Grade {e(record["grade"])} &middot; {e(record["grade_label"])}</span>
-          </div>
-        </div>
-        <div style="flex:1 1 240px;min-width:0">
-          <p class="muted small">{e(record["summary"])}</p>
-          {S.category_bars(record)}
-        </div>
-      </div>
-      <p class="mono-muted small mt-2">Grade B &mdash; strong. Eight controls completed and none returned an inconclusive answer. The two warnings are informational header gaps typical of a minimal reference site.</p>
-    </div>
-    <div class="tab-panel" role="tabpanel" id="home-panel-1" aria-labelledby="home-tab-1" hidden>
-      {S.findings_html(record, limit=4)}
-      <p class="small mt-2"><a class="tlink" href="/sample-report/">Open the full report <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg></a></p>
-    </div>
-    <div class="tab-panel" role="tabpanel" id="home-panel-2" aria-labelledby="home-tab-2" hidden>
-      <p class="small muted">Every conclusive finding quotes the observation that produced it. Copy any line and re-run the equivalent query from outside your network.</p>
-      <div class="mt-2">{evidence}</div>
-    </div>
-  </div>
-</div>"""
+    return '<div class="home-process">' + "".join(f"""
+<article><small>{index}</small><h3>{title}</h3><p>{body}</p></article>
+""" for index, title, body in steps) + "</div>"
 
 
-def _trust_cards() -> str:
-    cards = [
-        ("scale-doc", "A reproducible test record", "The published sandbox suite is listed test by test, with objective, expected result, actual result and notes. Run it yourself with two commands.", "/validation/", "Read the validation record"),
-        ("layers", "Documented methodology", "What is measured, how statuses are assigned, how the score is weighted, what the grade bands mean, and where the method stops being able to tell you anything.", "/methodology/", "Read the methodology"),
-        ("file", "Sample evidence", "The recorded assessment is published as HTML, JSON, CSV and TXT, with sanitised metadata you can inspect before you talk to anyone.", "/sample-report/", "Open the sample report"),
-        ("shield", "Privacy and limitations", "No analytics, no tracking cookies, no scan data sent anywhere. The limitations page explains what an external assessment cannot establish.", "/limitations/", "Read the limitations"),
-    ]
-    return '<div class="grid g2">' + "".join(f"""
-<article class="card reveal">
-  <div class="card-icon">{icon(i, 20)}</div>
-  <h3>{title}</h3>
-  <p>{text}</p>
-  <div class="card-link"><a class="tlink" href="{href}">{link} {icon('arrow', 16)}</a></div>
-</article>""" for i, title, text, href, link in cards) + "</div>"
-
-
-def _faq_preview() -> str:
-    picks = [0, 4, 6, 8, 13]
-    items = "".join(
-        f'<details><summary>{D.FAQ[i][0]}</summary><div><p>{D.FAQ[i][2]}</p></div></details>' for i in picks
-    )
-    return f'<div class="acc reveal" style="max-width:52rem">{items}</div>'
-
-
-def _resource_preview() -> str:
+def _resources() -> str:
     cards = []
-    for res in D.RESOURCES[:3]:
+    for article in D.RESOURCES[:3]:
         cards.append(f"""
-<a class="resource-card reveal" href="/resources/{res['slug']}/">
-  <span class="component-tag mono">{e(D.RESOURCE_CATEGORIES[res['cat']])}</span>
-  <h3>{e(res['title'])}</h3>
-  <p>{e(res['desc'])}</p>
-  <span class="resource-meta"><span>{e(res['date'])}</span><span>{res['read']} min read</span></span>
+<a class="resource-card" href="/resources/{e(article["slug"])}/">
+  <span class="component-tag mono">{e(D.RESOURCE_CATEGORIES[article["cat"]])} / GUIDE</span>
+  <h3>{e(article["title"])}</h3><p>{e(article["desc"])}</p>
+  <span class="resource-meta"><span>{e(article["date"])}</span><span>{article["read"]} min read</span></span>
 </a>""")
-    return f'<div class="resource-grid">{"".join(cards)}</div>'
+    return '<div class="resource-grid">' + "".join(cards) + "</div>"
 
 
 def build() -> str:
     record = D.RECORDED[D.RECORDED_DEFAULT]
-    description = (
-        "SMB Scanner Lite is an evidence-first external security posture assessment for small "
-        "and medium businesses: 22 controls, a 0-100 score and an A-F grade, with the observation "
-        "behind every conclusive finding. Explore a recorded assessment."
-    )
-
-    # The homepage is where the software itself is the subject: one page
-    # node (WebPage) whose mainEntity is the SoftwareApplication entity.
-    # No price/offer node is published - see tools/sitegen/schema.py.
     schema = [structured.software_application()]
-
+    beta_active = C.SAAS["enabled"]
+    primary_url = "/scan/" if beta_active else "/request-assessment/"
+    primary_label = "Open verified assessment" if beta_active else "Request an assessment"
+    beta_notice = (
+        "A limited DNS/email self-service assessment is now available for "
+        "verified domain owners; other controls require a separate agreed scope."
+        if beta_active else
+        "Automated DNS/email assessment is being prepared. The recorded demo "
+        "is available now; private assessment enquiries are reviewed manually."
+    )
     body = f"""
 <section class="hero">
   <div class="wrap hero-grid">
     <div>
-      <p class="hero-rise eyebrow">Evidence-first external security posture</p>
-      <h1 class="hero-rise">Know what your business exposes <span class="grad">before it becomes a problem.</span></h1>
-      <p class="lede hero-rise">Find out whether customers can see spoofable email settings, exposed remote access or security gaps that could cost trust. The assessment turns those observations into clear priorities, evidence and a report you can act on.</p>
-      <div class="hero-actions hero-rise">
-        {btn('/demo/', 'Explore the demo', 'primary', 'bolt')}
-        {btn('/sample-report/', 'View sample report', 'ghost')}
+      <p class="home-dateline"><span class="home-mark"></span>Independent security assessment / evidence first</p>
+      <h1>Security, <span class="grad">without the guesswork.</span></h1>
+      <p class="lede">A clearer view of what your business publishes to the internet.
+      Understand its public security posture, see the observation behind each
+      finding, and focus on what can actually be improved.</p>
+      <div class="hero-actions">
+        {btn('/demo/', 'Explore a real report', 'primary', 'arrow')}
+        {btn(primary_url, primary_label, 'ghost')}
       </div>
-      <div class="hero-meta hero-rise">
-        <span class="meta-item">{icon('gauge', 16)}22 controls &middot; 0&ndash;100 score &middot; A&ndash;F grade</span>
-        <span class="meta-item">{icon('lock', 16)}5 approved test domains</span>
-        <span class="meta-item">{icon('file', 16)}HTML &middot; JSON &middot; CSV &middot; TXT</span>
+      <div class="hero-meta">
+        <span class="meta-item">{icon('check-circle', 16)} Evidence before claims</span>
+        <span class="meta-item">{icon('shield', 16)} Authorised targets only</span>
+        <span class="meta-item">{icon('file', 16)} Exportable reports</span>
       </div>
     </div>
     {S.hero_window(record)}
   </div>
 </section>
 
-<section class="section section--tight">
+<section class="section section--tight" aria-label="Product facts">
   <div class="wrap">
-    <div class="kpi-row reveal">
-      <div class="kpi"><b>22</b><span>security controls in the assessment catalog</span></div>
-      <div class="kpi"><b>0&ndash;100</b><span>weighted posture score with an A&ndash;F grade</span></div>
-      <div class="kpi"><b>5</b><span>approved test domains in the public edition</span></div>
-      <div class="kpi"><b>4</b><span>finding statuses, including inconclusive</span></div>
+    <div class="home-proof-strip">
+      <div><b>01 / Transparent</b><span>Real, dated assessment output you can inspect before making an enquiry.</span></div>
+      <div><b>02 / Bounded</b><span>22 documented catalog controls. Current SaaS automation: DNS and email only.</span></div>
+      <div><b>03 / Authorised</b><span>Domain verification precedes automated checks; the public demo remains restricted.</span></div>
     </div>
-    <p class="faint small mt-2">Positioning: <strong>evidence-first external security posture assessment for small and medium businesses.</strong> This is a defensive configuration and exposure assessment &mdash; not a penetration test, and not a guarantee.</p>
   </div>
 </section>
 
 <section class="section">
-  <div class="wrap">
-    {section_head("Product overview", "An outside view, written so it can be acted on.", "Most businesses cannot see their own public footprint the way a stranger does. SMB Scanner Lite looks from the outside, at a defined set of controls, and reports what it observed &mdash; without inventing certainty it does not have.")}
-    {_overview()}
-    <div class="grid g2 mt-4">
-      <div class="card reveal">
-        <div class="card-icon card-icon--cyan">{icon('user', 20)}</div>
-        <h3>Who it is for</h3>
-        <ul class="card-list">
-          <li>SMB owners who need to know what is exposed before a customer asks</li>
-          <li>IT administrators and managed service providers who need a defensible starting point</li>
-          <li>Cybersecurity consultants who want evidence, not a sales deck</li>
-          <li>Defensive practitioners learning how external assessment actually works</li>
-        </ul>
-      </div>
-      <div class="card reveal">
-        <div class="card-icon card-icon--cyan">{icon('alert', 20)}</div>
-        <h3>What it deliberately is not</h3>
-        <ul class="card-list">
-          <li>Not a vulnerability scanner: nothing is exploited or fuzzed</li>
-          <li>Not a penetration test: it cannot prove a weakness is exploitable</li>
-          <li>Not a certification: a high score is not a statement that you are secure</li>
-          <li>Not unrestricted: the public edition cannot be pointed at arbitrary hosts</li>
-        </ul>
-      </div>
+  <div class="wrap home-editorial">
+    <div class="section-head">
+      <p class="eyebrow">01 / The standard</p>
+      <h2>A finding should never outrun its evidence.</h2>
+      <p class="section-lede">Every external assessment has blind spots.
+      We show the boundary, distinguish measurement from assumption, and keep
+      inconclusive results visible instead of hiding them inside a score.</p>
+      <div class="row mt-3">{btn('/methodology/', 'Examine the methodology', 'ghost', 'arrow')}</div>
     </div>
+    {_principles()}
   </div>
 </section>
 
 <section class="section section--alt">
   <div class="wrap">
-    {section_head("Why an owner should care", "Technical checks mapped to business consequences.", "The report keeps the technical evidence, but the first question is practical: what could this mean for your email, your access, your customers or your next security questionnaire?")}
-    {_owner_risks()}
-  </div>
-</section>
-
-<section class="section section--alt">
-  <div class="wrap">
-    {section_head("Capabilities", "Twenty-two controls, organised into five categories.", "The catalog covers DNS integrity, email authentication, transport security, browser headers and network exposure. Expand the full catalog for what each control evaluates, why it matters, and an example of the evidence it produces.")}
-    {_capability_cards()}
-    <div class="row mt-3">{btn('/capabilities/', 'Open the full capability catalog', 'ghost', 'arrow')}</div>
+    <div class="home-sample">
+      <div class="section-head">
+        <p class="eyebrow">02 / Recorded evidence</p>
+        <h2>Open the report. Inspect the details.</h2>
+        <p class="section-lede">This is a genuine, stored assessment of
+        <span class="mono">example.com</span> from 28 October 2026. It is
+        deliberately labelled <strong>recorded</strong> and never represented
+        as a live scan of your browser or domain.</p>
+        <div class="home-ribbon">
+          <span>{e(record["report_id"])}</span>
+          <a class="tlink" href="/sample-report/">Full sample report {icon('arrow', 16)}</a>
+        </div>
+        <p class="home-editorial-note">A recorded example demonstrates the
+        report format, not the state of somebody else's infrastructure today.
+        Full assessment evidence is only shared with its authorised owner.</p>
+      </div>
+      <div>
+        {S.score_panel(record)}
+        <div class="row mt-2">{btn('/demo/', 'Explore recorded findings', 'primary', 'arrow')}
+        {btn('/validation/', 'See reproducible tests', 'ghost')}</div>
+      </div>
+    </div>
   </div>
 </section>
 
 <section class="section">
   <div class="wrap">
-    {section_head("Scoring", "A score that shows its working.", "Each control resolves to a status. Only conclusive controls contribute to the score, and each category carries a weight that reflects how much it matters to a small business.")}
-    <div class="grid g2" style="align-items:start">
-      {S.score_panel(record)}
-      <div class="reveal">
-        <ul class="trust-list">
-          <li><strong>Measured only</strong>A control that timed out is excluded from the score and reported as inconclusive, so silence can neither inflate nor deflate the result.</li>
-          <li><strong>Weighted by consequence</strong>Email authentication carries the largest weight (25%), followed by DNS, transport and exposure (20% each) and browser headers (15%).</li>
-          <li><strong>Grade bands are fixed</strong>A 90&ndash;100, B 80&ndash;89, C 65&ndash;79, D 50&ndash;64, F below 50. The same bands apply to every target.</li>
-          <li><strong>Not a certificate</strong>The score says nothing about your applications, your people, your processes or your physical security.</li>
-        </ul>
-        <div class="row mt-2">{btn('/methodology/', 'Read the scoring methodology', 'ghost', 'arrow')}</div>
-      </div>
+    {section_head('03 / What gets measured',
+      'Five areas. An explicitly limited view.',
+      'The full product catalog contains 22 defined controls. A control in the catalog is not a claim that every live plan or assessment executes it.')}
+    {_capabilities()}
+    <div class="home-ribbon">
+      <span>Current automated service: DNS + mail authentication only</span>
+      <a class="tlink" href="/capabilities/">View the full control catalog {icon('arrow', 16)}</a>
     </div>
   </div>
 </section>
 
 <section class="section section--alt">
   <div class="wrap">
-    {section_head("Sample report", "Inspect the report before you talk to anyone.", "This is the genuine recorded assessment of example.com from 28 October 2026: score, grade, findings, evidence and report metadata. The same structure is used for every assessment.")}
-    {_sample_tabs()}
-  </div>
-</section>
-
-<section class="section">
-  <div class="wrap">
-    {section_head("How it works", "Four steps, one of which is authorisation.", "The assessment is read-only end to end. What changes between a public demonstration and a private assessment is the target, the scope and the authorisation behind it.")}
+    {section_head('04 / How the service works',
+      'A clear workflow, with permission first.',
+      'The public sandbox, limited self-service beta, and manually arranged private assessments are distinct services. No tool is permission to assess a domain you do not control.')}
     {_steps()}
-  </div>
-</section>
-
-<section class="section section--alt" id="demo">
-  <div class="wrap">
-    {section_head("Recorded demo", "A real result you can explore, not a simulation.", "The demo renders stored output from a genuine sandbox run. It is labelled as recorded, it shows the assessment timestamp and report ID, and it never pretends your browser is scanning anything.")}
-    {S.recorded_banner()}
-    <div class="grid g2 mt-3" style="align-items:start">
-      <div class="card reveal">
-        <h3>Five approved domains, enforced in the runtime</h3>
-        <p>The public edition accepts exactly these names. A look-alike subdomain, a raw IP address or a trailing dot is rejected before any network request is made.</p>
-        <div class="chips mt-1">{''.join(f'<span class="chip">{e(d)}</span>' for d in C.ALLOWED_DOMAINS)}</div>
-        <p class="faint small mt-2">Each domain has a recorded or reference profile you can inspect: score, grade, category breakdown, findings and evidence.</p>
-        <div class="row mt-2">{btn('/demo/', 'Open the recorded assessment', 'primary', 'arrow')}</div>
-      </div>
-      <div class="card reveal">
-        <div class="recorded-banner" style="margin-bottom:0.4rem"><span class="dot"></span><span><b>Recorded</b> example.com &middot; 28 Oct 2026</span></div>
-        <div class="row" style="justify-content:space-between;align-items:flex-end">
-          <div>
-            <span class="mono faint tiny">POSTURE SCORE</span>
-            <p style="font-family:var(--font-head);font-size:2.4rem;font-weight:600;margin:0;letter-spacing:-0.04em">{record["score"]}<span class="faint" style="font-size:1rem;font-weight:500"> / 100</span></p>
-          </div>
-          <span class="grade-badge"><b>{e(record["grade"])}</b><span>Grade</span></span>
-        </div>
-        {S.category_bars(record)}
-        <p class="faint tiny mt-2">Report {e(record["report_id"])} &middot; consent {e(record["consent_id"])}</p>
-      </div>
+    <p class="home-editorial-note">{e(beta_notice)}</p>
+    <div class="row mt-3">
+      {btn(primary_url, primary_label, 'primary', 'arrow')}
+      {btn('/responsible-use/', 'Read acceptable use', 'ghost')}
     </div>
   </div>
 </section>
 
 <section class="section">
-  <div class="wrap">
-    {section_head("Validation & trust", "Credibility from evidence, not from badges.", "There are no customer logos on this page, because there are no customers whose permission has been obtained. What is published instead is testable: the test record, the method, the sample evidence and the limits.")}
-    {_trust_cards()}
-    <div class="callout mt-3 reveal">
-      {icon('info', 20)}
-      <div><p><strong>No fabricated proof.</strong> This site contains no invented testimonials, review scores, client names, usage statistics or success stories. Where independent proof does not exist, the page says so rather than filling the gap.</p></div>
+  <div class="wrap home-method">
+    <div class="section-head">
+      <p class="eyebrow">05 / Scoring integrity</p>
+      <h2>Useful numbers. No false certainty.</h2>
+      <p class="section-lede">A posture score summarises the results of
+      checks actually performed. It cannot substitute for an internal audit,
+      penetration test, compliance review, or comprehensive risk assessment.</p>
+      <div class="row mt-3">{btn('/limitations/', 'Where the method stops', 'ghost', 'arrow')}</div>
     </div>
+    <ul class="trust-list">
+      <li><strong>Pass / warning / fail / inconclusive</strong>Unknown outcomes remain unknown. DNS timeouts never become a missing-policy finding.</li>
+      <li><strong>Scoped by the job</strong>A DNS/email score is not presented as a full-network security grade.</li>
+      <li><strong>Evidence you can revisit</strong>Findings carry observations and supporting context, not unsupported claims of exploitability.</li>
+      <li><strong>Privacy by default</strong>Detailed customer reports are not posted publicly or included in the free preview.</li>
+    </ul>
   </div>
 </section>
 
 <section class="section section--alt">
   <div class="wrap">
-    {section_head("Knowledge base", "Technical writing, not keyword filler.", "Explanations of the controls this product measures, written for the people who have to fix them. Each article is original, internally linked and reviewed against the underlying standards.")}
-    {_resource_preview()}
-    <div class="row mt-3">{btn('/resources/', 'Browse the knowledge base', 'ghost', 'arrow')}</div>
+    {section_head('06 / Reference library',
+      'Better decisions begin with better explanations.',
+      'Explore practical guidance on public security controls and why the observations matter.')}
+    {_resources()}
+    <div class="row mt-3">{btn('/blogs/', 'Browse technical writing', 'ghost', 'arrow')}
+    {btn('/resources/', 'Open reference library', 'ghost')}</div>
   </div>
 </section>
 
-<section class="section">
+<section class="home-closer">
   <div class="wrap">
-    {section_head("FAQ", "Questions people actually ask.", "Short answers, no upsell. The methodology page has the longer technical version of most of these.")}
-    {_faq_preview()}
-    <div class="row mt-3">{btn('/faq/', 'Read all questions', 'ghost', 'arrow')}</div>
-  </div>
-</section>
-
-<section class="section section--alt">
-  <div class="wrap">
-    <div class="split">
-      <div class="reveal">
-        <p class="eyebrow">Next step</p>
-        <h2>Need an assessment of a domain you own?</h2>
-        <p class="section-lede">The public edition is deliberately limited to five test domains. For your own infrastructure, request a private assessment: scope and written authorisation are agreed before anything runs.</p>
-        <ul class="trust-list mt-2">
-          <li><strong>Reviewed by a person</strong>No request triggers an automatic scan of any kind.</li>
-          <li><strong>Authorisation first</strong>You confirm ownership; it is verified before work starts.</li>
-          <li><strong>Same evidence standard</strong>Every finding comes with the observation behind it.</li>
-        </ul>
-        <div class="btn-row mt-3">
-          {btn('/request-assessment/', 'Request an assessment', 'primary', 'arrow')}
-          {btn('/contact/', 'Contact the maintainer', 'ghost')}
-        </div>
-      </div>
-      <div class="card reveal">
-        <div class="card-icon">{icon('shield', 20)}</div>
-        <h3>About the project</h3>
-        <p>SMB Scanner Lite is built and maintained by {C.AUTHOR} in Rawalpindi, Pakistan, as an evidence-first defensive assessment tool. The public repository ships the website, the documentation and a sandbox runtime locked to five testing domains.</p>
-        <p class="small">The full engine &mdash; all 22 controls, the scoring model and the private test suite &mdash; stays in a private repository so that unrestricted scanning capability is not published.</p>
-        <div class="row mt-1">
-          <a class="tlink" href="/about/">About the project {icon('arrow', 16)}</a>
-          <a class="tlink" href="{C.REPO_URL}" rel="noopener" target="_blank">Public repository {icon('external', 16)}</a>
-        </div>
-      </div>
+    <p class="eyebrow">A more useful outside view</p>
+    <h2>Make the next security conversation more precise.</h2>
+    <p class="section-lede">Start with a genuine example or request a carefully
+    scoped assessment for infrastructure you are authorised to manage.</p>
+    <div class="hero-actions">
+      {btn(primary_url, primary_label, 'primary', 'arrow')}
+      {btn('/demo/', 'View the recorded demo', 'ghost')}
     </div>
   </div>
 </section>
-
-{cta_band("Explore the recorded assessment, or request one for your own domain.", "Both routes show the same report structure, the same evidence standard and the same stated limits.", ("/demo/", "Open the recorded assessment"), ("/request-assessment/", "Request an assessment"))}
 """
-
     return layout(
         "/",
-        f"{C.SITE_NAME} — Evidence-First External Security Posture Assessment",
-        description,
-        body,
-        active="home",
-        schema=schema,
+        "SMB Scanner Lite — Security Evidence, Without the Guesswork",
+        "Independent external security posture assessments with clearly scoped checks, reproducible observations, and honest reporting. Explore a recorded report.",
+        body, active="home", schema=schema, body_class="home-page",
         page_extra={"mainEntity": {"@id": structured.SOFTWARE_ID}},
     )
