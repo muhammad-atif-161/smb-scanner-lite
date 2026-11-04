@@ -133,8 +133,10 @@ def check_head(rel: str, html: str, canonical_path: str, report: Report, site_ur
     robots = single(r'<meta name="robots" content="([^"]*)"', html)
     if not robots:
         report.fail(where, "missing robots meta")
-    elif "noindex" in robots and not is_redirect(html) and rel != "404.html":
+    elif "noindex" in robots and not is_redirect(html) and rel not in ("404.html", "scan/index.html"):
         report.fail(where, "public page is marked noindex")
+    if rel == "scan/index.html" and (not robots or "noindex" not in robots):
+        report.fail(where, "beta SaaS portal must remain noindex")
 
     og = {
         key: single(rf'<meta property="og:{key}" content="([^"]*)"', html)
@@ -331,7 +333,8 @@ def check_sitemap_robots(out: Path, pages: dict, redirects: dict, report: Report
     sitemap = sitemap_file.read_text(encoding="utf-8")
     locs = re.findall(r"<loc>(.*?)</loc>", sitemap)
 
-    expected = {page_path(rel) for rel in pages if rel != "404.html"}
+    # Noindex beta routes are deliberately excluded from the public sitemap.
+    expected = {page_path(rel) for rel in pages if rel != "404.html"} - noindex_paths
     extra = [loc for loc in locs if loc.replace(config.SITE_URL, "") not in expected]
     if extra:
         report.fail("sitemap.xml", f"lists URLs that are not canonical pages: {extra[:3]}")
