@@ -1,7 +1,7 @@
-"""Standalone, opt-in SaaS assessment page, not part of the recorded sandbox.
+"""Ownership-verified online DNS/email assessment portal.
 
-This route is noindex and unlinked until the Cloudflare runtime is configured.
-Legacy manual request, public demo, licensing, and recorded reports are unchanged.
+This route is noindex; public requests are gated by the Cloudflare release switch.
+Customer API requests and scans stay disabled until the operator completes deployment.
 """
 from __future__ import annotations
 from .ui import layout, icon, asset
@@ -10,11 +10,9 @@ def portal() -> str:
     body = f"""
 <div class="page-head">
   <div class="wrap scan-shell">
-    <p class="eyebrow">DNS and email posture · Limited beta</p>
-    <h1>Verify your domain. See the evidence-backed preview.</h1>
-    <p class="lede">Request a strictly scoped external assessment of a domain you own or are authorised to test.
-    A DNS TXT record proves control of the domain before any scan can start.
-    This beta only checks DNS and email authentication — not TLS, HTTP, or exposed ports.</p>
+    <p class="eyebrow">Online assessment / DNS and email</p>
+    <h1>Your domain, verified. Your findings, explained.</h1>
+    <p class="lede">Start with a domain you own. Verify control through a temporary DNS record, then authorize a limited review of public DNS and email-authentication policy. No login, vulnerability exploitation or intrusive probing.</p>
   </div>
 </div>
 <section class="section section--tight">
@@ -29,16 +27,15 @@ def portal() -> str:
     <p class="scan-message" id="scan-message" data-tone="info" aria-live="polite" role="status" hidden></p>
 
     <section class="scan-panel" id="scan-closed" hidden aria-label="Availability notice">
-      <h2>Online assessments are not open yet</h2>
-      <p>We're completing the security connection between the website and the private backend.
-      No form or scan is available from this page until the service is deliberately enabled.</p>
-      <a href="/request-assessment/" class="btn btn-primary">Request a manual assessment</a>
+      <h2>Online scanning is opening soon</h2>
+      <p>The assessment interface and private backend are being prepared for controlled customer access.
+      Public scan requests are not enabled yet. Explore the example report or contact us about availability.</p>
+      <a href="/request-assessment/" class="btn btn-primary">Ask about availability</a>
     </section>
 
     <section class="scan-panel" id="scan-create" hidden aria-labelledby="scan-create-title">
-      <h2 id="scan-create-title">Request your assessment</h2>
-      <p class="scan-privacy">Enter only public domain and contact details. Do not submit passwords,
-      credentials, customer information or private infrastructure details.</p>
+      <h2 id="scan-create-title">Set up your assessment</h2>
+      <p class="scan-privacy">Enter your public domain and a contact address. Never enter passwords, API keys or internal network details.</p>
       <form id="scan-request-form">
         <div class="scan-form">
           <div class="field">
@@ -63,14 +60,14 @@ def portal() -> str:
           </div>
         </div>
         <div class="scan-actions">
-          <button type="submit" class="btn btn-primary">Create assessment</button>
-          <a href="/demo/" class="btn btn-ghost">View recorded demo instead</a>
+          <button type="submit" class="btn btn-primary">Create verification request</button>
+          <a href="/demo/" class="btn btn-ghost">See a sample report instead</a>
         </div>
       </form>
     </section>
 
     <section class="scan-panel" id="scan-resume" hidden aria-labelledby="scan-resume-title">
-      <h2 id="scan-resume-title">Resume an existing assessment</h2>
+      <h2 id="scan-resume-title">Return to your assessment</h2>
       <p class="scan-privacy">If you saved your assessment ID and private access token,
       use them here. Neither is ever placed in a URL.</p>
       <form id="scan-resume-form">
@@ -89,9 +86,9 @@ def portal() -> str:
     </section>
 
     <section class="scan-panel" id="scan-verify" hidden aria-labelledby="scan-verify-title">
-      <h2 id="scan-verify-title">Publish your ownership TXT record</h2>
-      <p class="scan-privacy">Your DNS provider must publish this exact TXT record.
-      Changes may take some time to propagate. No scan can start until the backend verifies it.</p>
+      <h2 id="scan-verify-title">Verify domain ownership</h2>
+      <p class="scan-privacy">Add the following TXT record at the DNS provider that manages this domain.
+      Only after its exact value is observed can the service authorize a scan.</p>
       <dl class="meta-list">
         <div><dt>Domain</dt><dd id="scan-domain"></dd></div>
         <div><dt>TXT record name</dt><dd class="scan-code" id="scan-record-name"></dd></div>
@@ -119,10 +116,9 @@ def portal() -> str:
     </section>
 
     <section class="scan-panel" id="scan-dispatch" hidden aria-labelledby="scan-dispatch-title">
-      <h2 id="scan-dispatch-title">Start one limited assessment</h2>
-      <p class="scan-privacy">This runs DNS and email-authentication checks only. It may take
-      time to enter the GitHub Actions queue. A request cannot automatically trigger a
-      second run, and the result will be stored for later payment unlocking.</p>
+      <h2 id="scan-dispatch-title">Authorize a single DNS/email scan</h2>
+      <p class="scan-privacy">The online worker reads public DNS and email-authentication records only. It does
+      not test TLS, web applications or open ports. A scan is dispatched once; an uncertain result is not silently retried.</p>
       <label class="check"><input type="checkbox" id="scan-dispatch-consent">
         <span>I confirm I am authorised to assess this exact domain, and I want to start this single scan.</span>
       </label>
@@ -130,7 +126,7 @@ def portal() -> str:
     </section>
 
     <section class="scan-panel scan-preview" id="scan-preview" hidden aria-labelledby="scan-preview-title">
-      <h2 id="scan-preview-title">Your security preview</h2>
+      <h2 id="scan-preview-title">Assessment preview</h2>
       <p class="scan-privacy">This is a DNS/email-only posture assessment, not a full perimeter
       scan or a guarantee that the domain is secure.</p>
       <p>Domain: <strong id="scan-preview-domain"></strong></p>
@@ -139,8 +135,7 @@ def portal() -> str:
       <h3>Top findings</h3>
       <ul id="scan-findings" class="card-list"></ul>
       <div class="scan-lock"><p id="scan-report-notice"></p>
-        <p class="scan-privacy">Payment and full report access are not available in this phase.
-        No payment is collected by this page.</p>
+        <p class="scan-privacy">The full evidence report is kept private. Payment and report unlocking are not yet active; this page does not collect any payment.</p>
       </div>
     </section>
   </div>
@@ -148,8 +143,8 @@ def portal() -> str:
 """
     return layout(
         "/scan/",
-        "Domain Security Assessment Portal — SMB Scanner Lite",
-        "Ownership-verified DNS and email-authentication assessment portal. Private beta; complete evidence remains locked.",
+        "Online Domain Security Assessment | SMB Scanner Lite",
+        "A domain ownership verification and limited DNS/email security scan with an evidence-led preview. Online access is opening soon.",
         body, crumbs=[("Home", "/"), ("Security Scan", None)], noindex=True,
         extra_head=(
             f'<link rel="stylesheet" href="{asset("/scan.css")}" />'
