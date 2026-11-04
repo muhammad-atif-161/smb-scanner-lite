@@ -6,7 +6,7 @@ from .ui import layout, btn, e, asset
 def not_found() -> str:
     body=f"""<section class="section"><div class="wrap">
     <p class="eyebrow">404 / Page not found</p>
-    <h1>There isn't a page at this address.</h1>
+    <h1>There isn't a page at this address.</h1><h2 class="sr-only">Where to go next</h2>
     <p class="lede">Start with the online assessment, explore what it checks,
     or read a recorded example while public scan access is being prepared.</p>
     <div class="hero-actions">{btn("/scan/","Check scan availability","primary","arrow")}
