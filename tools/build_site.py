@@ -30,7 +30,7 @@ from sitegen import data as D  # noqa: E402
 from sitegen import pages_home, pages_legal, pages_product, pages_resources  # noqa: E402
 from sitegen import pages_blog  # noqa: E402
 from sitegen import blog as blog_posts  # noqa: E402
-from sitegen import pages_contact, pages_trust  # noqa: E402
+from sitegen import pages_contact, pages_trust, pages_saas  # noqa: E402
 from sitegen import audit as A  # noqa: E402
 from sitegen import ui  # noqa: E402
 
@@ -55,6 +55,7 @@ PAGES = {
     "about/index.html": pages_trust.about,
     "contact/index.html": pages_contact.contact,
     "request-assessment/index.html": pages_contact.request_assessment,
+    "scan/index.html": pages_saas.portal,
     "acquisition/index.html": pages_contact.acquisition,
     "privacy/index.html": pages_legal.privacy,
     "terms/index.html": pages_legal.terms,
@@ -117,6 +118,7 @@ def config_js_source() -> str:
         "listingUrl": C.LISTING_URL,
         "allowlist": list(C.ALLOWED_DOMAINS),
         "recordedDataUrl": "/data/recorded-assessment.json",
+        "saas": C.SAAS,
     }
     js = (
         "/* ==========================================================================\n"
@@ -419,6 +421,8 @@ def apply_asset_versions() -> dict[str, str]:
     versions = {
         "/styles.css": digest((OUT / "styles.css").read_bytes()),
         "/site.js": digest((OUT / "site.js").read_bytes()),
+        "/scan.css": digest((OUT / "scan.css").read_bytes()),
+        "/scan-app.mjs": digest((OUT / "scan-app.mjs").read_bytes()),
         "/config.js": digest(config_js_source()),
     }
     ui.set_asset_versions(versions)
