@@ -8,7 +8,7 @@ once. The generated HTML is what GitHub Pages serves from `website/`.
 from __future__ import annotations
 
 SITE_NAME = "SMB Scanner Lite"
-SITE_TAGLINE = "Evidence-First External Security Posture Assessment"
+SITE_TAGLINE = "Ownership-Verified Online Domain Security Assessment"
 SITE_URL = "https://smbscannerlite.me"
 AUTHOR = "Muhammad Atif"
 AUTHOR_URL = "https://github.com/muhammad-atif-161"
@@ -109,54 +109,37 @@ ALLOWED_DOMAINS = (
 
 # Primary navigation. `key` is used for aria-current and the active state.
 NAV = (
-    ("home", "Overview", "/"),
-    ("capabilities", "Capabilities", "/capabilities/"),
+    ("scan", "Online scan", "/scan/"),
+    ("capabilities", "Coverage", "/capabilities/"),
+    ("methodology", "How it works", "/methodology/"),
     ("report", "Sample report", "/sample-report/"),
-    ("methodology", "Method", "/methodology/"),
     ("blog", "Journal", "/blogs/"),
-    ("contact", "Contact", "/contact/"),
+    ("desktop", "Desktop sandbox", "/docs/"),
 )
 
 FOOTER_COLUMNS = (
-    (
-        "Product",
-        (
-            ("Overview", "/"),
-            ("Capabilities", "/capabilities/"),
-            ("Recorded Demo", "/demo/"),
-            ("Sample Report", "/sample-report/"),
-            ("Methodology", "/methodology/"),
-        ),
-    ),
-    (
-        "Resources",
-        (
-            ("Documentation", "/docs/"),
-            ("Blog", "/blogs/"),
-            ("Knowledge Base", "/resources/"),
-            ("Technical Guides", "/resources/#guides"),
-            ("Validation Record", "/validation/"),
-            ("GitHub", REPO_URL),
-        ),
-    ),
-    (
-        "Legal",
-        (
-            ("Privacy Policy", "/privacy/"),
-            ("Terms of Use", "/terms/"),
-            ("Responsible Use", "/responsible-use/"),
-            ("Assessment Limitations", "/limitations/"),
-        ),
-    ),
-    (
-        "Business",
-        (
-            ("Contact", "/contact/"),
-            ("Request an Assessment", "/request-assessment/"),
-            ("Project Acquisition", "/acquisition/"),
-            ("About the Project", "/about/"),
-        ),
-    ),
+    ("Online service", (
+        ("Online scan", "/scan/"),
+        ("Current coverage", "/capabilities/"),
+        ("How it works", "/methodology/"),
+        ("Example report", "/sample-report/"),
+        ("Limitations", "/limitations/"),
+    )),
+    ("Learn", (
+        ("Journal", "/blogs/"),
+        ("Reference library", "/resources/"),
+        ("Recorded demonstration", "/demo/"),
+        ("Desktop sandbox download", "/docs/"),
+        ("Validation record", "/validation/"),
+    )),
+    ("Company & policies", (
+        ("About", "/about/"),
+        ("Contact", "/contact/"),
+        ("Questions", "/faq/"),
+        ("Responsible use", "/responsible-use/"),
+        ("Privacy", "/privacy/"),
+        ("Terms", "/terms/"),
+    )),
 )
 
 # Pages that must appear in the sitemap: (path, changefreq, priority)
