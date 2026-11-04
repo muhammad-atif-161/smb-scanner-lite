@@ -1,0 +1,46 @@
+name: Phase 4 Website Portal Tests
+
+on:
+  pull_request:
+    paths:
+      - "website/scan*"
+      - "tools/sitegen/pages_saas.py"
+      - "tools/sitegen/config.py"
+      - "tools/build_site.py"
+      - "site.saas.json"
+      - "tests/scan_frontend.test.mjs"
+      - ".github/workflows/deploy-pages.yml"
+      - ".github/workflows/phase4-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  portal-offline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Build static site, check links and SEO/accessibility
+        run: python3 tools/build_site.py --check --audit
+      - name: Test phase 4 API client without network
+        run: node --test tests/scan_frontend.test.mjs
+      - name: Ensure portal is closed by default
+        run: |
+          python3 - <<'PY'
+          import pathlib, json
+          s = json.loads(pathlib.Path("site.saas.json").read_text())
+          assert s["enabled"] is False
+          assert s["api_base_url"] == ""
+          html = pathlib.Path("website/scan/index.html").read_text()
+          assert 'name="robots" content="noindex, follow"' in html
+          assert '/scan-app.mjs?v=' in html
+          PY
