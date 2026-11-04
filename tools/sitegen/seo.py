@@ -49,7 +49,7 @@ OVERRIDES = {
     ),
     "/resources/assessment-methodology/": (
         "External Assessment: Scope and Evidence | SMB Scanner Lite",
-        None,
+        "Define scope, select the observation point, attach evidence and state the limits of an external security assessment without overstating its findings.",
     ),
     "/resources/dnssec-explained/": (
         "DNSSEC: What It Protects | SMB Scanner Lite",
