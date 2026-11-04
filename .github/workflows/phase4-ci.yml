@@ -8,12 +8,16 @@ on:
       - "website/logo.svg"
       - "tools/sitegen/pages_saas.py"
       - "tools/sitegen/pages_home.py"
+      - "tools/sitegen/pages_relaunch*.py"
+      - "tools/sitegen/blog/**"
+      - "tools/sitegen/pages_relaunch_refs.py"
       - "tools/sitegen/pages_contact.py"
       - "tools/sitegen/ui.py"
       - "tools/sitegen/config.py"
       - "tools/build_site.py"
       - "site.saas.json"
       - "tests/scan_frontend.test.mjs"
+      - "tests/test_relaunch_content.py"
       - ".github/workflows/deploy-pages.yml"
       - ".github/workflows/phase4-ci.yml"
 
@@ -36,6 +40,8 @@ jobs:
           node-version: "24"
       - name: Build static site, check links and SEO/accessibility
         run: python3 tools/build_site.py --check --audit
+      - name: Validate online-service positioning and original editorial content
+        run: python3 -m unittest discover -s tests -p test_relaunch_content.py -v
       - name: Test phase 4 API client without network
         run: node --test tests/scan_frontend.test.mjs
       - name: Ensure portal is closed by default
@@ -49,9 +55,10 @@ jobs:
           assert 'name="robots" content="noindex, follow"' in html
           assert '/scan-app.mjs?v=' in html
           home = pathlib.Path("website/index.html").read_text()
-          assert 'Security, ' in home
-          assert 'without the guesswork.' in home
+          assert 'Understand what your domain' in home
+          assert 'reveals.' in home
           assert 'studio.css?v=' in home
-          assert 'href="/scan/"' not in home
-          assert 'Request assessment' in home
+          assert 'href="/scan/"' in home
+          assert 'Online scans opening soon' in home
+          assert 'Start scan' not in home
           PY
