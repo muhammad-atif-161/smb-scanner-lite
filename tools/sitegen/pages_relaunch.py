@@ -240,7 +240,7 @@ def docs() -> str:
       +btn("/scan/","Use the online assessment instead","ghost"))
     body+=article(f"""
 <h2>What you are downloading</h2>
-<p>The publicly licensed <strong>SMB Scanner Lite v{e(C.PRODUCT_VERSION)}</strong> educational sandbox,
+<p>The publicly licensed <strong>SMB Scanner Lite v{e(C.PRODUCT_VERSION)} Public Sandbox Edition</strong> educational package,
 not the private online worker. It supports the historical demo's restricted testing workflow
 and stores consent receipts locally. It cannot scan arbitrary commercial domains.</p>
 <h2>Requirements</h2>
