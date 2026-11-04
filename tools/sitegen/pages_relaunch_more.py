@@ -20,7 +20,7 @@ def faq() -> str:
     items="".join(f'<details><summary>{e(q)}</summary><div><p>{e(a)}</p></div></details>' for q,a in qa)
     body=P.head("Questions answered","Before you scan, know the limits.",
       "Plain answers about authorization, coverage, release status and access to results.")
-    body+=f'<section class="section"><div class="wrap"><div class="acc" style="max-width:860px">{items}</div></div></section>'
+    body+=f'<section class="section"><div class="wrap"><h2 class="sr-only">Common questions</h2><div class="acc" style="max-width:860px">{items}</div></div></section>'
     return P.frame("/faq/","Questions & Answers | SMB Scanner Lite",
       "Common questions about the online DNS/email scanner, domain verification, availability, report privacy and the separate desktop sandbox.",body)
 
