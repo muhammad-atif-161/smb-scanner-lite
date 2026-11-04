@@ -33,7 +33,7 @@ company-wide certifications. The important deliverable is a list of findings an 
 can understand, investigate and verify after making changes.</p>
 """),
 "smb-cybersecurity-basics": (
-"Small business security: a practical foundation",
+"Practical small business security",
 "A security baseline built around account ownership, recovery, updates, vendor relationships and public-domain policy rather than dashboard scores.",
 """
 <h2>Identity first</h2>
@@ -102,7 +102,7 @@ Distinguish unsigned, verified, invalid and inconclusive states. Treat validatio
 failure as an operational issue requiring investigation, not an automatic attack finding.</p>
 """),
 "public-facing-infrastructure": (
-"Public infrastructure: mapping without overreach",
+"Mapping public infrastructure carefully",
 "Build an accurate inventory of domains and publicly visible services, with a clear distinction between passive observation and active authorized testing.",
 """
 <h2>Start with authoritative ownership records</h2>
