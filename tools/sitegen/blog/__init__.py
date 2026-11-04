@@ -210,6 +210,9 @@ POSTS = (
     + assessment.POSTS
 )
 
+from .relaunch import rewrite_registry as _rewrite_registry
+_rewrite_registry(POSTS, CLUSTERS)
+
 BY_SLUG = {post["slug"]: post for post in POSTS}
 POSTS_BY_CLUSTER: dict[str, list[dict]] = {slug: [] for slug in CLUSTERS}
 for _post in POSTS:
