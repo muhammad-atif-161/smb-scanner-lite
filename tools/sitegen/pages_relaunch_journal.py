@@ -3,7 +3,31 @@ from __future__ import annotations
 from . import blog as B
 from . import config as C
 from . import schema as structured
-from .pages_blog import _with_ids, _long_date
+import re
+import html
+from datetime import datetime
+
+def _long_date(value: str) -> str:
+    return datetime.strptime(value, "%Y-%m-%d").strftime("%-d %B %Y")
+
+def _with_ids(body: str):
+    toc = []
+    used = set()
+    def convert(match):
+        label = match.group(1)
+        text = html.unescape(re.sub(r"<[^>]+>", "", label)).strip()
+        anchor = re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-") or "section"
+        if not anchor[0].isalpha():
+            anchor = "section-" + anchor
+        base = anchor
+        n = 2
+        while anchor in used:
+            anchor = f"{base}-{n}"
+            n += 1
+        used.add(anchor)
+        toc.append((anchor, text))
+        return f'<h2 id="{anchor}">{label}</h2>'
+    return re.sub(r"<h2>(.*?)</h2>", convert, body, flags=re.S), toc
 from .ui import btn, e, icon, layout, section_head
 from . import pages_relaunch as P
 

@@ -27,10 +27,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from sitegen import config as C  # noqa: E402
 from sitegen import data as D  # noqa: E402
-from sitegen import pages_home, pages_legal, pages_product, pages_resources  # noqa: E402
-from sitegen import pages_blog  # noqa: E402
+from sitegen import pages_legal  # noqa: E402
 from sitegen import blog as blog_posts  # noqa: E402
-from sitegen import pages_contact, pages_trust, pages_saas  # noqa: E402
+from sitegen import pages_saas  # noqa: E402
 from sitegen import pages_relaunch as relaunch, pages_relaunch_more as relaunch_more  # noqa: E402
 from sitegen import pages_relaunch_journal as relaunch_journal, pages_relaunch_refs as relaunch_refs  # noqa: E402
 from sitegen import audit as A  # noqa: E402

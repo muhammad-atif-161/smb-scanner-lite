@@ -12,7 +12,6 @@ import json
 
 from . import config as C
 from . import schema as structured
-from . import seo as SEO
 
 
 # ---------------------------------------------------------------------------
