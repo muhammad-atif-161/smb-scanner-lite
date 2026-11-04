@@ -420,6 +420,7 @@ def apply_asset_versions() -> dict[str, str]:
     """
     versions = {
         "/styles.css": digest((OUT / "styles.css").read_bytes()),
+        "/studio.css": digest((OUT / "studio.css").read_bytes()),
         "/site.js": digest((OUT / "site.js").read_bytes()),
         "/scan.css": digest((OUT / "scan.css").read_bytes()),
         "/scan-app.mjs": digest((OUT / "scan-app.mjs").read_bytes()),
