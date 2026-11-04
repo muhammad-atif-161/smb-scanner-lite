@@ -1,0 +1,25 @@
+/* Phase 4 portal — contained styles, inherits Midnight Intelligence tokens. */
+.scan-shell{max-width:980px;margin:0 auto}
+.scan-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.75rem;margin:1.25rem 0 2rem;list-style:none;padding:0}
+.scan-step{padding:.85rem 1rem;border:1px solid var(--border,#28364d);border-radius:12px;background:var(--surface,#111827);font-size:.85rem}
+.scan-step b{display:block;font-size:.75rem;color:var(--accent,#7dd3fc);margin-bottom:.25rem}
+.scan-step.is-active{border-color:#6c8cff}
+.scan-step.is-done{border-color:#3ddc97}
+.scan-panel{background:var(--surface,#111827);border:1px solid var(--border,#29374c);border-radius:16px;padding:clamp(1.15rem,3vw,2rem);margin-bottom:1.25rem}
+.scan-panel h2{margin:.1rem 0 1rem}
+.scan-panel[hidden],.scan-message[hidden],.scan-preview[hidden]{display:none!important}
+.scan-form{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.scan-form .field--wide{grid-column:1/-1}
+.scan-actions{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1rem}
+.scan-message{padding:.85rem 1rem;border-radius:10px;border:1px solid #385173;background:rgba(76,145,255,.09);margin:1rem 0;white-space:pre-line}
+.scan-message[data-tone="error"]{border-color:#a44b5c;background:rgba(255,82,110,.08)}
+.scan-message[data-tone="success"]{border-color:#3c9275;background:rgba(61,220,151,.09)}
+.scan-code{overflow-wrap:anywhere;padding:.9rem 1rem;border:1px solid #344562;border-radius:10px;background:#080b14;color:#dce9ff;font:500 .9rem/1.55 ui-monospace,SFMono-Regular,Menlo,monospace}
+.scan-privacy{font-size:.86rem;color:var(--text-muted,#98a4b8)}
+.scan-finding{padding:.8rem 1rem;border-bottom:1px solid #29374c;overflow-wrap:anywhere}
+.scan-finding strong{display:block}
+.scan-grade{display:flex;align-items:baseline;gap:.7rem;flex-wrap:wrap;margin:1rem 0}
+.scan-grade b{font-size:3.1rem;letter-spacing:-.06em;line-height:1}
+.scan-lock{border-top:1px solid #29374c;margin-top:1rem;padding-top:1rem}
+.scan-panel button:disabled{cursor:not-allowed;opacity:.55}
+@media(max-width:650px){.scan-steps{grid-template-columns:1fr 1fr}.scan-form{grid-template-columns:1fr}}

@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      - name: Generate and validate the static website
+        run: python3 tools/build_site.py --check --audit
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload static site artifact (website/)

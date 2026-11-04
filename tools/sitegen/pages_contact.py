@@ -102,6 +102,7 @@ def request_assessment() -> str:
     <h1>Request an assessment of a domain you own.</h1>
     <p class="lede">The public edition is deliberately limited to five reserved test domains. For real infrastructure, an assessment is arranged directly: reviewed manually, authorised in writing, and reported with the same evidence standard you can inspect in the sample report.</p>
     <div class="hero-actions">{btn('/sample-report/', 'See what you would receive', 'primary', 'file')}{btn('/methodology/', 'Read the method first', 'ghost')}</div>
+    {'<div class="notice notice--accent mt-2"><div class="notice-body"><strong>DNS and email-only self-service beta</strong><p>Prefer a limited ownership-verified report? <a href="/scan/">Open the DNS/email portal</a>. This is separate from the full private assessment described below.</p></div></div>' if C.SAAS["enabled"] else ""}
   </div>
 </div>
 

@@ -1,0 +1,5 @@
+{
+  "enabled": false,
+  "api_base_url": "",
+  "notes": "Phase 4 public portal release gate. Keep disabled until Cloudflare worker, D1 schema, and matching secrets are configured; use the exact HTTPS workers.dev origin. Never commit secrets here."
+}
