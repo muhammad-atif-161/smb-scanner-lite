@@ -53,6 +53,26 @@ def _load_contact() -> dict:
     return data
 
 
+# Separate public SaaS configuration. Never store service tokens here.
+SAAS_CONFIG_FILE = _Path(__file__).resolve().parents[2] / "site.saas.json"
+
+def _load_saas() -> dict:
+    try:
+        raw = _json.loads(SAAS_CONFIG_FILE.read_text(encoding="utf-8"))
+    except (FileNotFoundError, ValueError):
+        return {"enabled": False, "apiBaseUrl": ""}
+    enabled = raw.get("enabled") is True
+    url = str(raw.get("api_base_url") or "").strip().rstrip("/")
+    if enabled:
+        from urllib.parse import urlsplit as _urlsplit
+        p = _urlsplit(url)
+        if (p.scheme != "https" or not p.hostname or p.username or p.password
+                or p.port or p.path or p.query or p.fragment):
+            raise ValueError("Enabled SaaS API must be an HTTPS origin without a path or credentials")
+    return {"enabled": enabled, "apiBaseUrl": url if enabled else ""}
+
+SAAS = _load_saas()
+
 CONTACT = _load_contact()
 
 # Primary first, duplicates removed, order preserved.
