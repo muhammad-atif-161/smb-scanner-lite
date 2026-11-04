@@ -1,256 +1,68 @@
-# SMB Scanner Lite v5.2.0 — Public Sandbox Edition
+# SMB Scanner Lite
 
-**Evidence-First External & SMB Security Assessment Demo · Created by Muhammad Atif**
+An evidence-led, ownership-verified **online domain security assessment** for small businesses, with a separately downloadable **restricted desktop sandbox** for learning.
 
-<p align="center">
-  <a href="https://smbscannerlite.me"><img src="https://img.shields.io/badge/Main%20Website-smbscannerlite.me-3ED6C5?style=for-the-badge" alt="Main Website" /></a>
-  <a href="https://github.com/muhammad-atif-161/smb-scanner-lite"><img src="https://img.shields.io/badge/Public%20Repo-smb--scanner--lite-6C8CFF?style=for-the-badge&logo=github" alt="Public Repo" /></a>
-  <a href="https://github.com/muhammad-atif-161"><img src="https://img.shields.io/badge/Creator-Muhammad%20Atif-3DDC97?style=for-the-badge&logo=github" alt="Creator" /></a>
-</p>
-
----
-
-## What Is This?
-
-**SMB Scanner Lite (Public Sandbox Edition)** is the public face of an evidence-first external security posture assessment tool built for educational and defensive demonstration purposes.
-
-It inspects a domain’s public-facing internet footprint (DNS, email authentication, TLS, security headers, and high-risk port exposure) and produces a clear 0–100 Posture Score.
-
-**Important security constraints of this public repository:**
-
-- Full scanning engine and internal modules remain **private**.
-- The published package is hard-locked to **exactly 5 free-to-use testing domains**.
-- Every scan requires explicit user consent and produces a tamper-evident SHA-256 consent proof receipt.
-- No credentials, real customer data, or unrestricted scanning capability is published.
-
-### Allowed Sandbox Domains (only these)
-
-| Domain | Purpose |
-|--------|--------|
-| `example.com` | IANA RFC 2606 / RFC 6761 reserved test domain |
-| `example.org` | IANA reserved organization test domain |
-| `example.net` | IANA reserved network test domain |
-| `scanme.nmap.org` | Official Nmap Project authorised test host |
-| `badssl.com` | Public educational TLS & certificate test portal |
-
-Any other target is rejected before any network request is made.
-
----
-
-## Website (smbscannerlite.me)
-
-### 2026 editorial redesign
-
-The live static site uses the site's own generator and a restrained visual
-system: `website/studio.css` (warm mineral-dark, lime accent, typographic
-grids), `tools/sitegen/pages_home.py` (new concise editorial homepage), and
-shared shell updates in `tools/sitegen/ui.py`. The generator incorporates
-the new stylesheet into every page with a content-hashed URL. No tracking
-scripts, stock art, or remote fonts were added.
-
-The Cloudflare Worker API origin is configured in `site.saas.json`
-(`https://smbscanner-edge.myself-atiff.workers.dev`), while `enabled`
-remains **false** until service credentials and authorized scans are tested.
-See [design and launch protocol](docs/editorial-redesign-and-cloudflare.md).
-
-### Phase 4 self-service portal (currently OFF)
-
-The Phase 4 `/scan/` customer portal is generated from `tools/sitegen/pages_saas.py`
-and served as part of the static website. It can talk to the separate private
-Cloudflare Workers + D1 backend when enabled. **It is disabled and noindex by
-default** in `site.saas.json`, so it cannot request or dispatch customer scans.
-The existing recorded sandbox and manual assessment request remain functional.
-
-Deployment now rebuilds the site and runs link/SEO/accessibility checks before
-uploading the generated `website/` artifact. The browser has no GitHub or
-Cloudflare service credentials; only the public API origin is added when ready.
-See [Phase 4 rollout notes](docs/phase4-saas-portal.md).
-
-The public site lives in `website/` and is deployed to GitHub Pages by
-`.github/workflows/deploy-pages.yml` (static upload, no build step on the runner).
-It is generated from a small, dependency-free Python builder so that navigation,
-footer, metadata and the recorded assessment data stay consistent across pages.
-
-```bash
-# Rebuild every page, sitemap and downloadable report
-python3 tools/build_site.py
-
-# Rebuild and verify that every internal link resolves
-python3 tools/build_site.py --check
-
-# Rebuild, check links, and run the static SEO / accessibility / structured-data audit
-python3 tools/build_site.py --check --audit
-```
-
-The audit fails the build on anything that would be wrong for a crawler or a
-visitor: a `Product`/`Offer`/`AggregateRating` node appearing again, a relative
-or dangling `@id`, a canonical that disagrees with the sitemap, a missing
-`alt`, an unlabelled form field, a heading level skip, a third-party font
-request. Title/description length is reported as a warning, not an error.
-
-### Assets, fonts and caching
-
-- The three typefaces (Inter, Space Grotesk, JetBrains Mono) are **self-hosted**
-  from `website/fonts/` under the SIL OFL 1.1; there is no request to Google
-  Fonts and no third-party preconnect. See `website/fonts/OFL.txt`.
-- GitHub Pages serves everything with `cache-control: max-age=600` and cannot be
-  configured, so the builder appends a content hash to the CSS/JS/config URLs
-  (`/styles.css?v=c8f893d1`). Editing a file changes its URL immediately on the
-  next build; old cached copies can never be served after a deploy.
-- Nothing in `website/` is edited by hand. Change the template, then rebuild.
-
-| Path | Purpose |
-|------|---------|
-| `tools/build_site.py` | Entry point: renders pages, sitemap, robots and report downloads |
-| `tools/sitegen/config.py` | Site identity, navigation, footer, sitemap, contact address |
-| `tools/sitegen/data.py` | 22-control catalog, recorded assessment data, FAQ, resources |
-| `tools/sitegen/pages_*.py` | Page templates grouped by audience |
-| `tools/sitegen/blog/` | Blog content: cluster definitions plus one module per cluster (five modules, ten posts so far) |
-| `tools/sitegen/pages_blog.py` | Blog index, cluster hubs and the article template (TOC, byline, control block) |
-| `tools/sitegen/schema.py` | Structured data: site entities, page nodes, article/report builders (no merchant markup) |
-| `tools/sitegen/audit.py` | Static audit run by `--audit`: structured data, head tags, headings, labels, links, sitemap |
-| `website/styles.css` | Midnight Intelligence design system (single stylesheet, self-hosted `@font-face`) |
-| `website/site.js` | Navigation, tabs, disclosures, recorded-demo explorer, forms |
-| `website/fonts/` | Self-hosted latin WOFF2 faces + `OFL.txt` (SIL Open Font License 1.1) |
-| `website/config.js` | **Generated** runtime config read by the browser (do not edit by hand) |
-| `site.contact.json` | Single source of truth for the contact email and form endpoint |
-| `tools/set_contact.py` | One-command helper that edits the JSON and rebuilds the site |
-| `docs/structured-data.md` | Which schema types are published, which are refused, and why |
-| `docs/blog-2026-10.md` | Blog architecture, editorial standard, verification record and outstanding items |
-| `docs/technical-seo-remediation-2026-10.md` | Audit, plan and verification record for the 2026 SEO/performance work |
-
-### Blog
-
-`/blogs/` is the practical layer of the site; `/resources/` stays the technical
-reference. Ten posts sit in five clusters (email security, DNS, website/TLS, SMB
-basics, assessment and scoring), each with a hub at `/blogs/<cluster>/` that lists
-its guides, the controls they map to, and the reference article behind them. Posts
-link to their hub, their reference article and two related posts; reference
-articles link back to their practical counterparts.
-
-Adding a post means one dictionary in `tools/sitegen/blog/<cluster>.py` and a
-rebuild — no template edit. `docs/blog-2026-10.md` has the field list, the editorial
-rules, the structured-data notes and the verification commands.
-
-### Configuration you may need to change
-
-- **Contact email** — one file only: `site.contact.json`. Do not edit
-  `website/config.js` or any page; both are generated from it.
-
-  ```bash
-  python3 tools/set_contact.py --show                    # what is published now
-  python3 tools/set_contact.py --email you@example.com   # change it + rebuild
-  python3 tools/set_contact.py --add-email team@example.com
-  python3 tools/set_contact.py --endpoint https://formspree.io/f/xxxxxxx
-  python3 tools/set_contact.py --clear-endpoint          # fall back to the mail client
-  ```
-
-  It updates the footer, contact page, privacy policy, terms, about page,
-  acquisition page, structured data and `website/config.js` in one pass, then runs
-  the internal link check.
-
-  You can also do it from the browser: **Actions → “Change contact email” → Run
-  workflow**, enter the address, and the workflow commits the rebuild and triggers
-  the Pages deployment. Nothing else needs to change.
-
-- **Form delivery** — the site is static. When `form_endpoint` is set (currently a
-  Formspree endpoint) the enquiry forms POST to it; when it is empty they compose
-  the message in the visitor's mail client instead. Neither path stores data on the
-  website. The endpoint lives in the same JSON, so it moves with the address.
-- **Acquisition price and listing** — `tools/site/config.py` and the acquisition
-  page template; keep them consistent with the marketplace listing.
-
-### Content rules enforced by the site
-
-- The recorded assessment shows genuine stored output with its real timestamp,
-  report ID and scanner version. It is labelled "recorded", never "live".
-- No testimonials, customer logos, review scores, revenue figures or usage
-  statistics are published, because none are held with documented permission.
-  The same rule applies to structured data: there is no `Review`,
-  `AggregateRating` or `Offer` markup anywhere, and no `Product` markup on the
-  acquisition page — a project sale is not a retail product with shipping and
-  returns. See `docs/structured-data.md`.
-- The five-domain allowlist is stated wherever the demo appears, and the public
-  CLI/test suite remains unchanged.
-- The 65-control "validation register" is not claimed. `validation/` publishes the
-  five reproducible tests that actually exist in `tests/test_sandbox.py`.
-- Blog posts follow the same evidence rule as the rest of the site: no invented
-  statistics, incidents, customer stories or author credentials; commands instead
-  of generalities; a stated limit next to every capability; a link to
-  `/responsible-use/`; and the real byline from `config.AUTHOR`. Each post ends
-  with a visible "What SMB Scanner Lite checks here" block so the product claim
-  and the page content cannot drift apart. See `docs/blog-2026-10.md`.
-
-### Legacy URLs
-
-`/checks/`, `/how/`, `/ethics/` and the old `/blog/` entries are kept as static
-redirect pages (meta refresh + canonical) so existing links and search results do
-not break. GitHub Pages does not support server-side redirects. The legacy
-`/blog/` index now redirects to the live section at `/blogs/`; the three old
-`/blog/<article>/` paths still redirect to their `/resources/` articles.
-
----
-
-## Quick Start (Public Sandbox)
-
-```bash
-# Clone
-git clone https://github.com/muhammad-atif-161/smb-scanner-lite.git
-cd smb-scanner-lite
-
-# Install editable
-pip install -e .
-
-# List the only permitted domains
-smb-scanner --list-domains
-
-# Run a sandbox assessment (mandatory consent)
-smb-scanner example.com --accept-privacy-policy --consent-user "Your Name" --html report.html
-
-# Verify consent ledger integrity
-smb-scanner --verify-consent-log
-```
-
-You can also launch the GUI:
-
-```bash
-smb-scanner --gui
-```
-
----
-
-## Privacy & Consent
-
-Before any scan runs you must accept the [Privacy Policy](PRIVACY_POLICY.md).  
-Each scan records a cryptographic consent proof (`CONSENT-YYYYMMDD-XXXXXXXX`) with a SHA-256 hash chain.
-
-Consent logs are stored **locally** on your machine and are excluded from Git via `.gitignore`.
-
----
-
-## Repository Layout (Public)
-
-- `src/smb_scanner/` — Restricted sandbox runtime, CLI, GUI, and consent lock
-- `tests/` — Safe public tests that verify the 5-domain restriction and consent proofs
-- `PRIVACY_POLICY.md` — Mandatory user consent agreement
-- `LICENSE` — MIT (does **not** authorise scanning systems you do not own)
-- `website/` — the generated public site (GitHub Pages) and its builder in `tools/`
-
-The full control catalog, scoring logic, private rules, internal tests, development notes, and complete source history remain in a **private** repository.
-
----
-
-## Creator
-
-**Muhammad Atif** — cybersecurity learner from Rawalpindi, Pakistan.  
-Building practical defensive tools with an evidence-first philosophy.
-
-- Website: [smbscannerlite.me](https://smbscannerlite.me)
-- GitHub: [muhammad-atif-161](https://github.com/muhammad-atif-161)
-
----
-
-## License & Acceptable Use
-
-MIT License for the published code.  
-**You may only use this tool against the five listed public testing domains or systems you own / are explicitly authorised to test.**
+**Website:** https://smbscannerlite.me
+
+## The online service
+
+The product is a hosted review of public **DNS and email-authentication posture** for a domain the customer can prove they control. A Cloudflare Worker coordinates ownership verification and jobs, a D1 database stores private assessment records, and a separate private Python worker collects bounded DNS/email evidence.
+
+The intended customer journey is to submit a domain, publish a temporary TXT verification record, authorize a single scan, then view a limited preview. Detailed paid reports are planned but **payment and full-report delivery are not enabled yet**.
+
+**Release status:** public scan creation is currently **disabled** until encrypted credentials, operational safeguards and an authorized end-to-end test are completed. The site must never imply public scans or payment are operational prematurely.
+
+The current automated profile covers public DNS, SPF, DMARC and limited DKIM selector discovery. It does **not** perform TCP port probing, TLS tests, HTTP checks, credential testing or vulnerability exploitation.
+
+Visit [scan availability](https://smbscannerlite.me/scan/), [current scope](https://smbscannerlite.me/capabilities/) or [methodology](https://smbscannerlite.me/methodology/).
+
+## The desktop sandbox — different product
+
+The code in this public repository is **SMB Scanner Lite v5.2.0 Public Sandbox Edition**, a small local Python training tool. It is separate from the hosted job runner, and it cannot scan arbitrary customer domains.
+
+It is deliberately restricted to five training targets: example.com, example.org, example.net, scanme.nmap.org and badssl.com. Consent is required, and locally stored receipts are hash-linked. Respect the hosts' published test rules; an allowlist is not blanket permission for intrusive testing.
+
+**Install on Python 3.10+** using these commands:
+
+    git clone https://github.com/muhammad-atif-161/smb-scanner-lite.git
+    cd smb-scanner-lite
+    python -m pip install -e .
+    smb-scanner --help
+
+The full commercial worker and customer report database are private, not present in the public download.
+
+## Website source
+
+The public website is a lightweight static application generated with Python and published through GitHub Pages. It has been rewritten around the owner-verified online service.
+
+- tools/build_site.py — builds all pages, sitemap, redirects and recorded example downloads.
+- tools/sitegen/pages_relaunch.py — hosted product, scope, methodology and desktop download.
+- tools/sitegen/pages_relaunch_more.py — questions, contact, privacy, terms and responsible use.
+- tools/sitegen/pages_relaunch_journal.py and blog/relaunch.py — ten newly authored journal articles at stable URLs.
+- tools/sitegen/pages_relaunch_refs.py — eight newly written reference guides.
+- website/styles.css and website/studio.css — locally served ivory-and-ink design and tested interface primitives.
+- website/scan-app.mjs — customer ownership verification, status and preview interactions; disabled by default.
+- site.saas.json — public Worker origin and protected release flag. Never store secrets here.
+- site.contact.json — public contact details and optional contact delivery configuration.
+
+**Validate before publishing:**
+
+    python3 tools/build_site.py --check --audit
+    node --test tests/scan_frontend.test.mjs
+    python3 -m unittest discover -s tests
+
+The Pages workflow rebuilds source templates and validates links, metadata, document structure, form labels, basic structured data and assets. These checks do not replace human desktop/mobile visual review.
+
+## Private backend operations
+
+The operator must set the encrypted Cloudflare secrets IP_HASH_KEY, GITHUB_DISPATCH_TOKEN, SMB_WORKER_API_TOKEN and WORKER_LEASE_SIGNING_KEY, and matching GitHub Actions credentials for the private worker. Public assessment and dispatch feature gates must stay off until controlled authorized testing and operating-policy review are complete.
+
+**Never commit customer data, worker secrets, access tokens or full reports to this public repository.**
+
+## Project and use
+
+Built independently by [Muhammad Atif](https://github.com/muhammad-atif-161). There are no implied third-party certifications, customer testimonials or proven commercial revenue figures. This is a bounded external assessment, **not** a penetration test or guarantee of security.
+
+[Website](https://smbscannerlite.me/) · [Recorded example](https://smbscannerlite.me/sample-report/) · [Privacy](https://smbscannerlite.me/privacy/) · [Responsible use](https://smbscannerlite.me/responsible-use/)
+
+For licensing, see [LICENSE](LICENSE).
