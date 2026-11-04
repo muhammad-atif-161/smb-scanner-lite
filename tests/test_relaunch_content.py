@@ -74,8 +74,8 @@ class SiteRelaunchTests(unittest.TestCase):
         self.assertNotIn("from $149",page("request-assessment/index.html").lower())
 
     def test_no_private_tokens_in_web_assets(self):
-        files=("website/config.js","website/scan-app.mjs","website/site.js",
-               "website/index.html")
+        files=("config.js","scan-app.mjs","site.js",
+               "index.html")
         for path in files:
             text=page(path)
             for key in ("WORKER_LEASE_SIGNING_KEY","GITHUB_DISPATCH_TOKEN",
