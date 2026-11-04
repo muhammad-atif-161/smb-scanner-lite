@@ -111,10 +111,9 @@ ALLOWED_DOMAINS = (
 NAV = (
     ("home", "Overview", "/"),
     ("capabilities", "Capabilities", "/capabilities/"),
-    ("report", "Sample Report", "/sample-report/"),
-    ("methodology", "Methodology", "/methodology/"),
-    ("blog", "Blog", "/blogs/"),
-    ("faq", "FAQ", "/faq/"),
+    ("report", "Sample report", "/sample-report/"),
+    ("methodology", "Method", "/methodology/"),
+    ("blog", "Journal", "/blogs/"),
     ("contact", "Contact", "/contact/"),
 )
 

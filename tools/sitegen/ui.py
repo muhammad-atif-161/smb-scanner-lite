@@ -12,6 +12,7 @@ import json
 
 from . import config as C
 from . import schema as structured
+from . import seo as SEO
 
 
 # ---------------------------------------------------------------------------
@@ -191,6 +192,9 @@ def nav_html(active: str) -> str:
     for key, label, href in C.NAV:
         current = ' aria-current="page"' if key == active else ""
         panel_links.append(f'<a href="{href}"{current}>{e(label)}</a>')
+    primary_href = "/scan/" if C.SAAS["enabled"] else "/request-assessment/"
+    primary_label = "Open scan portal" if C.SAAS["enabled"] else "Request assessment"
+    availability = "Owner-verified DNS / mail beta" if C.SAAS["enabled"] else "Evidence-first / independently built"
     return f"""
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="nav" data-nav>
@@ -203,7 +207,8 @@ def nav_html(active: str) -> str:
       {''.join(links)}
     </nav>
     <div class="nav-actions">
-      <a class="btn btn-primary btn-sm" href="/demo/">{icon('bolt', 16, 'btn-icon')}<span>Try the Demo</span></a>
+      <span class="nav-availability"><span class="signal"></span>{e(availability)}</span>
+      <a class="btn btn-primary btn-sm" href="{primary_href}">{icon('arrow', 16, 'btn-icon')}<span>{e(primary_label)}</span></a>
       <button class="nav-toggle" type="button" data-nav-toggle aria-label="Open menu" aria-expanded="false" aria-controls="nav-panel">
         <span data-nav-open>{icon('menu', 22)}</span>
         <span data-nav-close hidden>{icon('x', 22)}</span>
@@ -216,8 +221,8 @@ def nav_html(active: str) -> str:
     {''.join(panel_links)}
   </nav>
   <div class="nav-panel-foot">
-    <a class="btn btn-primary" href="/demo/">{icon('bolt', 16, 'btn-icon')}<span>Try the Demo</span></a>
-    <a class="btn btn-ghost" href="/request-assessment/">Request an assessment</a>
+    <a class="btn btn-primary" href="{primary_href}">{icon('arrow', 16, 'btn-icon')}<span>{e(primary_label)}</span></a>
+    <a class="btn btn-ghost" href="/demo/">Explore the recorded demo</a>
   </div>
 </div>"""
 
@@ -240,8 +245,8 @@ def footer_html() -> str:
           <img src="/logo.svg" width="30" height="30" alt="" />
           <span>SMB Scanner <span class="brand-lite">Lite</span></span>
         </a>
-        <p class="foot-desc">An evidence-first external security posture assessment for small and medium businesses. 22 controls, a 0&ndash;100 score and an A&ndash;F grade &mdash; with the observation behind every conclusive finding. The public edition is restricted to five approved test domains.</p>
-        <p class="foot-meta"><span class="mono">v{C.PRODUCT_VERSION}</span> &middot; {e(C.EDITION)}</p>
+        <p class="foot-desc">Independent external security posture assessment. The documented catalog includes 22 controls; the public demo is recorded and the limited self-service service focuses on DNS and email. Every conclusion is bounded by observed evidence.</p>
+        <p class="foot-meta"><span class="mono">v{C.PRODUCT_VERSION}</span> &middot; {e(C.EDITION)} &middot; No claim without evidence</p>
         <div class="foot-mails">{''.join(f'<a class="foot-mail" href="mailto:{e(address)}">{icon("mail", 16)}<span>{e(address)}</span></a>' for address in C.CONTACT_EMAILS)}</div>
       </div>
       {''.join(columns)}
@@ -276,6 +281,7 @@ def layout(
     extra_head: str = "",
     body_class: str = "",
 ) -> str:
+    title, description = SEO.metadata(path, title, description)
     canonical = C.SITE_URL + path
     robots = (
         "noindex, follow" if noindex else "index, follow, max-image-preview:large, max-snippet:-1"
@@ -309,7 +315,7 @@ def layout(
 <link rel="canonical" href="{canonical}" />
 <meta name="robots" content="{robots}" />
 <meta name="author" content="{e(C.AUTHOR)}" />
-<meta name="theme-color" content="#080B14" />
+<meta name="theme-color" content="#0c0f0c" />
 <meta name="generator" content="SMB Scanner Lite static site builder" />
 <meta property="og:site_name" content="{C.SITE_NAME}" />
 <meta property="og:type" content="{og_type}" />
@@ -329,6 +335,7 @@ def layout(
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
 <link rel="alternate" type="application/json" href="/data/recorded-assessment.json" title="Recorded assessment data (JSON)" />
 <link rel="stylesheet" href="{asset('/styles.css')}" />
+<link rel="stylesheet" href="{asset('/studio.css')}" />
 <link rel="preload" href="/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="/fonts/space-grotesk-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
 {extra_head}

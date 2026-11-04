@@ -39,6 +39,20 @@ Any other target is rejected before any network request is made.
 
 ## Website (smbscannerlite.me)
 
+### 2026 editorial redesign
+
+The live static site uses the site's own generator and a restrained visual
+system: `website/studio.css` (warm mineral-dark, lime accent, typographic
+grids), `tools/sitegen/pages_home.py` (new concise editorial homepage), and
+shared shell updates in `tools/sitegen/ui.py`. The generator incorporates
+the new stylesheet into every page with a content-hashed URL. No tracking
+scripts, stock art, or remote fonts were added.
+
+The Cloudflare Worker API origin is configured in `site.saas.json`
+(`https://smbscanner-edge.myself-atiff.workers.dev`), while `enabled`
+remains **false** until service credentials and authorized scans are tested.
+See [design and launch protocol](docs/editorial-redesign-and-cloudflare.md).
+
 ### Phase 4 self-service portal (currently OFF)
 
 The Phase 4 `/scan/` customer portal is generated from `tools/sitegen/pages_saas.py`

@@ -1,5 +1,5 @@
 {
   "enabled": false,
-  "api_base_url": "",
-  "notes": "Phase 4 public portal release gate. Keep disabled until Cloudflare worker, D1 schema, and matching secrets are configured; use the exact HTTPS workers.dev origin. Never commit secrets here."
+  "api_base_url": "https://smbscanner-edge.myself-atiff.workers.dev",
+  "notes": "Real production Worker HTTPS origin (public, not a secret). Customer portal and dispatch stay disabled until Cloudflare/GitHub private credentials, operational policy and a controlled end-to-end test are completed."
 }
