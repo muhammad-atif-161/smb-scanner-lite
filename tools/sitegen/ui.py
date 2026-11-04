@@ -192,9 +192,9 @@ def nav_html(active: str) -> str:
     for key, label, href in C.NAV:
         current = ' aria-current="page"' if key == active else ""
         panel_links.append(f'<a href="{href}"{current}>{e(label)}</a>')
-    primary_href = "/scan/" if C.SAAS["enabled"] else "/request-assessment/"
-    primary_label = "Open scan portal" if C.SAAS["enabled"] else "Request assessment"
-    availability = "Owner-verified DNS / mail beta" if C.SAAS["enabled"] else "Evidence-first / independently built"
+    primary_href = "/scan/"
+    primary_label = "Start scan" if C.SAAS["enabled"] else "Check availability"
+    availability = "DNS & email assessments" if C.SAAS["enabled"] else "Online scans opening soon"
     return f"""
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="nav" data-nav>
@@ -222,7 +222,7 @@ def nav_html(active: str) -> str:
   </nav>
   <div class="nav-panel-foot">
     <a class="btn btn-primary" href="{primary_href}">{icon('arrow', 16, 'btn-icon')}<span>{e(primary_label)}</span></a>
-    <a class="btn btn-ghost" href="/demo/">Explore the recorded demo</a>
+    <a class="btn btn-ghost" href="/docs/">Desktop sandbox download</a>
   </div>
 </div>"""
 
@@ -245,14 +245,14 @@ def footer_html() -> str:
           <img src="/logo.svg" width="30" height="30" alt="" />
           <span>SMB Scanner <span class="brand-lite">Lite</span></span>
         </a>
-        <p class="foot-desc">Independent external security posture assessment. The documented catalog includes 22 controls; the public demo is recorded and the limited self-service service focuses on DNS and email. Every conclusion is bounded by observed evidence.</p>
-        <p class="foot-meta"><span class="mono">v{C.PRODUCT_VERSION}</span> &middot; {e(C.EDITION)} &middot; No claim without evidence</p>
+        <p class="foot-desc">An ownership-verified online review of public DNS and email policy, designed to separate actual observations from assumptions. The restricted desktop sandbox is available separately for learning.</p>
+        <p class="foot-meta">A narrow scan, a clear report, and a stated boundary.</p>
         <div class="foot-mails">{''.join(f'<a class="foot-mail" href="mailto:{e(address)}">{icon("mail", 16)}<span>{e(address)}</span></a>' for address in C.CONTACT_EMAILS)}</div>
       </div>
       {''.join(columns)}
     </div>
     <div class="foot-bottom">
-      <p>&copy; <span data-year>2026</span> {e(C.AUTHOR)} &middot; {e(C.SITE_NAME)} &middot; Built in Rawalpindi, Pakistan.</p>
+      <p>&copy; <span data-year>2026</span> {e(C.AUTHOR)} &middot; {e(C.SITE_NAME)} &middot; Independently developed.</p>
       <p class="foot-bottom-links">
         <a href="/privacy/">Privacy</a>
         <a href="/terms/">Terms</a>
@@ -281,7 +281,6 @@ def layout(
     extra_head: str = "",
     body_class: str = "",
 ) -> str:
-    title, description = SEO.metadata(path, title, description)
     canonical = C.SITE_URL + path
     robots = (
         "noindex, follow" if noindex else "index, follow, max-image-preview:large, max-snippet:-1"
@@ -315,7 +314,7 @@ def layout(
 <link rel="canonical" href="{canonical}" />
 <meta name="robots" content="{robots}" />
 <meta name="author" content="{e(C.AUTHOR)}" />
-<meta name="theme-color" content="#0c0f0c" />
+<meta name="theme-color" content="#f7f6f2" />
 <meta name="generator" content="SMB Scanner Lite static site builder" />
 <meta property="og:site_name" content="{C.SITE_NAME}" />
 <meta property="og:type" content="{og_type}" />
@@ -323,7 +322,7 @@ def layout(
 <meta property="og:description" content="{e(description)}" />
 <meta property="og:url" content="{canonical}" />
 <meta property="og:image" content="{og_image}" />
-<meta property="og:image:alt" content="SMB Scanner Lite — a dark navy assessment report showing a posture score of 86 out of 100, grade B, with evidence-backed findings." />
+<meta property="og:image:alt" content="SMB Scanner Lite example security assessment report." />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:locale" content="en_US" />
