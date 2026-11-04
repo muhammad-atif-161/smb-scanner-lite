@@ -31,6 +31,8 @@ from sitegen import pages_home, pages_legal, pages_product, pages_resources  # n
 from sitegen import pages_blog  # noqa: E402
 from sitegen import blog as blog_posts  # noqa: E402
 from sitegen import pages_contact, pages_trust, pages_saas  # noqa: E402
+from sitegen import pages_relaunch as relaunch, pages_relaunch_more as relaunch_more  # noqa: E402
+from sitegen import pages_relaunch_journal as relaunch_journal, pages_relaunch_refs as relaunch_refs  # noqa: E402
 from sitegen import audit as A  # noqa: E402
 from sitegen import ui  # noqa: E402
 
@@ -42,41 +44,41 @@ BUILD_DATE = date.today().isoformat()
 # ---------------------------------------------------------------------------
 
 PAGES = {
-    "index.html": pages_home.build,
-    "capabilities/index.html": pages_product.capabilities,
-    "sample-report/index.html": pages_product.sample_report,
-    "methodology/index.html": pages_product.methodology,
-    "demo/index.html": pages_product.demo,
-    "docs/index.html": pages_product.docs,
-    "validation/index.html": pages_trust.validation,
-    "faq/index.html": pages_trust.faq,
-    "limitations/index.html": pages_trust.limitations,
-    "responsible-use/index.html": pages_trust.responsible_use,
-    "about/index.html": pages_trust.about,
-    "contact/index.html": pages_contact.contact,
-    "request-assessment/index.html": pages_contact.request_assessment,
+    "index.html": relaunch.home,
+    "capabilities/index.html": relaunch.capabilities,
+    "sample-report/index.html": relaunch.sample_report,
+    "methodology/index.html": relaunch.methodology,
+    "demo/index.html": relaunch.demo,
+    "docs/index.html": relaunch.docs,
+    "validation/index.html": relaunch.validation,
+    "faq/index.html": relaunch_more.faq,
+    "limitations/index.html": relaunch_more.limitations,
+    "responsible-use/index.html": relaunch_more.responsible_use,
+    "about/index.html": relaunch_more.about,
+    "contact/index.html": relaunch_more.contact,
+    "request-assessment/index.html": relaunch_more.request_assessment,
     "scan/index.html": pages_saas.portal,
-    "acquisition/index.html": pages_contact.acquisition,
-    "privacy/index.html": pages_legal.privacy,
-    "terms/index.html": pages_legal.terms,
-    "resources/index.html": pages_resources.resources_index,
+    "acquisition/index.html": relaunch_more.acquisition,
+    "privacy/index.html": relaunch_more.privacy,
+    "terms/index.html": relaunch_more.terms,
+    "resources/index.html": relaunch_refs.index,
     "404.html": pages_legal.not_found,
 }
 
 for res in D.RESOURCES:
     PAGES[f"resources/{res['slug']}/index.html"] = (
-        lambda slug=res["slug"]: pages_resources.article(slug)
+        lambda slug=res["slug"]: relaunch_refs.article(slug)
     )
 
 # Blog: index, one hub per cluster, one page per post.
-PAGES["blogs/index.html"] = pages_blog.index
+PAGES["blogs/index.html"] = relaunch_journal.index
 for _cluster in blog_posts.CLUSTERS:
     PAGES[f"blogs/{_cluster}/index.html"] = (
-        lambda slug=_cluster: pages_blog.cluster(slug)
+        lambda slug=_cluster: relaunch_journal.cluster(slug)
     )
 for _post in blog_posts.POSTS:
     PAGES[f"blogs/{_post['slug']}/index.html"] = (
-        lambda slug=_post["slug"]: pages_blog.post(slug)
+        lambda slug=_post["slug"]: relaunch_journal.post(slug)
     )
 
 # Legacy URLs kept alive as static redirects (GitHub Pages has no rewrites).
