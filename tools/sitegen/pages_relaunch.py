@@ -301,20 +301,38 @@ def sample_report() -> str:
 def demo() -> str:
     sample=D.RECORDED[D.RECORDED_DEFAULT]
     body=head("Interactive recorded demo","Explore the evidence without starting a scan.",
-      "A saved assessment allows you to understand the interface and report format. Nothing on this page scans your device, browser or business domain.",
-      main_button("Explore real-domain workflow")+secondary("Download sample evidence"))
+      "This saved report is a real historical example. It does not test your browser, device or domain and does not claim that the current online DNS/email profile runs every illustrated check.",
+      main_button("Online scan availability")+secondary("Download the report"))
     body+=f"""<section class="section"><div class="wrap">
     {S.recorded_banner()}
     <div class="relaunch-split mt-3">
-    <div><h2>The reference result</h2><p>Recorded against <code>{e(sample["target"])}</code> on 28 October 2026.
-    The original sample carries its own scope, timestamp, consent receipt and observed results.</p>
-    <p>This is an example of how evidence appears. It does not represent the DNS/email-only online product's
-    current complete coverage.</p>
-    {btn("/sample-report/","Read the full example","ghost","arrow")}</div>
-    <div>{S.score_panel(sample)}</div></div></div></section>"""
+      <div><h2>The reference assessment</h2>
+      <p>Recorded against <code>{e(sample["target"])}</code> on 28 October 2026.
+      This specimen includes its timestamp, test context and recorded observations.</p>
+      <p>Switch between the summary and findings to see how a result becomes an
+      understandable recommendation. No action here sends a live request.</p></div>
+      <div>{S.score_panel(sample)}</div>
+    </div>
+    <div class="panel mt-4" data-tabs="recorded-example">
+      <div class="tabs" role="tablist" aria-label="Recorded report sections">
+        <button type="button" class="tab" role="tab" id="recorded-tab-summary" aria-controls="recorded-panel-summary" aria-selected="true" tabindex="0">Report context</button>
+        <button type="button" class="tab" role="tab" id="recorded-tab-findings" aria-controls="recorded-panel-findings" aria-selected="false" tabindex="-1">Observed findings</button>
+      </div>
+      <div class="tab-panel" role="tabpanel" id="recorded-panel-summary" aria-labelledby="recorded-tab-summary">
+        <h3>What this specimen shows</h3>
+        <p>A dated, scoped measurement with a score for its recorded controls.
+        The report never substitutes for a current assessment or a certification.</p>
+        <p>Report ID: <code>{e(sample["report_id"])}</code></p>
+        <div class="hero-actions">{btn("/sample-report/","Download sample evidence","ghost","download")}</div>
+      </div>
+      <div class="tab-panel" role="tabpanel" id="recorded-panel-findings" aria-labelledby="recorded-tab-findings" hidden>
+        <h3>Findings from the recorded run</h3>
+        {S.findings_html(sample,limit=6)}
+      </div>
+    </div>
+    </div></section>"""
     return frame("/demo/","Recorded Security Assessment Demo | SMB Scanner Lite",
-      "Explore saved security-assessment evidence and scoring without launching a live scan.",body)
-
+      "Explore saved security-assessment evidence and findings through interactive tabs without launching a live scan.",body)
 
 def validation() -> str:
     tests=D.PUBLIC_TESTS
