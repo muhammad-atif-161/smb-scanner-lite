@@ -12,6 +12,7 @@ import json
 
 from . import config as C
 from . import schema as structured
+from . import seo as SEO
 
 
 # ---------------------------------------------------------------------------
@@ -280,6 +281,7 @@ def layout(
     extra_head: str = "",
     body_class: str = "",
 ) -> str:
+    title, description = SEO.metadata(path, title, description)
     canonical = C.SITE_URL + path
     robots = (
         "noindex, follow" if noindex else "index, follow, max-image-preview:large, max-snippet:-1"
