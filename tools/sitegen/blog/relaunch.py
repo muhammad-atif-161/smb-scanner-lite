@@ -164,7 +164,7 @@ your private zones or the provider accounts behind them.</p>
 """),
 "external-website-security-checks": entry(
 "Website security checks worth doing by hand",
-"A measured checklist for HTTPS, certificates, redirects, browser headers and site exposure, with clear limits and no suggestion these tests are in the first online scan.",
+"A measured checklist for HTTPS, certificates, redirects and browser headers, clearly separated from the first online DNS/email scan.",
 "Not every useful check needs an exploit. Some of the first questions are visible from an ordinary browser request.",
 ["A browser padlock establishes connection properties, not application trust.",
  "Header and certificate checks are useful but incomplete.",
