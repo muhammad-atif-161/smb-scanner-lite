@@ -17,10 +17,10 @@ GitHub policy permission, and one controlled test are complete.**
 
     {
       "enabled": false,
-      "api_base_url": ""
+      "api_base_url": "https://smbscanner-edge.myself-atiff.workers.dev"
     }
 
-The default disables the entire API client, hides the request form, and shows
+The false gate disables the entire API client even though the public Worker origin is configured. It hides the request form and shows
 a manual enquiry link. The portal is \`noindex\` and unlinked; existing live
 website content stays unchanged. The browser never contains a GitHub PAT or a
 Cloudflare worker secret. The only API value exposed to the browser later is
@@ -30,10 +30,10 @@ After all security checks succeed, use the exact, tested Workers URL:
 
     {
       "enabled": true,
-      "api_base_url": "https://smbscanner-edge.<your-real-subdomain>.workers.dev"
+      "api_base_url": "https://smbscanner-edge.myself-atiff.workers.dev"
     }
 
-**Do not copy the illustrative URL literally.** The builder refuses
+**Do not enable this without the private credentials, worker-policy review and a controlled authorized integration test.** The builder refuses
 non-HTTPS origins or URLs with a path, query, credentials, or unusual port.
 When enabled, the manual assessment page links to /scan/ as a separate
 DNS/email beta, not the full multi-control service.
