@@ -148,33 +148,30 @@ function startPortal() {
     button.disabled = value;
     button.setAttribute("aria-busy", String(value));
   };
-  if (!active) {
-    step("#scan-create",false);
-    step("#scan-closed",true);
-    showMessage("Online assessments are not open yet. The recorded demo and manual enquiry remain available.");
-    return;
+  let client = null;
+  if (active) {
+    try { client = makeScanClient(cfg.apiBaseUrl); }
+    catch { showMessage("Online configuration is incomplete. Enquiries remain available.","error"); }
   }
-  let client;
-  try { client = makeScanClient(cfg.apiBaseUrl); }
-  catch {
-    step("#scan-create",false);
-    step("#scan-closed",true);
-    showMessage("Online assessment configuration is incomplete. Please use the manual request form.", "error");
-    return;
+  if (!client) {
+    step("#scan-create",true);step("#scan-closed",true);step("#scan-resume",false);
+    showMessage("Live scans are not accepting public jobs yet. Choose a tier to send an enquiry. No scan or payment will start.");
   }
-  let session = null;
+  let session = null, pollTimer = null, dispatchPending = false;
+  const stopPolling = () => { if(pollTimer) clearTimeout(pollTimer); pollTimer=null; };
   const save = value => {
     session = value;
     try { window.sessionStorage.setItem(STORE_KEY,JSON.stringify(value)); } catch { /* private mode */ }
   };
   const discard = () => {
-    session = null;
+    stopPolling(); session = null;
     try { window.sessionStorage.removeItem(STORE_KEY); } catch { /* private mode */ }
   };
   function showCreated() {
     if (!session) return;
     step("#scan-create",false);
     step("#scan-resume",false);
+    step("#scan-closed",false);
     step("#scan-verify",true);
     step("#scan-status",true);
     text("#scan-domain",session.domain);
@@ -190,6 +187,8 @@ function startPortal() {
     text("#scan-preview-grade",data.grade ?? "—");
     text("#scan-preview-score",Number.isFinite(data.score) ? data.score + "/100" : "Not available");
     text("#scan-preview-confidence",data.confidence ?? "Limited evidence");
+    text("#scan-preview-controls",Number.isInteger(data.conclusive_controls)&&Number.isInteger(data.total_controls) ?
+      data.conclusive_controls+" of "+data.total_controls+" controls conclusive" : "Public DNS/email profile only");
     const list = $("#scan-findings");
     list.replaceChildren();
     for (const entry of Array.isArray(data.top_findings) ? data.top_findings.slice(0,3) : []) {
@@ -233,25 +232,58 @@ function startPortal() {
       step("#scan-verify",true);
     }
   }
+  function selectedTier() {
+    return root.querySelector('input[name="tier"]:checked')?.value || "basic";
+  }
+  function updateTier() {
+    const tier = selectedTier();
+    root.querySelectorAll(".scan-tier").forEach(card =>
+      card.classList.toggle("is-selected",card.querySelector("input")?.checked===true));
+    text("#scan-submit-label",client && tier==="basic" ?
+      "Create ownership verification" : "Send assessment enquiry");
+    step("#scan-tier-disclosure",tier!=="basic");
+  }
+  root.querySelectorAll('input[name="tier"]').forEach(el=>el.addEventListener("change",updateTier));
+  updateTier();
   $("#scan-request-form").addEventListener("submit",async event=>{
     event.preventDefault();
     const form=event.currentTarget;
-    const accept=$("#scan-consent");
-    if (!accept.checked) { showMessage("Confirm that you own or are expressly authorized to assess this domain.", "error"); return; }
+    if(!$("#scan-consent").checked) {
+      showMessage("Confirm domain ownership or explicit written authorization first.","error"); return;
+    }
     const button=form.querySelector('button[type="submit"]');
     busy(button,true);
+    const payload={
+      name:form.elements.namedItem("name").value.trim(),
+      email:form.elements.namedItem("email").value.trim(),
+      domain:form.elements.namedItem("domain").value.trim(),
+      tier:selectedTier(),authorised:true,
+    };
+    let notified=false;
     try {
-      const payload={name:form.elements.namedItem("name").value.trim(),
-                     email:form.elements.namedItem("email").value.trim(),
-                     domain:form.elements.namedItem("domain").value.trim()};
+      try { notified=await notifyRequest(window.SMB_CONFIG?.formEndpoint,payload); }
+      catch { notified=false; }
+      if(!client || payload.tier!=="basic") {
+        if(notified) {
+          form.reset(); updateTier();
+          showMessage("Enquiry delivered. Scope, final pricing and authorization will be agreed before work. No scan has started.","success");
+        } else {
+          showMessage("Formspree could not deliver the enquiry. Use the Contact page. No scan has started.","error");
+        }
+        return;
+      }
       const result=await client.create(payload);
-      const next=parseSession({id:result.assessment_id,token:result.access_token,
-        domain:result.domain,recordName:result.dns_record_name,recordValue:result.dns_record_value});
-      if (!next || !next.recordName || !next.recordValue) throw new Error("Invalid server response");
-      save(next);
-      showCreated();
+      const next=parseSession({
+        id:result.assessment_id,token:result.access_token,
+        domain:result.domain,recordName:result.dns_record_name,
+        recordValue:result.dns_record_value,launchAuthorized:true,
+      });
+      if(!next || !next.recordName || !next.recordValue) throw new Error("Invalid server response");
+      save(next); showCreated();statusView("awaiting_verification");
+      if(!notified) showMessage("Verification created, but team notification is unavailable. Keep the token private.");
     } catch(e) {
-      showMessage(e instanceof ScanAPIError ? e.message : "Could not create an assessment. Please use the manual request form.", "error");
+      showMessage(e instanceof ScanAPIError ? e.message :
+        "Could not create verification. Please use the Contact page.","error");
     } finally {busy(button,false)}
   });
   $("#scan-verify-button").addEventListener("click",async event=>{
@@ -311,14 +343,17 @@ function startPortal() {
       showMessage("Private token copied. Keep it secure and do not share it in chat.", "success");
     } catch { showMessage("Select and copy the private token manually.", "info"); }
   });
-  try {session=parseSession(window.sessionStorage.getItem(STORE_KEY));}catch{session=null}
-  if(session){
-    showCreated();
-    refresh().catch(()=>showMessage("Couldn't refresh automatically. Use Refresh status to try again.", "error"));
-  } else {
-    step("#scan-create",true);
-    step("#scan-resume",true);
+  if(client) {
+    try { session=parseSession(window.sessionStorage.getItem(STORE_KEY)); } catch { session=null; }
+    if(session){
+      showCreated();
+      refresh().catch(()=>showMessage("Automatic refresh unavailable. Use Refresh status.","error"));
+    } else {
+      step("#scan-create",true);
+      step("#scan-resume",true);
+    }
   }
+  window.addEventListener("pagehide",()=>{ if(pollTimer) clearTimeout(pollTimer); },{once:true});
 }
 if (typeof document !== "undefined") {
   // DOMContentLoaded follows all deferred site config scripts. A module in
