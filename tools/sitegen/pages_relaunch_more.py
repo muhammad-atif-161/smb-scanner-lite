@@ -214,9 +214,15 @@ private assessment results. Cloudflare D1 stores assessment records and reports.
 access token authorizes report preview and status; the token is given to the customer once.
 IP addresses may be converted to keyed hashes for basic abuse limiting.</p>
 <h2>How results are accessed</h2>
-<p>The browser stores its recovery token in session storage for the active tab. A full private
-report is not published to visitors or anonymous APIs. The payment unlock is not available
-yet, and the site does not process payment card details today.</p>
+<p>The browser stores a private recovery token in session storage for the active tab. Only a
+holder of that token can request the free preview or full report. The full report is protected
+by a separate payment-verification check; returning from checkout never by itself unlocks it.</p>
+<h2>Payment processing</h2>
+<p>When paid report access is activated, a $19 one-time report purchase is processed by Stripe
+on its own secure checkout site. Stripe receives the contact email and report reference needed
+to process and match the payment. Card details are not submitted to or stored by this website.
+The backend stores the payment session identifier, payment state and confirmation time.
+Checkout remains disabled until the operator completes payment-provider setup.</p>
 <h2>Enquiries</h2>
 <p>The manual form uses your mail application unless a dedicated contact endpoint is configured.
 A composed email is only delivered after you send it. Avoid including passwords or sensitive
@@ -261,10 +267,14 @@ without the domain owner's permission.</p>
 <h2>Desktop software</h2>
 <p>The public sandbox is available under the license published in the public repository and
 is restricted by its intended educational scope. Review its license before installation.</p>
-<h2>Payments and refunds</h2>
-<p>There is no active checkout or paid report delivery in the current public experience.
-Payment, pricing, fulfillment and refund terms will require separate publication before
-any charges are accepted.</p>
+<h2>Payments, report delivery and refunds</h2>
+<p>The Basic scan offers a free restricted preview. When securely activated, a one-time
+$19 USD purchase for a completed assessment unlocks the full DNS/email evidence report,
+not an additional scan. Stripe processes the payment separately. A valid server-side payment
+confirmation and the assessment's private access token are required for delivery.
+Checkout is disabled until the provider account and operational conditions are ready.
+Applicable taxes, refunds, disputes and support procedures must be displayed and agreed
+before live charges are accepted. There is no active checkout while the payment release switch is disabled. No card payment is collected by the website while disabled.</p>
 <h2>No guarantee</h2>
 <p>We work to present accurately observed findings, but do not warrant that an assessment
 detects every security risk or that a passing grade proves a system secure. The service

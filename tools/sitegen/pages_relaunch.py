@@ -52,10 +52,12 @@ def home() -> str:
                if enabled() else
                """<span class="product-state"><i></i> Online scans opening soon</span>""")
     work = [
-        ("01", "Enter your domain", "Give the exact public hostname and a contact address. The request does not initiate a scan."),
-        ("02", "Verify ownership", "Publish a temporary DNS TXT record. We check for the matching value before authorizing any work."),
-        ("03", "Run the limited check", "An authorized, single-run worker reviews public DNS and email-authentication settings. No exploitation."),
-        ("04", "Review the preview", "See the resulting score and selected findings. The detailed report stays private until payment access is available."),
+        ("01", "Enter your domain", "Provide a public domain you control and explicitly authorize one DNS/email scan."),
+        ("02", "Verify DNS TXT", "Publish a temporary record at your DNS provider. Exact proof is required."),
+        ("03", "Run scan", "The one-time worker reads published DNS and email policy. No intrusive probes."),
+        ("04", "Restricted preview", "See the evidence-based score, grade and selected findings at no cost."),
+        ("05", "$19 evidence unlock", "When secure checkout is activated, a single payment unlocks your detailed report."),
+        ("06", "Read full evidence", "After server-verified payment, view and download evidence with your private token."),
     ]
     features = [
         ("01 / DNS", "Start with the records", "Resolve the public DNS posture of your domain. Results depend on what a resolver can actually observe."),
@@ -119,8 +121,8 @@ def home() -> str:
 </div></section>
 
 <section class="section section--alt"><div class="wrap">
-{section_head("How it works", "Four steps. No scan before proof of control.",
-"From a temporary DNS record to a tightly scoped report preview, the process is designed to be understandable without a security team.")}
+{section_head("How it works", "Six stages, one carefully scoped assessment.",
+"From proof of DNS control to a free preview and optional $19 full evidence report, each stage has a clear boundary.")}
 <div class="relaunch-inline-steps">{steps}</div>
 <div class="relaunch-callout mt-3"><p><strong>Service availability:</strong>
 {"The online flow is in a limited owner-verified beta." if enabled() else "The portal is prepared, but public scan creation remains disabled while the private deployment is finalized."}
@@ -222,8 +224,7 @@ interpreted as a clean result.</p>
 <h2>05. Private results and access</h2>
 <p>The backend records the assessment and stores the callback report in D1. A token bound to
 the request authorizes status and preview access. The detailed report is not published by
-the website. Payment and full-report delivery will be enabled only after a verified payment
-integration has been implemented and tested.</p>
+the website. A $19 one-time checkout and detailed evidence unlock are staged behind separate backend release controls. Only a verified provider webhook unlocks a report, and access still requires the private owner token.</p>
 <h2>06. Reproduce and review</h2>
 <p>The sample report documents a historical demonstration, not the state of any domain today.
 For a current report, compare its timestamp, target, tested controls and observed DNS responses
@@ -292,7 +293,7 @@ def sample_report() -> str:
     <div class="download-grid">{cards}</div>
     <div class="relaunch-callout mt-3"><p><strong>What changes in the online service?</strong> The live workflow
     performs the narrower DNS/email scan profile, not the full catalog represented in the historic example.
-    The paid full-report access flow is still being built.</p></div>
+    The $19 evidence unlock is staged and unavailable until secure payment verification is activated.</p></div>
     </div></section>"""
     return frame("/sample-report/","Example Security Report | SMB Scanner Lite",
       "Inspect a real historical security report with observed evidence, grade and downloadable examples in four formats.",body,active="report")

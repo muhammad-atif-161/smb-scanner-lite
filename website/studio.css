@@ -286,3 +286,10 @@ code,kbd{color:#234f59;background:#e9efed;border-color:#d1dfdc;border-radius:4px
  .home-closer{background:#eee;color:#111}
  .home-closer h2,.home-closer p{color:#111}
 }
+
+/* Six precisely named stages on the product overview. */
+.relaunch-inline-steps{grid-template-columns:repeat(3,minmax(0,1fr));gap:1.35rem}
+.relaunch-inline-steps article{min-width:0;padding:1.4rem .25rem .9rem 0}
+.relaunch-inline-steps h3{min-height:2.3rem}
+@media(max-width:900px){.relaunch-inline-steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.relaunch-inline-steps{grid-template-columns:1fr}.relaunch-inline-steps h3{min-height:0}}
