@@ -67,6 +67,8 @@ export function makeScanClient(apiBase, fetchImpl = fetch) {
     dispatch: (id,token) => call("POST", path(id) + "/scan", token),
     status: (id,token) => call("GET", path(id), token),
     preview: (id,token) => call("GET", path(id) + "/preview", token),
+    checkout: (id,token) => call("POST", path(id) + "/checkout", token),
+    report: (id,token) => call("GET", path(id) + "/report", token),
   });
 }
 
@@ -112,6 +114,15 @@ export const SCAN_STATUSES=Object.freeze({
   completed:"Assessment complete. Your score and findings are ready",
 });
 const BUSY_STATES=new Set(["dispatching","queued","running"]);
+export function checkedCheckoutUrl(value) {
+  let url;
+  try { url=new URL(value); } catch { throw new Error("Invalid secure checkout destination"); }
+  if(url.protocol!=="https:" || url.hostname!=="checkout.stripe.com" ||
+     url.username || url.password || url.port || url.hash) {
+    throw new Error("Unexpected checkout destination");
+  }
+  return url.href;
+}
 
 const STORE_KEY = "smbscanner.saas.session.v1";
 
@@ -158,13 +169,15 @@ function startPortal() {
     showMessage("Live scans are not accepting public jobs yet. Choose a tier to send an enquiry. No scan or payment will start.");
   }
   let session = null, pollTimer = null, dispatchPending = false;
+  let evidence = null, paymentPolls = 0;
+  const checkoutResult = new URL(window.location.href).searchParams.get("checkout");
   const stopPolling = () => { if(pollTimer) clearTimeout(pollTimer); pollTimer=null; };
   const save = value => {
     session = value;
     try { window.sessionStorage.setItem(STORE_KEY,JSON.stringify(value)); } catch { /* private mode */ }
   };
   const discard = () => {
-    stopPolling(); session = null;
+    stopPolling(); session = null; evidence=null; paymentPolls=0;
     try { window.sessionStorage.removeItem(STORE_KEY); } catch { /* private mode */ }
   };
   function showCreated() {
@@ -201,7 +214,67 @@ function startPortal() {
       item.append(title,detail);
       list.appendChild(item);
     }
-    text("#scan-report-notice","The detailed evidence is locked until secure payment is available. There is no checkout or charge in this preview.");
+    text("#scan-report-notice","The preview is free. The complete DNS/email evidence report is available with one verified $19 payment.");
+  }
+  function renderPaywall(state) {
+    step("#scan-paywall",!state.report_unlocked);
+    const pay=$("#scan-pay-button");
+    if(pay) pay.disabled=state.checkout_available!==true;
+    text("#scan-pay-status",state.checkout_available===true
+      ? "Pay $19 securely through Stripe. Your full evidence report unlocks only after the payment is verified."
+      : "Secure checkout is not active yet. Your free preview remains available; no payment can be taken here.");
+    root.querySelectorAll("[data-scan-stage]").forEach(el=>{
+      const i=Number(el.dataset.scanStage);
+      el.classList.toggle("is-active",i===4);
+      el.classList.toggle("is-done",i<4);
+    });
+  }
+  function drawFullReport(payload) {
+    if(!payload || !payload.report || !Array.isArray(payload.report.results)) {
+      throw new Error("The server returned an invalid evidence report");
+    }
+    evidence=payload.report;
+    step("#scan-paywall",false);
+    step("#scan-unlocked",true);
+    text("#scan-full-domain",String(evidence.target || session?.domain || ""));
+    text("#scan-full-id",String(evidence.report_id || "Not supplied"));
+    const parent=$("#scan-full-findings");
+    parent.replaceChildren();
+    for(const entry of evidence.results) {
+      const item=document.createElement("details");
+      item.className="scan-evidence";
+      const summary=document.createElement("summary");
+      const heading=document.createElement("strong");
+      heading.textContent=String(entry.title || entry.control || "Security control");
+      const status=document.createElement("span");
+      status.textContent=[entry.status || "UNSPECIFIED",entry.severity || ""].filter(Boolean).join(" · ");
+      summary.append(heading,status);
+      const body=document.createElement("div");
+      body.className="scan-evidence-body";
+      const desc=document.createElement("p");
+      desc.textContent=String(entry.description || entry.explanation || entry.summary || "Recorded finding");
+      const pre=document.createElement("pre");
+      pre.textContent=typeof entry.evidence==="string" ? entry.evidence :
+        JSON.stringify(entry.evidence ?? entry,null,2);
+      body.append(desc,pre);item.append(summary,body);parent.appendChild(item);
+    }
+    if(!evidence.results.length) {
+      const notice=document.createElement("p");
+      notice.textContent="No individual control results were returned.";
+      parent.appendChild(notice);
+    }
+    const dl=$("#scan-download-report");
+    if(dl) dl.disabled=false;
+    root.querySelectorAll("[data-scan-stage]").forEach(el=>{
+      const i=Number(el.dataset.scanStage);
+      el.classList.toggle("is-active",i===5);
+      el.classList.toggle("is-done",i<5);
+    });
+  }
+  async function receiveReport() {
+    if(!session || !client || evidence) return;
+    const payload=await client.report(session.id,session.token);
+    drawFullReport(payload);
   }
   function statusView(status) {
     const message=SCAN_STATUSES[status] || "Waiting for a server status update";
@@ -249,7 +322,30 @@ function startPortal() {
       stopPolling();step("#scan-verify",false);step("#scan-dispatch",false);
       const data=await client.preview(session.id,session.token);
       drawPreview(data);
-      showMessage("Assessment complete. Your score, grade and priority findings are ready.","success");
+      if(state.report_unlocked===true) {
+        step("#scan-paywall",false);
+        try {
+          await receiveReport();
+          showMessage("Payment verified. The complete evidence report is unlocked below.","success");
+        } catch {
+          showMessage("Payment is recorded, but the report could not be loaded. Use Refresh status.","error");
+        }
+      } else {
+        renderPaywall(state);
+        if(checkoutResult==="success") {
+          if(paymentPolls<10) {
+            paymentPolls++;
+            showMessage("Returned from checkout. Waiting for the payment provider to confirm your purchase; no report is unlocked yet.");
+            schedulePoll();
+          } else {
+            showMessage("Payment has not yet been confirmed. Use Refresh status or contact support before paying again.");
+          }
+        } else if(checkoutResult==="cancelled") {
+          showMessage("Checkout was cancelled. Your free preview is unchanged.");
+        } else {
+          showMessage("Assessment complete. View the free preview or unlock full evidence for $19.","success");
+        }
+      }
     } else if(["failed","dispatch_failed"].includes(state.status)) {
       stopPolling();step("#scan-verify",false);step("#scan-dispatch",false);
       showMessage("The assessment could not finish. No repeat scan was started.","error");
@@ -378,6 +474,7 @@ function startPortal() {
     discard();step("#scan-create",true);step("#scan-verify",false);step("#scan-status",false);
     step("#scan-dispatch",false);step("#scan-preview",false);step("#scan-resume",true);
     step("#scan-running",false);step("#scan-closed",!client);step("#scan-resume",Boolean(client));
+    step("#scan-paywall",false);step("#scan-unlocked",false);step("#scan-preview",false);
     showMessage("Session cleared from this tab. The server-side assessment was not deleted.");
   });
   $("#scan-copy-token").addEventListener("click",async()=>{
@@ -386,6 +483,35 @@ function startPortal() {
       await navigator.clipboard.writeText(session.token);
       showMessage("Private token copied. Keep it secure and do not share it in chat.", "success");
     } catch { showMessage("Select and copy the private token manually.", "info"); }
+  });
+  $("#scan-pay-button")?.addEventListener("click",async event=>{
+    if(!session || !client) return;
+    const button=event.currentTarget;
+    busy(button,true);
+    try {
+      const outcome=await client.checkout(session.id,session.token);
+      if(outcome.unlocked===true) {
+        await refresh();
+      } else {
+        const destination=checkedCheckoutUrl(outcome.checkout_url);
+        // Never place assessment IDs, owner tokens, reports or PII into a URL.
+        window.location.assign(destination);
+      }
+    } catch(e) {
+      showMessage(e instanceof ScanAPIError ? e.message :
+        "Secure checkout could not be opened. Please refresh status or contact support.","error");
+    } finally { busy(button,false); }
+  });
+  $("#scan-download-report")?.addEventListener("click",()=>{
+    if(!evidence) return;
+    const blob=new Blob([JSON.stringify(evidence,null,2)],{type:"application/json"});
+    const url=URL.createObjectURL(blob);
+    const anchor=document.createElement("a");
+    anchor.href=url;
+    const safeDomain=String(evidence.target || "domain").replace(/[^a-z0-9.-]/gi,"-");
+    anchor.download="smbscanner-evidence-"+safeDomain+".json";
+    document.body.appendChild(anchor);anchor.click();anchor.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1500);
   });
   if(client) {
     try { session=parseSession(window.sessionStorage.getItem(STORE_KEY)); } catch { session=null; }
