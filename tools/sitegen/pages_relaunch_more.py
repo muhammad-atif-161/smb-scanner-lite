@@ -274,7 +274,7 @@ not an additional scan. Stripe processes the payment separately. A valid server-
 confirmation and the assessment's private access token are required for delivery.
 Checkout is disabled until the provider account and operational conditions are ready.
 Applicable taxes, refunds, disputes and support procedures must be displayed and agreed
-before live charges are accepted. No card payment is collected by the website while disabled.</p>
+before live charges are accepted. There is no active checkout while the payment release switch is disabled. No card payment is collected by the website while disabled.</p>
 <h2>No guarantee</h2>
 <p>We work to present accurately observed findings, but do not warrant that an assessment
 detects every security risk or that a passing grade proves a system secure. The service
