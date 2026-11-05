@@ -203,34 +203,75 @@ function startPortal() {
     }
     text("#scan-report-notice","The detailed evidence is locked until secure payment is available. There is no checkout or charge in this preview.");
   }
+  function statusView(status) {
+    const message=SCAN_STATUSES[status] || "Waiting for a server status update";
+    text("#scan-state",String(status || "unknown").replaceAll("_"," "));
+    text("#scan-progress-label",message);
+    text("#scan-activity",message);
+    step("#scan-running",BUSY_STATES.has(status));
+    const stage=status==="completed" ? 3 :
+      BUSY_STATES.has(status) || ["failed","dispatch_failed","dispatch_unknown"].includes(status) ? 2 :
+      status==="verified" ? 1 : 0;
+    root.querySelectorAll("[data-scan-stage]").forEach(el=>{
+      const pos=Number(el.dataset.scanStage);
+      el.classList.toggle("is-active",pos===stage);
+      el.classList.toggle("is-done",pos<stage);
+    });
+  }
+  function schedulePoll() {
+    stopPolling();
+    if(!session) return;
+    pollTimer=setTimeout(async()=>{
+      try { await refresh(); }
+      catch {
+        stopPolling();
+        showMessage("Status updates are temporarily unavailable. Use Refresh status; your scan was not restarted.","error");
+      }
+    },6000);
+  }
   async function refresh() {
-    if (!session) return;
-    const state = await client.status(session.id,session.token);
+    if(!session || !client) return;
+    const state=await client.status(session.id,session.token);
     step("#scan-status",true);
-    text("#scan-state",state.status || "unknown");
-    if (state.status === "verified") {
+    statusView(state.status);
+    if(state.status==="verified") {
       step("#scan-verify",false);
       step("#scan-dispatch",true);
-      showMessage("Ownership verified. A scan will start only if you explicitly confirm below.", "success");
-    } else if (["queued","dispatching","dispatch_unknown","running"].includes(state.status)) {
-      step("#scan-verify",false);
-      step("#scan-dispatch",false);
-      showMessage(state.status === "dispatch_unknown"
-        ? "GitHub dispatch outcome is unknown. Do not click Start again; contact support with your assessment ID."
-        : "Your assessment has been submitted. Use Refresh status to check progress.");
-    } else if (state.status === "completed") {
-      step("#scan-verify",false);
-      step("#scan-dispatch",false);
-      const data = await client.preview(session.id,session.token);
+      showMessage("Ownership verified. A single authorized DNS/email scan is ready.","success");
+    } else if(BUSY_STATES.has(state.status)) {
+      step("#scan-verify",false);step("#scan-dispatch",false);
+      showMessage("Remote workflow active. Its actual status refreshes automatically.");
+      schedulePoll();
+    } else if(state.status==="dispatch_unknown") {
+      stopPolling();step("#scan-verify",false);step("#scan-dispatch",false);
+      showMessage("Dispatch outcome is unknown. Do not restart; contact support with your assessment ID.","error");
+    } else if(state.status==="completed") {
+      stopPolling();step("#scan-verify",false);step("#scan-dispatch",false);
+      const data=await client.preview(session.id,session.token);
       drawPreview(data);
-      showMessage("Assessment complete. A limited preview is available below.", "success");
-    } else if (["failed","dispatch_failed"].includes(state.status)) {
-      step("#scan-verify",false);
-      step("#scan-dispatch",false);
-      showMessage("The assessment could not complete. No second scan will start automatically. Contact support with your assessment ID.", "error");
+      showMessage("Assessment complete. Your score, grade and priority findings are ready.","success");
+    } else if(["failed","dispatch_failed"].includes(state.status)) {
+      stopPolling();step("#scan-verify",false);step("#scan-dispatch",false);
+      showMessage("The assessment could not finish. No repeat scan was started.","error");
     } else {
       step("#scan-verify",true);
     }
+  }
+  async function startOneScan(button) {
+    if(!session || !client || dispatchPending) return;
+    dispatchPending=true;busy(button,true);
+    try {
+      showMessage("Ownership confirmed. Requesting a single remote DNS/email assessment…");
+      const result=await client.dispatch(session.id,session.token);
+      step("#scan-dispatch",false);
+      statusView(result.status || "queued");
+      showMessage("Remote assessment requested. Progress updates will appear automatically.","success");
+      schedulePoll();
+    } catch(e) {
+      showMessage(e instanceof ScanAPIError ? e.message :
+        "Launch could not be confirmed. Refresh status; never start twice.","error");
+      try { await refresh(); } catch { /* status may be unavailable */ }
+    } finally {dispatchPending=false;busy(button,false)}
   }
   function selectedTier() {
     return root.querySelector('input[name="tier"]:checked')?.value || "basic";
@@ -287,27 +328,29 @@ function startPortal() {
     } finally {busy(button,false)}
   });
   $("#scan-verify-button").addEventListener("click",async event=>{
-    const button=event.currentTarget; busy(button,true);
-    try {
-      await client.verify(session.id,session.token);
-      await refresh();
-    } catch(e) {showMessage(e instanceof ScanAPIError ? e.message : "Could not verify DNS ownership.", "error")}
-    finally {busy(button,false)}
-  });
-  $("#scan-dispatch-button").addEventListener("click",async event=>{
-    if (!$("#scan-dispatch-consent").checked) {
-      showMessage("Confirm explicit authorization before starting the DNS/email assessment.","error"); return;
-    }
+    if(!session || !client) return;
     const button=event.currentTarget;busy(button,true);
     try {
-      const result=await client.dispatch(session.id,session.token);
-      showMessage("Assessment dispatch requested. The scanner cannot be started again for this assessment.","success");
-      text("#scan-state",result.status);
-      step("#scan-dispatch",false);
+      await client.verify(session.id,session.token);
+      statusView("verified");
+      step("#scan-verify",false);
+      if(session.launchAuthorized) {
+        // Intake explicitly authorized one DNS/email scan after TXT proof.
+        await startOneScan($("#scan-dispatch-button"));
+      } else {
+        // Resumed legacy sessions require a second explicit scan consent.
+        await refresh();
+      }
     } catch(e) {
-      showMessage(e instanceof ScanAPIError ? e.message :
-        "Dispatch status uncertain. Use Refresh status; do not submit again.","error");
+      showMessage(e instanceof ScanAPIError ? e.message : "Could not verify DNS ownership.","error");
     } finally {busy(button,false)}
+  });
+  $("#scan-dispatch-button").addEventListener("click",async event=>{
+    if(!$("#scan-dispatch-consent").checked) {
+      showMessage("Confirm explicit authorization for this exact DNS/email assessment.","error");
+      return;
+    }
+    await startOneScan(event.currentTarget);
   });
   $("#scan-refresh-button").addEventListener("click",async event=>{
     const button=event.currentTarget;busy(button,true);
@@ -334,7 +377,8 @@ function startPortal() {
   $("#scan-new-button").addEventListener("click",()=>{
     discard();step("#scan-create",true);step("#scan-verify",false);step("#scan-status",false);
     step("#scan-dispatch",false);step("#scan-preview",false);step("#scan-resume",true);
-    showMessage("Previous assessment cleared from this browser tab. Its stored report was not deleted.");
+    step("#scan-running",false);step("#scan-closed",!client);step("#scan-resume",Boolean(client));
+    showMessage("Session cleared from this tab. The server-side assessment was not deleted.");
   });
   $("#scan-copy-token").addEventListener("click",async()=>{
     if(!session) return;
