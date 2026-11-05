@@ -12,16 +12,18 @@ def portal() -> str:
   <div class="wrap scan-shell">
     <p class="eyebrow">Online assessment / DNS and email</p>
     <h1>Verify the domain. Understand the exposure.</h1>
-    <p class="lede">Choose a level of review, confirm that you control the domain, and follow an evidence-led assessment. The live Basic profile examines public DNS and email safeguards; broader work is scoped separately.</p>
+    <p class="lede">Enter a domain you control, prove ownership with a DNS TXT record, and run a limited DNS/email scan. View your score and priority findings at no cost; unlock the complete underlying evidence for a single $19 payment when secure checkout is available.</p>
   </div>
 </div>
 <section class="section section--tight">
   <div class="wrap scan-shell" data-saas-portal>
     <ol class="scan-steps" aria-label="Assessment process">
-      <li class="scan-step" data-scan-stage="0"><b>01</b>Choose a scan</li>
-      <li class="scan-step" data-scan-stage="1"><b>02</b>Verify ownership</li>
-      <li class="scan-step" data-scan-stage="2"><b>03</b>Watch progress</li>
-      <li class="scan-step" data-scan-stage="3"><b>04</b>Read findings</li>
+      <li class="scan-step" data-scan-stage="0"><b>01</b>Enter domain</li>
+      <li class="scan-step" data-scan-stage="1"><b>02</b>Verify DNS TXT</li>
+      <li class="scan-step" data-scan-stage="2"><b>03</b>Run scan</li>
+      <li class="scan-step" data-scan-stage="3"><b>04</b>Preview results</li>
+      <li class="scan-step" data-scan-stage="4"><b>05</b>$19 unlock</li>
+      <li class="scan-step" data-scan-stage="5"><b>06</b>Full evidence</li>
     </ol>
 
     <p class="scan-message" id="scan-message" data-tone="info" aria-live="polite" role="status" hidden></p>
@@ -41,6 +43,7 @@ def portal() -> str:
             <input type="radio" name="tier" value="basic" checked>
             <span class="scan-tier-type">01 / Essential</span><strong>Basic</strong>
             <span class="scan-tier-price">$0 <small>/ preview</small></span>
+            <span class="scan-tier-note">Full evidence report: $19 one-time</span>
             <span class="scan-tier-desc">Public DNS, SPF, DMARC and selected DKIM observations. Score, grade and top findings after domain verification.</span>
             <em>Automated when available</em>
           </label>
@@ -162,9 +165,38 @@ def portal() -> str:
       <p class="scan-privacy" id="scan-preview-controls"></p>
       <h3>Top findings</h3>
       <ul id="scan-findings" class="card-list"></ul>
-      <div class="scan-lock"><p id="scan-report-notice"></p>
-        <p class="scan-privacy">The full evidence report is kept private. Payment and report unlocking are not active; this page does not collect payment.</p>
+      <div class="scan-lock"><p id="scan-report-notice">Detailed evidence stays private until payment is verified.</p></div>
+    </section>
+
+    <section class="scan-panel scan-paywall" id="scan-paywall" hidden aria-labelledby="scan-paywall-title">
+      <p class="eyebrow">Private report access</p>
+      <h2 id="scan-paywall-title">Unlock the evidence behind your score.</h2>
+      <div class="scan-payment-row">
+        <div><strong>$19</strong><span>USD · one-time · per completed domain assessment</span></div>
+        <p>See the full DNS/email control results, original observations, severity and report metadata. This is not an expanded or intrusive scan.</p>
       </div>
+      <div class="scan-actions">
+        <button class="btn btn-primary" type="button" id="scan-pay-button" disabled>Secure checkout · $19</button>
+      </div>
+      <p class="scan-privacy" id="scan-pay-status" role="status" aria-live="polite">Checkout is available only after a completed scan and confirmed payment-provider activation.</p>
+      <p class="scan-privacy">Payments, when enabled, are handled by Stripe. No card information is entered or stored on this website. Redirecting back from checkout does not itself unlock a report.</p>
+    </section>
+
+    <section class="scan-panel scan-full-report" id="scan-unlocked" hidden aria-labelledby="scan-full-title">
+      <p class="eyebrow">Payment confirmed / Private evidence</p>
+      <h2 id="scan-full-title">Your full evidence report</h2>
+      <p class="scan-privacy">This report covers public DNS and email authentication only. Its observations are time-specific; a good score does not guarantee security.</p>
+      <dl class="scan-report-meta">
+        <div><dt>Assessed domain</dt><dd id="scan-full-domain"></dd></div>
+        <div><dt>Report ID</dt><dd id="scan-full-id"></dd></div>
+        <div><dt>Assessment scope</dt><dd>DNS / email controls</dd></div>
+      </dl>
+      <h3>Detailed controls and evidence</h3>
+      <div id="scan-full-findings" class="scan-full-findings"></div>
+      <div class="scan-actions">
+        <button class="btn btn-primary" id="scan-download-report" type="button" disabled>Download full JSON report</button>
+      </div>
+      <p class="scan-privacy">Private access requires your assessment ID and token. Store the downloaded report securely.</p>
     </section>
   </div>
 </section>
@@ -172,7 +204,7 @@ def portal() -> str:
     return layout(
         "/scan/",
         "Online Domain Security Assessment | SMB Scanner Lite",
-        "A domain ownership verification and limited DNS/email security scan with an evidence-led preview. Online access is opening soon.",
+        "Verified domain assessment with free preview and a $19 payment-verified private evidence report when checkout is available.",
         body, crumbs=[("Home", "/"), ("Security Scan", None)], noindex=True,
         extra_head=(
             f'<link rel="stylesheet" href="{asset("/scan.css")}" />'
