@@ -100,3 +100,44 @@ test("tier Formspree notification never includes credentials or assessment token
   assert.equal(calls[0].options.credentials,"omit");
   assert.throws(()=>checkedFormEndpoint("https://other-site.test/f/xbggayev"));
 });
+
+
+test("full evidence is requested only with a private owner bearer; checkout has no card fields",async()=>{
+  const calls=[];
+  const client=makeScanClient(apiOrigin,async(url,options)=>{
+    calls.push({url,options});
+    return Response.json(options.method==="POST"
+      ? {checkout_url:"https://checkout.stripe.com/c/pay/cs_test_demo"}
+      : {report:{report_id:"R1",target:"owned.example.org",results:[]}});
+  });
+  const checkout=await client.checkout(id,token);
+  const full=await client.report(id,token);
+  assert.match(checkout.checkout_url,/checkout\.stripe\.com/);
+  assert.equal(full.report.report_id,"R1");
+  assert.deepEqual(calls.map(x=>x.options.method),["POST","GET"]);
+  assert.deepEqual(calls.map(x=>new URL(x.url).pathname),
+    ["/api/v1/assessments/"+id+"/checkout","/api/v1/assessments/"+id+"/report"]);
+  assert.ok(calls.every(x=>x.options.headers.Authorization==="Bearer "+token));
+  assert.ok(calls.every(x=>!x.url.includes(token)));
+  assert.ok(calls.every(x=>x.options.credentials==="omit"));
+  assert.ok(calls.every(x=>x.options.body===undefined));
+});
+test("Stripe hosted checkout URL is strictly validated against redirect injection",async()=>{
+  const {checkedCheckoutUrl}=await import("../website/scan-app.mjs");
+  assert.equal(checkedCheckoutUrl("https://checkout.stripe.com/c/pay/cs_test_123"),
+    "https://checkout.stripe.com/c/pay/cs_test_123");
+  for(const value of ["","javascript:alert(1)",
+    "http://checkout.stripe.com/c/pay/cs_test_123",
+    "https://checkout.stripe.com.evil.test/pay",
+    "https://evil.test/pay","https://checkout.stripe.com@evil.test/pay",
+    "https://checkout.stripe.com:8443/pay",
+    "https://checkout.stripe.com/pay#private"]) {
+    assert.throws(()=>checkedCheckoutUrl(value),undefined,value);
+  }
+});
+test("a backend 402 is not interpreted as a successful payment",async()=>{
+  const client=makeScanClient(apiOrigin,async()=>Response.json(
+    {error:"Full evidence report requires verified $19 payment"},{status:402}));
+  await assert.rejects(client.report(id,token),
+    e=>e instanceof ScanAPIError && e.status===402);
+});
