@@ -70,6 +70,49 @@ export function makeScanClient(apiBase, fetchImpl = fetch) {
   });
 }
 
+
+/** Send only public contact metadata to Formspree. DNS ownership and scan
+ * authorization are always checked separately by the private backend. */
+export function checkedFormEndpoint(value) {
+  if (typeof value !== "string" || !/^https:\/\/formspree\.io\/f\/[a-z0-9]{8,}$/i.test(value.trim())) {
+    throw new Error("Form notification is not configured");
+  }
+  return value.trim();
+}
+export async function notifyRequest(endpoint, input, fetchImpl = fetch) {
+  const tier = ["basic","regular","deep"].includes(input.tier) ? input.tier : "basic";
+  const payload = {
+    kind:"assessment-tier-enquiry",
+    name:String(input.name || "").slice(0,100),
+    email:String(input.email || "").slice(0,254),
+    domain:String(input.domain || "").slice(0,253),
+    tier,
+    authorised:input.authorised===true ? "yes" : "no",
+    page:"/scan/",
+    note:tier==="basic" ? "Basic DNS/email enquiry; verified ownership required." :
+      "Manually scoped assessment enquiry. No scan or payment initiated.",
+  };
+  const response=await fetchImpl(checkedFormEndpoint(endpoint),{
+    method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},
+    body:JSON.stringify(payload),credentials:"omit",redirect:"error",
+    referrerPolicy:"no-referrer",cache:"no-store",signal:AbortSignal.timeout(9000),
+  });
+  if(!response.ok) throw new Error("Team notification could not be delivered");
+  return true;
+}
+export const SCAN_STATUSES=Object.freeze({
+  awaiting_verification:"Waiting for DNS TXT ownership proof",
+  verified:"Ownership verified. Ready for one authorized scan",
+  dispatching:"Securely contacting the remote worker",
+  queued:"Request accepted. Waiting for an available worker",
+  running:"Worker active. Reviewing public DNS and email policy",
+  dispatch_unknown:"Dispatch uncertain. Operator review required",
+  dispatch_failed:"The worker rejected the launch",
+  failed:"Assessment could not finish",
+  completed:"Assessment complete. Your score and findings are ready",
+});
+const BUSY_STATES=new Set(["dispatching","queued","running"]);
+
 const STORE_KEY = "smbscanner.saas.session.v1";
 
 export function parseSession(value) {
@@ -82,6 +125,7 @@ export function parseSession(value) {
       domain: typeof record.domain === "string" ? record.domain.slice(0, 253) : "",
       recordName: typeof record.recordName === "string" ? record.recordName.slice(0, 300) : "",
       recordValue: typeof record.recordValue === "string" ? record.recordValue.slice(0, 300) : "",
+      launchAuthorized: record.launchAuthorized === true,
     };
   } catch { return null; }
 }
@@ -104,33 +148,30 @@ function startPortal() {
     button.disabled = value;
     button.setAttribute("aria-busy", String(value));
   };
-  if (!active) {
-    step("#scan-create",false);
-    step("#scan-closed",true);
-    showMessage("Online assessments are not open yet. The recorded demo and manual enquiry remain available.");
-    return;
+  let client = null;
+  if (active) {
+    try { client = makeScanClient(cfg.apiBaseUrl); }
+    catch { showMessage("Online configuration is incomplete. Enquiries remain available.","error"); }
   }
-  let client;
-  try { client = makeScanClient(cfg.apiBaseUrl); }
-  catch {
-    step("#scan-create",false);
-    step("#scan-closed",true);
-    showMessage("Online assessment configuration is incomplete. Please use the manual request form.", "error");
-    return;
+  if (!client) {
+    step("#scan-create",true);step("#scan-closed",true);step("#scan-resume",false);
+    showMessage("Live scans are not accepting public jobs yet. Choose a tier to send an enquiry. No scan or payment will start.");
   }
-  let session = null;
+  let session = null, pollTimer = null, dispatchPending = false;
+  const stopPolling = () => { if(pollTimer) clearTimeout(pollTimer); pollTimer=null; };
   const save = value => {
     session = value;
     try { window.sessionStorage.setItem(STORE_KEY,JSON.stringify(value)); } catch { /* private mode */ }
   };
   const discard = () => {
-    session = null;
+    stopPolling(); session = null;
     try { window.sessionStorage.removeItem(STORE_KEY); } catch { /* private mode */ }
   };
   function showCreated() {
     if (!session) return;
     step("#scan-create",false);
     step("#scan-resume",false);
+    step("#scan-closed",false);
     step("#scan-verify",true);
     step("#scan-status",true);
     text("#scan-domain",session.domain);
@@ -146,6 +187,8 @@ function startPortal() {
     text("#scan-preview-grade",data.grade ?? "—");
     text("#scan-preview-score",Number.isFinite(data.score) ? data.score + "/100" : "Not available");
     text("#scan-preview-confidence",data.confidence ?? "Limited evidence");
+    text("#scan-preview-controls",Number.isInteger(data.conclusive_controls)&&Number.isInteger(data.total_controls) ?
+      data.conclusive_controls+" of "+data.total_controls+" controls conclusive" : "Public DNS/email profile only");
     const list = $("#scan-findings");
     list.replaceChildren();
     for (const entry of Array.isArray(data.top_findings) ? data.top_findings.slice(0,3) : []) {
@@ -160,78 +203,154 @@ function startPortal() {
     }
     text("#scan-report-notice","The detailed evidence is locked until secure payment is available. There is no checkout or charge in this preview.");
   }
+  function statusView(status) {
+    const message=SCAN_STATUSES[status] || "Waiting for a server status update";
+    text("#scan-state",String(status || "unknown").replaceAll("_"," "));
+    text("#scan-progress-label",message);
+    text("#scan-activity",message);
+    step("#scan-running",BUSY_STATES.has(status));
+    const stage=status==="completed" ? 3 :
+      BUSY_STATES.has(status) || ["failed","dispatch_failed","dispatch_unknown"].includes(status) ? 2 :
+      status==="verified" ? 1 : 0;
+    root.querySelectorAll("[data-scan-stage]").forEach(el=>{
+      const pos=Number(el.dataset.scanStage);
+      el.classList.toggle("is-active",pos===stage);
+      el.classList.toggle("is-done",pos<stage);
+    });
+  }
+  function schedulePoll() {
+    stopPolling();
+    if(!session) return;
+    pollTimer=setTimeout(async()=>{
+      try { await refresh(); }
+      catch {
+        stopPolling();
+        showMessage("Status updates are temporarily unavailable. Use Refresh status; your scan was not restarted.","error");
+      }
+    },6000);
+  }
   async function refresh() {
-    if (!session) return;
-    const state = await client.status(session.id,session.token);
+    if(!session || !client) return;
+    const state=await client.status(session.id,session.token);
     step("#scan-status",true);
-    text("#scan-state",state.status || "unknown");
-    if (state.status === "verified") {
+    statusView(state.status);
+    if(state.status==="verified") {
       step("#scan-verify",false);
       step("#scan-dispatch",true);
-      showMessage("Ownership verified. A scan will start only if you explicitly confirm below.", "success");
-    } else if (["queued","dispatching","dispatch_unknown","running"].includes(state.status)) {
-      step("#scan-verify",false);
-      step("#scan-dispatch",false);
-      showMessage(state.status === "dispatch_unknown"
-        ? "GitHub dispatch outcome is unknown. Do not click Start again; contact support with your assessment ID."
-        : "Your assessment has been submitted. Use Refresh status to check progress.");
-    } else if (state.status === "completed") {
-      step("#scan-verify",false);
-      step("#scan-dispatch",false);
-      const data = await client.preview(session.id,session.token);
+      showMessage("Ownership verified. A single authorized DNS/email scan is ready.","success");
+    } else if(BUSY_STATES.has(state.status)) {
+      step("#scan-verify",false);step("#scan-dispatch",false);
+      showMessage("Remote workflow active. Its actual status refreshes automatically.");
+      schedulePoll();
+    } else if(state.status==="dispatch_unknown") {
+      stopPolling();step("#scan-verify",false);step("#scan-dispatch",false);
+      showMessage("Dispatch outcome is unknown. Do not restart; contact support with your assessment ID.","error");
+    } else if(state.status==="completed") {
+      stopPolling();step("#scan-verify",false);step("#scan-dispatch",false);
+      const data=await client.preview(session.id,session.token);
       drawPreview(data);
-      showMessage("Assessment complete. A limited preview is available below.", "success");
-    } else if (["failed","dispatch_failed"].includes(state.status)) {
-      step("#scan-verify",false);
-      step("#scan-dispatch",false);
-      showMessage("The assessment could not complete. No second scan will start automatically. Contact support with your assessment ID.", "error");
+      showMessage("Assessment complete. Your score, grade and priority findings are ready.","success");
+    } else if(["failed","dispatch_failed"].includes(state.status)) {
+      stopPolling();step("#scan-verify",false);step("#scan-dispatch",false);
+      showMessage("The assessment could not finish. No repeat scan was started.","error");
     } else {
       step("#scan-verify",true);
     }
   }
+  async function startOneScan(button) {
+    if(!session || !client || dispatchPending) return;
+    dispatchPending=true;busy(button,true);
+    try {
+      showMessage("Ownership confirmed. Requesting a single remote DNS/email assessment…");
+      const result=await client.dispatch(session.id,session.token);
+      step("#scan-dispatch",false);
+      statusView(result.status || "queued");
+      showMessage("Remote assessment requested. Progress updates will appear automatically.","success");
+      schedulePoll();
+    } catch(e) {
+      showMessage(e instanceof ScanAPIError ? e.message :
+        "Launch could not be confirmed. Refresh status; never start twice.","error");
+      try { await refresh(); } catch { /* status may be unavailable */ }
+    } finally {dispatchPending=false;busy(button,false)}
+  }
+  function selectedTier() {
+    return root.querySelector('input[name="tier"]:checked')?.value || "basic";
+  }
+  function updateTier() {
+    const tier = selectedTier();
+    root.querySelectorAll(".scan-tier").forEach(card =>
+      card.classList.toggle("is-selected",card.querySelector("input")?.checked===true));
+    text("#scan-submit-label",client && tier==="basic" ?
+      "Create ownership verification" : "Send assessment enquiry");
+    step("#scan-tier-disclosure",tier!=="basic");
+  }
+  root.querySelectorAll('input[name="tier"]').forEach(el=>el.addEventListener("change",updateTier));
+  updateTier();
   $("#scan-request-form").addEventListener("submit",async event=>{
     event.preventDefault();
     const form=event.currentTarget;
-    const accept=$("#scan-consent");
-    if (!accept.checked) { showMessage("Confirm that you own or are expressly authorized to assess this domain.", "error"); return; }
+    if(!$("#scan-consent").checked) {
+      showMessage("Confirm domain ownership or explicit written authorization first.","error"); return;
+    }
     const button=form.querySelector('button[type="submit"]');
     busy(button,true);
+    const payload={
+      name:form.elements.namedItem("name").value.trim(),
+      email:form.elements.namedItem("email").value.trim(),
+      domain:form.elements.namedItem("domain").value.trim(),
+      tier:selectedTier(),authorised:true,
+    };
+    let notified=false;
     try {
-      const payload={name:form.elements.namedItem("name").value.trim(),
-                     email:form.elements.namedItem("email").value.trim(),
-                     domain:form.elements.namedItem("domain").value.trim()};
+      try { notified=await notifyRequest(window.SMB_CONFIG?.formEndpoint,payload); }
+      catch { notified=false; }
+      if(!client || payload.tier!=="basic") {
+        if(notified) {
+          form.reset(); updateTier();
+          showMessage("Enquiry delivered. Scope, final pricing and authorization will be agreed before work. No scan has started.","success");
+        } else {
+          showMessage("Formspree could not deliver the enquiry. Use the Contact page. No scan has started.","error");
+        }
+        return;
+      }
       const result=await client.create(payload);
-      const next=parseSession({id:result.assessment_id,token:result.access_token,
-        domain:result.domain,recordName:result.dns_record_name,recordValue:result.dns_record_value});
-      if (!next || !next.recordName || !next.recordValue) throw new Error("Invalid server response");
-      save(next);
-      showCreated();
+      const next=parseSession({
+        id:result.assessment_id,token:result.access_token,
+        domain:result.domain,recordName:result.dns_record_name,
+        recordValue:result.dns_record_value,launchAuthorized:true,
+      });
+      if(!next || !next.recordName || !next.recordValue) throw new Error("Invalid server response");
+      save(next); showCreated();statusView("awaiting_verification");
+      if(!notified) showMessage("Verification created, but team notification is unavailable. Keep the token private.");
     } catch(e) {
-      showMessage(e instanceof ScanAPIError ? e.message : "Could not create an assessment. Please use the manual request form.", "error");
+      showMessage(e instanceof ScanAPIError ? e.message :
+        "Could not create verification. Please use the Contact page.","error");
     } finally {busy(button,false)}
   });
   $("#scan-verify-button").addEventListener("click",async event=>{
-    const button=event.currentTarget; busy(button,true);
-    try {
-      await client.verify(session.id,session.token);
-      await refresh();
-    } catch(e) {showMessage(e instanceof ScanAPIError ? e.message : "Could not verify DNS ownership.", "error")}
-    finally {busy(button,false)}
-  });
-  $("#scan-dispatch-button").addEventListener("click",async event=>{
-    if (!$("#scan-dispatch-consent").checked) {
-      showMessage("Confirm explicit authorization before starting the DNS/email assessment.","error"); return;
-    }
+    if(!session || !client) return;
     const button=event.currentTarget;busy(button,true);
     try {
-      const result=await client.dispatch(session.id,session.token);
-      showMessage("Assessment dispatch requested. The scanner cannot be started again for this assessment.","success");
-      text("#scan-state",result.status);
-      step("#scan-dispatch",false);
+      await client.verify(session.id,session.token);
+      statusView("verified");
+      step("#scan-verify",false);
+      if(session.launchAuthorized) {
+        // Intake explicitly authorized one DNS/email scan after TXT proof.
+        await startOneScan($("#scan-dispatch-button"));
+      } else {
+        // Resumed legacy sessions require a second explicit scan consent.
+        await refresh();
+      }
     } catch(e) {
-      showMessage(e instanceof ScanAPIError ? e.message :
-        "Dispatch status uncertain. Use Refresh status; do not submit again.","error");
+      showMessage(e instanceof ScanAPIError ? e.message : "Could not verify DNS ownership.","error");
     } finally {busy(button,false)}
+  });
+  $("#scan-dispatch-button").addEventListener("click",async event=>{
+    if(!$("#scan-dispatch-consent").checked) {
+      showMessage("Confirm explicit authorization for this exact DNS/email assessment.","error");
+      return;
+    }
+    await startOneScan(event.currentTarget);
   });
   $("#scan-refresh-button").addEventListener("click",async event=>{
     const button=event.currentTarget;busy(button,true);
@@ -258,7 +377,8 @@ function startPortal() {
   $("#scan-new-button").addEventListener("click",()=>{
     discard();step("#scan-create",true);step("#scan-verify",false);step("#scan-status",false);
     step("#scan-dispatch",false);step("#scan-preview",false);step("#scan-resume",true);
-    showMessage("Previous assessment cleared from this browser tab. Its stored report was not deleted.");
+    step("#scan-running",false);step("#scan-closed",!client);step("#scan-resume",Boolean(client));
+    showMessage("Session cleared from this tab. The server-side assessment was not deleted.");
   });
   $("#scan-copy-token").addEventListener("click",async()=>{
     if(!session) return;
@@ -267,14 +387,17 @@ function startPortal() {
       showMessage("Private token copied. Keep it secure and do not share it in chat.", "success");
     } catch { showMessage("Select and copy the private token manually.", "info"); }
   });
-  try {session=parseSession(window.sessionStorage.getItem(STORE_KEY));}catch{session=null}
-  if(session){
-    showCreated();
-    refresh().catch(()=>showMessage("Couldn't refresh automatically. Use Refresh status to try again.", "error"));
-  } else {
-    step("#scan-create",true);
-    step("#scan-resume",true);
+  if(client) {
+    try { session=parseSession(window.sessionStorage.getItem(STORE_KEY)); } catch { session=null; }
+    if(session){
+      showCreated();
+      refresh().catch(()=>showMessage("Automatic refresh unavailable. Use Refresh status.","error"));
+    } else {
+      step("#scan-create",true);
+      step("#scan-resume",true);
+    }
   }
+  window.addEventListener("pagehide",()=>{ if(pollTimer) clearTimeout(pollTimer); },{once:true});
 }
 if (typeof document !== "undefined") {
   // DOMContentLoaded follows all deferred site config scripts. A module in

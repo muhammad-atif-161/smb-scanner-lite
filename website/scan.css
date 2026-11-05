@@ -27,3 +27,25 @@
 .scan-panel .meta-list{gap:1rem;margin:1.35rem 0}
 .scan-panel .meta-list dd{margin-top:.4rem}
 @media(max-width:650px){.scan-steps{grid-template-columns:1fr 1fr}.scan-step:nth-child(2){border-right:0}.scan-step:nth-child(-n+2){border-bottom:1px solid var(--border)}.scan-form{grid-template-columns:1fr}}
+
+/* Restrained pricing and truthful operational feedback. */
+.scan-tiers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;padding:0;margin:1.5rem 0;border:0}
+.scan-tier{position:relative;display:flex;flex-direction:column;gap:.65rem;cursor:pointer;min-width:0;background:#fffefa;border:1px solid #d3ddd7;border-radius:9px;padding:1.35rem;transition:border-color .18s,box-shadow .18s}
+.scan-tier:hover,.scan-tier.is-selected{border-color:#3b6870;box-shadow:0 0 0 1px #3b6870}
+.scan-tier:focus-within{outline:2px solid #2b656d;outline-offset:3px}
+.scan-tier input{position:absolute;top:1rem;right:1rem;width:17px;height:17px;accent-color:#295d65}
+.scan-tier-type{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:#876a44;font-weight:700;padding-right:1.4rem}
+.scan-tier strong{font:400 1.8rem/1.1 var(--font-head);color:var(--text)}
+.scan-tier-price{font:400 2.15rem/1.1 var(--font-head);color:#254d56}
+.scan-tier-price small{font:500 .75rem/1.5 var(--font-body);color:var(--text-secondary)}
+.scan-tier-desc{font-size:.84rem;color:var(--text-secondary);line-height:1.65;flex:1}
+.scan-tier em{font:600 .7rem/1.5 var(--font-body);font-style:normal;color:#3b6567;padding-top:.65rem;border-top:1px solid var(--border)}
+.scan-progress-track{height:5px;background:#e2e9e5;border-radius:99px;overflow:hidden;margin:1rem 0}
+.scan-progress-track span{display:block;width:35%;height:100%;background:#37666d;animation:scan-busy 1.8s ease-in-out infinite alternate}
+.scan-activity{margin:.85rem 0;font-size:.88rem;color:var(--text-secondary)}
+.scan-step.is-active{background:#eef4f0;box-shadow:inset 0 3px 0 #2e6269}
+.scan-step.is-done{color:#296b4c;background:#f3f6f2}
+.scan-tier-disclosure[hidden],.scan-progress-track[hidden]{display:none}
+@keyframes scan-busy{from{transform:translateX(-100%)}to{transform:translateX(280%)}}
+@media(max-width:790px){.scan-tiers{grid-template-columns:1fr}.scan-tier{gap:.4rem}.scan-tier-desc{flex:auto}}
+@media(prefers-reduced-motion:reduce){.scan-progress-track span{animation:none;width:100%}}
