@@ -70,6 +70,49 @@ export function makeScanClient(apiBase, fetchImpl = fetch) {
   });
 }
 
+
+/** Send only public contact metadata to Formspree. DNS ownership and scan
+ * authorization are always checked separately by the private backend. */
+export function checkedFormEndpoint(value) {
+  if (typeof value !== "string" || !/^https:\/\/formspree\.io\/f\/[a-z0-9]{8,}$/i.test(value.trim())) {
+    throw new Error("Form notification is not configured");
+  }
+  return value.trim();
+}
+export async function notifyRequest(endpoint, input, fetchImpl = fetch) {
+  const tier = ["basic","regular","deep"].includes(input.tier) ? input.tier : "basic";
+  const payload = {
+    kind:"assessment-tier-enquiry",
+    name:String(input.name || "").slice(0,100),
+    email:String(input.email || "").slice(0,254),
+    domain:String(input.domain || "").slice(0,253),
+    tier,
+    authorised:input.authorised===true ? "yes" : "no",
+    page:"/scan/",
+    note:tier==="basic" ? "Basic DNS/email enquiry; verified ownership required." :
+      "Manually scoped assessment enquiry. No scan or payment initiated.",
+  };
+  const response=await fetchImpl(checkedFormEndpoint(endpoint),{
+    method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},
+    body:JSON.stringify(payload),credentials:"omit",redirect:"error",
+    referrerPolicy:"no-referrer",cache:"no-store",signal:AbortSignal.timeout(9000),
+  });
+  if(!response.ok) throw new Error("Team notification could not be delivered");
+  return true;
+}
+export const SCAN_STATUSES=Object.freeze({
+  awaiting_verification:"Waiting for DNS TXT ownership proof",
+  verified:"Ownership verified. Ready for one authorized scan",
+  dispatching:"Securely contacting the remote worker",
+  queued:"Request accepted. Waiting for an available worker",
+  running:"Worker active. Reviewing public DNS and email policy",
+  dispatch_unknown:"Dispatch uncertain. Operator review required",
+  dispatch_failed:"The worker rejected the launch",
+  failed:"Assessment could not finish",
+  completed:"Assessment complete. Your score and findings are ready",
+});
+const BUSY_STATES=new Set(["dispatching","queued","running"]);
+
 const STORE_KEY = "smbscanner.saas.session.v1";
 
 export function parseSession(value) {
@@ -82,6 +125,7 @@ export function parseSession(value) {
       domain: typeof record.domain === "string" ? record.domain.slice(0, 253) : "",
       recordName: typeof record.recordName === "string" ? record.recordName.slice(0, 300) : "",
       recordValue: typeof record.recordValue === "string" ? record.recordValue.slice(0, 300) : "",
+      launchAuthorized: record.launchAuthorized === true,
     };
   } catch { return null; }
 }

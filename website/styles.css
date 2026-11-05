@@ -3420,3 +3420,11 @@ table caption {
   font-size: 1.0625rem;
   line-height: 1.35;
 }
+
+/* Capabilities: eliminate the duplicate CSS pseudo-chevron and lock every
+   control arrow into a consistent third grid column at all viewport widths. */
+.control-card > summary { display:grid;grid-template-columns:2.5rem minmax(0,1fr) 1rem;align-items:center;column-gap:.9rem; }
+.control-card > summary::after { content:none;display:none; }
+.control-card > summary .ctrl-chevron { grid-column:3;justify-self:center;align-self:center;margin:0; }
+.control-card > summary .ctrl-title { min-width:0; }
+.control-card > summary .ctrl-num { margin:0;justify-self:start; }

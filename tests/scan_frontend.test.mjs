@@ -84,3 +84,19 @@ test("invalid IDs, tokens, and recovery sessions rejected before network",async(
   assert.equal(valid.id,id);
   assert.equal(valid.token,token);
 });
+
+test("tier Formspree notification never includes credentials or assessment tokens",async()=>{
+  const {notifyRequest,checkedFormEndpoint}=await import("../website/scan-app.mjs");
+  const calls=[];
+  await notifyRequest("https://formspree.io/f/xbggayev",
+    {name:"A",email:"a@example.org",domain:"owned.example.org",tier:"deep",authorised:true,
+     token:"secret",recordValue:"secret",assessmentId:"secret"},
+    async(url,options)=>{calls.push({url,options});return Response.json({ok:true})});
+  assert.equal(calls.length,1);
+  assert.equal(checkedFormEndpoint(calls[0].url),"https://formspree.io/f/xbggayev");
+  assert.deepEqual(Object.keys(JSON.parse(calls[0].options.body)).sort(),
+    ["authorised","domain","email","kind","name","note","page","tier"].sort());
+  assert.equal(JSON.parse(calls[0].options.body).tier,"deep");
+  assert.equal(calls[0].options.credentials,"omit");
+  assert.throws(()=>checkedFormEndpoint("https://other-site.test/f/xbggayev"));
+});

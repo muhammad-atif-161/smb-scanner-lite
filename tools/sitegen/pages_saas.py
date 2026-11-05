@@ -11,32 +11,56 @@ def portal() -> str:
 <div class="page-head">
   <div class="wrap scan-shell">
     <p class="eyebrow">Online assessment / DNS and email</p>
-    <h1>Your domain, verified. Your findings, explained.</h1>
-    <p class="lede">Start with a domain you own. Verify control through a temporary DNS record, then authorize a limited review of public DNS and email-authentication policy. No login, vulnerability exploitation or intrusive probing.</p>
+    <h1>Verify the domain. Understand the exposure.</h1>
+    <p class="lede">Choose a level of review, confirm that you control the domain, and follow an evidence-led assessment. The live Basic profile examines public DNS and email safeguards; broader work is scoped separately.</p>
   </div>
 </div>
 <section class="section section--tight">
   <div class="wrap scan-shell" data-saas-portal>
     <ol class="scan-steps" aria-label="Assessment process">
-      <li class="scan-step"><b>01</b>Request</li>
-      <li class="scan-step"><b>02</b>Verify DNS</li>
-      <li class="scan-step"><b>03</b>Run once</li>
-      <li class="scan-step"><b>04</b>Preview</li>
+      <li class="scan-step" data-scan-stage="0"><b>01</b>Choose a scan</li>
+      <li class="scan-step" data-scan-stage="1"><b>02</b>Verify ownership</li>
+      <li class="scan-step" data-scan-stage="2"><b>03</b>Watch progress</li>
+      <li class="scan-step" data-scan-stage="3"><b>04</b>Read findings</li>
     </ol>
 
     <p class="scan-message" id="scan-message" data-tone="info" aria-live="polite" role="status" hidden></p>
 
     <section class="scan-panel" id="scan-closed" hidden aria-label="Availability notice">
-      <h2>Online scanning is opening soon</h2>
-      <p>The assessment interface and private backend are being prepared for controlled customer access.
-      Public scan requests are not enabled yet. Explore the example report or contact us about availability.</p>
-      <a href="/request-assessment/" class="btn btn-primary">Ask about availability</a>
+      <h2>Controlled onboarding</h2>
+      <p>The online worker is not yet accepting public jobs. Select a tier and send an enquiry below. This will not initiate a scan or charge you.</p>
     </section>
 
     <section class="scan-panel" id="scan-create" hidden aria-labelledby="scan-create-title">
-      <h2 id="scan-create-title">Set up your assessment</h2>
-      <p class="scan-privacy">Enter your public domain and a contact address. Never enter passwords, API keys or internal network details.</p>
+      <h2 id="scan-create-title">Choose your assessment</h2>
+      <p class="scan-privacy">Three clear levels of service. Prices shown are proposed launch rates in USD, not a checkout. No card details are collected.</p>
       <form id="scan-request-form">
+        <fieldset class="scan-tiers" aria-label="Select assessment level">
+          <legend class="sr-only">Assessment level</legend>
+          <label class="scan-tier is-selected">
+            <input type="radio" name="tier" value="basic" checked>
+            <span class="scan-tier-type">01 / Essential</span><strong>Basic</strong>
+            <span class="scan-tier-price">$0 <small>/ preview</small></span>
+            <span class="scan-tier-desc">Public DNS, SPF, DMARC and selected DKIM observations. Score, grade and top findings after domain verification.</span>
+            <em>Automated when available</em>
+          </label>
+          <label class="scan-tier">
+            <input type="radio" name="tier" value="regular">
+            <span class="scan-tier-type">02 / Extended</span><strong>Regular</strong>
+            <span class="scan-tier-price">$49 <small>/ indicative</small></span>
+            <span class="scan-tier-desc">Broader evidence and manually agreed scope. These checks are not performed by the current online worker.</span>
+            <em>Enquiry only</em>
+          </label>
+          <label class="scan-tier">
+            <input type="radio" name="tier" value="deep">
+            <span class="scan-tier-type">03 / In-depth</span><strong>Deep</strong>
+            <span class="scan-tier-price">$149 <small>/ indicative</small></span>
+            <span class="scan-tier-desc">Tailored, higher-assurance assessment with written scope, approved targets and agreed methodology.</span>
+            <em>Enquiry only</em>
+          </label>
+        </fieldset>
+        <p class="scan-privacy" id="scan-tier-disclosure" hidden>Regular and Deep requests go to the team for written scope and final pricing. They do not trigger a remote scan.</p>
+        <p class="scan-privacy">Enter your public domain and contact address. Never enter credentials, secrets, internal addresses or payment details.</p>
         <div class="scan-form">
           <div class="field">
             <label for="scan-name">Your name</label>
@@ -53,14 +77,14 @@ def portal() -> str:
           </div>
           <div class="field field--wide">
             <label class="check"><input type="checkbox" id="scan-consent" required>
-              <span>I own this domain or have explicit permission from its owner, agree to
-              the <a href="/terms/">terms</a> and <a href="/privacy/">privacy policy</a>,
-              and understand verification is required before scanning.</span>
+              <span>I own this domain or have written permission from its owner and agree to the
+              <a href="/terms/">terms</a> and <a href="/privacy/">privacy policy</a>.
+              For Basic, I authorize one low-impact DNS/email assessment after successful TXT verification.</span>
             </label>
           </div>
         </div>
         <div class="scan-actions">
-          <button type="submit" class="btn btn-primary">Create verification request</button>
+          <button type="submit" class="btn btn-primary"><span id="scan-submit-label">Send assessment enquiry</span></button>
           <a href="/demo/" class="btn btn-ghost">See a sample report instead</a>
         </div>
       </form>
@@ -108,7 +132,10 @@ def portal() -> str:
 
     <section class="scan-panel" id="scan-status" hidden aria-labelledby="scan-status-title">
       <h2 id="scan-status-title">Assessment status</h2>
-      <p>Status: <strong id="scan-state">awaiting_verification</strong></p>
+      <p class="scan-privacy">Server status: <strong id="scan-state" aria-live="polite">awaiting verification</strong></p>
+      <p id="scan-progress-label" aria-live="polite">Waiting for ownership verification</p>
+      <div class="scan-progress-track" id="scan-running" hidden aria-label="The remote scanner is busy"><span></span></div>
+      <p class="scan-activity" id="scan-activity" role="status" aria-live="polite">Request created</p>
       <div class="scan-actions">
         <button class="btn btn-ghost" id="scan-refresh-button" type="button">Refresh status</button>
         <button class="btn btn-ghost" id="scan-new-button" type="button">Clear this tab</button>
@@ -116,7 +143,7 @@ def portal() -> str:
     </section>
 
     <section class="scan-panel" id="scan-dispatch" hidden aria-labelledby="scan-dispatch-title">
-      <h2 id="scan-dispatch-title">Authorize a single DNS/email scan</h2>
+      <h2 id="scan-dispatch-title">Manual scan launch</h2>
       <p class="scan-privacy">The online worker reads public DNS and email-authentication records only. It does
       not test TLS, web applications or open ports. A scan is dispatched once; an uncertain result is not silently retried.</p>
       <label class="check"><input type="checkbox" id="scan-dispatch-consent">
@@ -132,10 +159,11 @@ def portal() -> str:
       <p>Domain: <strong id="scan-preview-domain"></strong></p>
       <div class="scan-grade"><b id="scan-preview-grade">—</b><span id="scan-preview-score">—</span></div>
       <p class="scan-privacy" id="scan-preview-confidence"></p>
+      <p class="scan-privacy" id="scan-preview-controls"></p>
       <h3>Top findings</h3>
       <ul id="scan-findings" class="card-list"></ul>
       <div class="scan-lock"><p id="scan-report-notice"></p>
-        <p class="scan-privacy">The full evidence report is kept private. Payment and report unlocking are not yet active; this page does not collect any payment.</p>
+        <p class="scan-privacy">The full evidence report is kept private. Payment and report unlocking are not active; this page does not collect payment.</p>
       </div>
     </section>
   </div>
