@@ -1,5 +1,7 @@
 # Editorial redesign and Cloudflare Phase 4 integration — 2026-11-04
 
+> Historical design record. The hosting, API, and release status below describe an earlier stage. See the private repository PROJECT_INDEX.md for current boundaries.
+
 ## Design direction
 
 The entire GitHub Pages website is now styled by two intentionally separate
@@ -15,7 +17,7 @@ layers:
 The home page \`tools/sitegen/pages_home.py\` has been rewritten as a concise
 editorial product narrative. It uses real recorded report output from the
 project data; no mock customer stories, unverified usage metrics, security
-certification claims or AI-generated "partner logos".
+certification claims or fabricated partner logos.
 
 Shared \`tools/sitegen/ui.py\` updates navigation, calls to action, metadata
 and footer across all 51 generated HTML documents. The original page
