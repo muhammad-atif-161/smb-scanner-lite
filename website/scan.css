@@ -90,3 +90,18 @@
   .scan-evidence summary{flex-wrap:wrap}
   .scan-evidence summary span{margin-left:0}
 }
+
+/* Match the Evidence Desk paper system; operational state remains literal. */
+.scan-tiers{gap:.75rem}
+.scan-tier{background:var(--card);border-color:var(--border);border-radius:2px;box-shadow:none}
+.scan-tier:hover,.scan-tier.is-selected{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.scan-tier-type{color:#80643a;font-family:var(--font-mono)}
+.scan-tier-price{font-family:var(--font-mono);font-size:1.25rem;color:var(--accent)}
+.scan-tier em{color:var(--accent)}
+.scan-progress-track span{width:100%;background:var(--accent);animation:none;transform:none}
+.scan-step.is-active{background:#e4e0d3;box-shadow:inset 0 2px 0 var(--accent)}
+.scan-step.is-done{color:var(--pass);background:#eeece1}
+.scan-payment-row strong{font:500 clamp(1.8rem,3vw,2.4rem)/1 var(--font-mono);color:var(--text)}
+.scan-evidence{background:var(--card);border-radius:2px}
+.scan-evidence-body{background:var(--inset)}
+.scan-evidence-body pre{background:#e8e3d7;color:var(--text)}

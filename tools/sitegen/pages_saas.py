@@ -10,9 +10,10 @@ def portal() -> str:
     body = f"""
 <div class="page-head">
   <div class="wrap scan-shell">
-    <p class="eyebrow">Online assessment / DNS and email</p>
-    <h1>Verify the domain. Understand the exposure.</h1>
-    <p class="lede">Enter a domain you control, prove ownership with a DNS TXT record, and run a limited DNS/email scan. View your score and priority findings at no cost; unlock the complete underlying evidence for a single $19 payment when secure checkout is available.</p>
+    <p class="eyebrow">Verified domain assessment / Online service</p>
+    <h1>Start with proof of domain control.</h1>
+    <p class="lede">The online service checks a defined set of public DNS and email controls. Ownership verification is required before any assessment can run. The result is an evidence report for this profile, not a complete security review.</p>
+    <p class="scan-privacy"><strong>Current release:</strong> private beta. Basic is planned as a free, limited DNS and email assessment. Standard and In-Depth are not yet available for self-service; pricing and availability will be stated before release.</p>
   </div>
 </div>
 <section class="section section--tight">
@@ -22,8 +23,8 @@ def portal() -> str:
       <li class="scan-step" data-scan-stage="1"><b>02</b>Verify DNS TXT</li>
       <li class="scan-step" data-scan-stage="2"><b>03</b>Run scan</li>
       <li class="scan-step" data-scan-stage="3"><b>04</b>Preview results</li>
-      <li class="scan-step" data-scan-stage="4"><b>05</b>$19 unlock</li>
-      <li class="scan-step" data-scan-stage="5"><b>06</b>Full evidence</li>
+      <li class="scan-step" data-scan-stage="4"><b>05</b>Private report</li>
+      <li class="scan-step" data-scan-stage="5"><b>06</b>JSON export</li>
     </ol>
 
     <p class="scan-message" id="scan-message" data-tone="info" aria-live="polite" role="status" hidden></p>
@@ -34,35 +35,35 @@ def portal() -> str:
     </section>
 
     <section class="scan-panel" id="scan-create" hidden aria-labelledby="scan-create-title">
-      <h2 id="scan-create-title">Choose your assessment</h2>
-      <p class="scan-privacy">Three clear levels of service. Prices shown are proposed launch rates in USD, not a checkout. No card details are collected.</p>
+      <h2 id="scan-create-title">Choose a profile</h2>
+      <p class="scan-privacy">Basic is the only profile planned for the public beta. Standard and In-Depth remain in private beta. No payment is collected here.</p>
       <form id="scan-request-form">
         <fieldset class="scan-tiers" aria-label="Select assessment level">
           <legend class="sr-only">Assessment level</legend>
           <label class="scan-tier is-selected">
             <input type="radio" name="tier" value="basic" checked>
-            <span class="scan-tier-type">01 / Essential</span><strong>Basic</strong>
-            <span class="scan-tier-price">$0 <small>/ preview</small></span>
-            <span class="scan-tier-note">Full evidence report: $19 one-time</span>
-            <span class="scan-tier-desc">Public DNS, SPF, DMARC and selected DKIM observations. Score, grade and top findings after domain verification.</span>
-            <em>Automated when available</em>
+            <span class="scan-tier-type">01 / Limited</span><strong>Basic</strong>
+            <span class="scan-tier-price">Free <small>/ beta</small></span>
+            <span class="scan-tier-note">Limited runs · ownership verification required</span>
+            <span class="scan-tier-desc">Public DNS, SPF, DMARC and selected DKIM observations. Score and findings are limited to the controls that return usable evidence.</span>
+            <em>Planned beta profile</em>
           </label>
           <label class="scan-tier">
             <input type="radio" name="tier" value="regular">
-            <span class="scan-tier-type">02 / Extended</span><strong>Regular</strong>
-            <span class="scan-tier-price">$49 <small>/ indicative</small></span>
-            <span class="scan-tier-desc">Broader evidence and manually agreed scope. These checks are not performed by the current online worker.</span>
-            <em>Enquiry only</em>
+            <span class="scan-tier-type">02 / Expanded</span><strong>Standard</strong>
+            <span class="scan-tier-price">Private beta</span>
+            <span class="scan-tier-desc">A broader owner-verified assessment with a private evidence report and JSON download. Exact coverage will be published before release.</span>
+            <em>Not available yet</em>
           </label>
           <label class="scan-tier">
             <input type="radio" name="tier" value="deep">
-            <span class="scan-tier-type">03 / In-depth</span><strong>Deep</strong>
-            <span class="scan-tier-price">$149 <small>/ indicative</small></span>
-            <span class="scan-tier-desc">Tailored, higher-assurance assessment with written scope, approved targets and agreed methodology.</span>
-            <em>Enquiry only</em>
+            <span class="scan-tier-type">03 / Extended scope</span><strong>In-Depth</strong>
+            <span class="scan-tier-price">Private beta</span>
+            <span class="scan-tier-desc">A separately scoped assessment with a private evidence report and JSON download. Coverage and terms will be agreed before any work begins.</span>
+            <em>Not available yet</em>
           </label>
         </fieldset>
-        <p class="scan-privacy" id="scan-tier-disclosure" hidden>Regular and Deep requests go to the team for written scope and final pricing. They do not trigger a remote scan.</p>
+        <p class="scan-privacy" id="scan-tier-disclosure" hidden>Standard and In-Depth are not currently available and selecting them will not start a scan or payment.</p>
         <p class="scan-privacy">Enter your public domain and contact address. Never enter credentials, secrets, internal addresses or payment details.</p>
         <div class="scan-form">
           <div class="field">
@@ -172,14 +173,13 @@ def portal() -> str:
       <p class="eyebrow">Private report access</p>
       <h2 id="scan-paywall-title">Unlock the evidence behind your score.</h2>
       <div class="scan-payment-row">
-        <div><strong>$19</strong><span>USD · one-time · per completed domain assessment</span></div>
-        <p>See the full DNS/email control results, original observations, severity and report metadata. This is not an expanded or intrusive scan.</p>
+        <div><strong>Private</strong><span>Paid report access · release details pending</span></div>
+        <p>Paid profiles are planned to include the complete evidence report and JSON download. Coverage and price will be shown before checkout is enabled.</p>
       </div>
       <div class="scan-actions">
-        <button class="btn btn-primary" type="button" id="scan-pay-button" disabled>Secure checkout · $19</button>
+        <button class="btn btn-primary" type="button" id="scan-pay-button" disabled>Checkout not available</button>
       </div>
-      <p class="scan-privacy" id="scan-pay-status" role="status" aria-live="polite">Checkout is available only after a completed scan and confirmed payment-provider activation.</p>
-      <p class="scan-privacy">Payments, when enabled, are handled by Stripe. No card information is entered or stored on this website. Redirecting back from checkout does not itself unlock a report.</p>
+      <p class="scan-privacy" id="scan-pay-status" role="status" aria-live="polite">Private beta. Checkout is not active, and no payment is collected.</p>
     </section>
 
     <section class="scan-panel scan-full-report" id="scan-unlocked" hidden aria-labelledby="scan-full-title">
@@ -204,7 +204,7 @@ def portal() -> str:
     return layout(
         "/scan/",
         "Online Domain Security Assessment | SMB Scanner Lite",
-        "Verified domain assessment with free preview and a $19 payment-verified private evidence report when checkout is available.",
+        "Owner-verified Basic DNS and email posture assessment. Standard and In-Depth remain in private beta; no checkout is available.",
         body, crumbs=[("Home", "/"), ("Security Scan", None)], noindex=True,
         extra_head=(
             f'<link rel="stylesheet" href="{asset("/scan.css")}" />'

@@ -31,5 +31,9 @@ window.SMB_CONFIG = {
     "scanme.nmap.org",
     "badssl.com"
   ],
-  "recordedDataUrl": "/data/recorded-assessment.json"
+  "recordedDataUrl": "/data/recorded-assessment.json",
+  "saas": {
+    "enabled": false,
+    "apiBaseUrl": ""
+  }
 };

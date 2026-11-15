@@ -109,7 +109,7 @@ ALLOWED_DOMAINS = (
 
 # Primary navigation. `key` is used for aria-current and the active state.
 NAV = (
-    ("scan", "Online scan", "/scan/"),
+    ("scan", "Verified assessment", "/scan/"),
     ("capabilities", "Coverage", "/capabilities/"),
     ("methodology", "How it works", "/methodology/"),
     ("report", "Sample report", "/sample-report/"),

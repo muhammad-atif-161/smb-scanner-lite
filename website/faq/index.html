@@ -4,35 +4,36 @@
 <meta charset="utf-8" />
 <script>document.documentElement.className=document.documentElement.className.replace("no-js","js");</script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>FAQ — SMB Scanner Lite Security Posture Assessment</title>
-<meta name="description" content="Straight answers about SMB Scanner Lite: what it measures, how the 0-100 score and A-F grades work, why the public demo is restricted to five domains, what happens after an assessment request, and what the tool cannot do." />
+<title>Questions &amp; Answers | SMB Scanner Lite</title>
+<meta name="description" content="Common questions about the online DNS/email scanner, domain verification, availability, report privacy and the separate desktop sandbox." />
 <link rel="canonical" href="https://smbscannerlite.me/faq/" />
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
 <meta name="author" content="Muhammad Atif" />
-<meta name="theme-color" content="#080B14" />
+<meta name="theme-color" content="#f7f6f2" />
 <meta name="generator" content="SMB Scanner Lite static site builder" />
 <meta property="og:site_name" content="SMB Scanner Lite" />
 <meta property="og:type" content="website" />
-<meta property="og:title" content="FAQ — SMB Scanner Lite Security Posture Assessment" />
-<meta property="og:description" content="Straight answers about SMB Scanner Lite: what it measures, how the 0-100 score and A-F grades work, why the public demo is restricted to five domains, what happens after an assessment request, and what the tool cannot do." />
+<meta property="og:title" content="Questions &amp; Answers | SMB Scanner Lite" />
+<meta property="og:description" content="Common questions about the online DNS/email scanner, domain verification, availability, report privacy and the separate desktop sandbox." />
 <meta property="og:url" content="https://smbscannerlite.me/faq/" />
 <meta property="og:image" content="https://smbscannerlite.me/og-image.png" />
-<meta property="og:image:alt" content="SMB Scanner Lite — a dark navy assessment report showing a posture score of 86 out of 100, grade B, with evidence-backed findings." />
+<meta property="og:image:alt" content="SMB Scanner Lite example security assessment report." />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:locale" content="en_US" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="FAQ — SMB Scanner Lite Security Posture Assessment" />
-<meta name="twitter:description" content="Straight answers about SMB Scanner Lite: what it measures, how the 0-100 score and A-F grades work, why the public demo is restricted to five domains, what happens after an assessment request, and what the tool cannot do." />
+<meta name="twitter:title" content="Questions &amp; Answers | SMB Scanner Lite" />
+<meta name="twitter:description" content="Common questions about the online DNS/email scanner, domain verification, availability, report privacy and the separate desktop sandbox." />
 <meta name="twitter:image" content="https://smbscannerlite.me/og-image.png" />
 <link rel="icon" href="/logo.svg" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
 <link rel="alternate" type="application/json" href="/data/recorded-assessment.json" title="Recorded assessment data (JSON)" />
-<link rel="stylesheet" href="/styles.css?v=7aa65b7e" />
+<link rel="stylesheet" href="/styles.css?v=c46f0141" />
+<link rel="stylesheet" href="/studio.css?v=21df8171" />
 <link rel="preload" href="/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="/fonts/space-grotesk-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
 
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://smbscannerlite.me/#organization","name":"SMB Scanner Lite","url":"https://smbscannerlite.me","logo":{"@type":"ImageObject","url":"https://smbscannerlite.me/logo-512.png","width":512,"height":512},"email":"myself.atiff@gmail.com","founder":{"@type":"Person","name":"Muhammad Atif","url":"https://github.com/muhammad-atif-161"},"description":"An evidence-first external security posture assessment product for small and medium businesses, published as a restricted public sandbox edition.","sameAs":["https://github.com/muhammad-atif-161/smb-scanner-lite","https://github.com/muhammad-atif-161"]},{"@type":"WebSite","@id":"https://smbscannerlite.me/#website","name":"SMB Scanner Lite","url":"https://smbscannerlite.me","description":"Evidence-first external security posture assessment for small and medium businesses.","inLanguage":"en","publisher":{"@id":"https://smbscannerlite.me/#organization"}},{"@type":"FAQPage","@id":"https://smbscannerlite.me/faq/#webpage","url":"https://smbscannerlite.me/faq/","name":"FAQ — SMB Scanner Lite Security Posture Assessment","description":"Straight answers about SMB Scanner Lite: what it measures, how the 0-100 score and A-F grades work, why the public demo is restricted to five domains, what happens after an assessment request, and what the tool cannot do.","isPartOf":{"@id":"https://smbscannerlite.me/#website"},"inLanguage":"en","breadcrumb":{"@id":"https://smbscannerlite.me/faq/#breadcrumb"},"mainEntity":[{"@type":"Question","name":"What is SMB Scanner Lite?","acceptedAnswer":{"@type":"Answer","text":"SMB Scanner Lite is an evidence-first external security posture assessment for small and medium businesses. It evaluates 22 publicly observable security controls on a domain, produces a 0-100 posture score and an A-F grade, and attaches the observation behind every conclusive finding."}},{"@type":"Question","name":"Who is it for?","acceptedAnswer":{"@type":"Answer","text":"Small business owners, the IT administrator or managed service provider who looks after their infrastructure, cybersecurity consultants who need a defensible starting point, and defensive security practitioners who want a tool that refuses to overstate what it saw."}},{"@type":"Question","name":"Is this a vulnerability scanner?","acceptedAnswer":{"@type":"Answer","text":"No. It is a configuration and exposure assessment. It does not run exploit code, it does not authenticate, and it does not enumerate shares or directories. A failed control means a published expectation was not met - not that an exploitable vulnerability was proven."}},{"@type":"Question","name":"Does it replace a penetration test?","acceptedAnswer":{"@type":"Answer","text":"No. A penetration test tests whether a weakness can actually be exploited, with authorisation to attempt it. SMB Scanner Lite observes what is visible from outside and reports that. The two are complementary, and the assessment page says so plainly."}},{"@type":"Question","name":"What does the 0-100 score mean?","acceptedAnswer":{"@type":"Answer","text":"It is a weighted summary of the controls that completed: pass earns full credit, warning partial credit, fail no credit, and inconclusive results are excluded entirely. It exists so an owner and their IT helper can agree on priority. It is a communication aid, not a certificate."}},{"@type":"Question","name":"What do the letter grades mean?","acceptedAnswer":{"@type":"Answer","text":"A is 90-100, B is 80-89, C is 65-79, D is 50-64 and F is below 50. The bands are documented on the methodology page and are applied identically to every target."}},{"@type":"Question","name":"Can I scan my own domain on this website?","acceptedAnswer":{"@type":"Answer","text":"Not on this public site. The published edition is hard-locked to five free-to-use testing domains - example.com, example.org, example.net, scanme.nmap.org and badssl.com - and every other name is rejected before a network request is made. To assess a domain you own, request an assessment or run the sandbox locally."}},{"@type":"Question","name":"Why is the public demo restricted?","acceptedAnswer":{"@type":"Answer","text":"Because a scanner that can be pointed at any host is a weapon, not a demo. The allowlist is enforced inside the runtime rather than in the interface, so it cannot be bypassed with a flag, a setting or an edited form field."}},{"@type":"Question","name":"Is the demo a live scan?","acceptedAnswer":{"@type":"Answer","text":"The demo on this site is a recorded assessment: stored output from a genuine run against example.com on 28 October 2026, with the timestamp, report ID, scanner version and consent receipt shown alongside it. Nothing you enter triggers a scan from your browser."}},{"@type":"Question","name":"Do you collect my data?","acceptedAnswer":{"@type":"Answer","text":"This website has no analytics, no advertising pixels and no tracking cookies. It sends no scan data anywhere. If you submit an enquiry form, the fields you type are used to reply to you and nothing else - see the <a href=\"/privacy/\">privacy policy</a> for exactly what is collected and how long it is held."}},{"@type":"Question","name":"What happens after I request an assessment?","acceptedAnswer":{"@type":"Answer","text":"Your request is reviewed manually. Nothing is scanned automatically. If the domain and authorisation check out, you are contacted to agree scope, written authorisation and delivery format before any assessment runs. If it does not check out, you receive a reply saying so."}},{"@type":"Question","name":"Do I need permission to request an assessment of a domain?","acceptedAnswer":{"@type":"Answer","text":"Yes. You must own the domain or be authorised to request an assessment of it. The request form asks you to confirm this, and authorisation is verified before work starts."}},{"@type":"Question","name":"What formats does a report come in?","acceptedAnswer":{"@type":"Answer","text":"HTML for reading and sharing, JSON for machine processing, CSV for spreadsheet review and TXT for pasting into a ticket. A sanitised sample of each format for the recorded example.com assessment is available on the sample report page."}},{"@type":"Question","name":"Can it detect a breach or tell me if I have been hacked?","acceptedAnswer":{"@type":"Answer","text":"No. External observation cannot establish compromise. It can show the exposure that often precedes one - missing mail authentication, an open remote-access service, weak transport configuration - and that is the honest limit of what it claims."}},{"@type":"Question","name":"What does inconclusive mean?","acceptedAnswer":{"@type":"Answer","text":"No conclusive answer arrived before the timeout. It is reported separately and excluded from the score, so a silent or filtering target can neither inflate nor deflate a result."}},{"@type":"Question","name":"Is the whole project for sale?","acceptedAnswer":{"@type":"Answer","text":"The complete project - private engine, source history, documentation and website - is offered for acquisition as a documented software project, not as a revenue-generating business. Details, terms and the price are on the <a href=\"/acquisition/\">acquisition page</a>."}},{"@type":"Question","name":"Where can I read the technical detail?","acceptedAnswer":{"@type":"Answer","text":"The <a href=\"/methodology/\">methodology page</a> covers measurement, scoring, evidence handling and limitations. The <a href=\"/capabilities/\">capability catalog</a> documents all 22 controls, and the <a href=\"/validation/\">validation page</a> publishes the reproducible test record."}}]},{"@type":"BreadcrumbList","@id":"https://smbscannerlite.me/faq/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://smbscannerlite.me/"},{"@type":"ListItem","position":2,"name":"FAQ"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://smbscannerlite.me/#organization","name":"SMB Scanner Lite","url":"https://smbscannerlite.me","logo":{"@type":"ImageObject","url":"https://smbscannerlite.me/logo-512.png","width":512,"height":512},"email":"myself.atiff@gmail.com","founder":{"@type":"Person","name":"Muhammad Atif","url":"https://github.com/muhammad-atif-161"},"description":"An evidence-first external security posture assessment product for small and medium businesses, published as a restricted public sandbox edition.","sameAs":["https://github.com/muhammad-atif-161/smb-scanner-lite","https://github.com/muhammad-atif-161"]},{"@type":"WebSite","@id":"https://smbscannerlite.me/#website","name":"SMB Scanner Lite","url":"https://smbscannerlite.me","description":"Evidence-first external security posture assessment for small and medium businesses.","inLanguage":"en","publisher":{"@id":"https://smbscannerlite.me/#organization"}},{"@type":"WebPage","@id":"https://smbscannerlite.me/faq/#webpage","url":"https://smbscannerlite.me/faq/","name":"Questions & Answers | SMB Scanner Lite","description":"Common questions about the online DNS/email scanner, domain verification, availability, report privacy and the separate desktop sandbox.","isPartOf":{"@id":"https://smbscannerlite.me/#website"},"inLanguage":"en","breadcrumb":{"@id":"https://smbscannerlite.me/faq/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://smbscannerlite.me/faq/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://smbscannerlite.me/"},{"@type":"ListItem","position":2,"name":"Questions & Answers | SMB Scanner Lite"}]}]}</script>
 </head>
 <body class="">
 
@@ -44,10 +45,11 @@
       <span class="brand-text">SMB Scanner <span class="brand-lite">Lite</span></span>
     </a>
     <nav class="nav-links" aria-label="Primary">
-      <a href="/">Overview</a><a href="/capabilities/">Capabilities</a><a href="/sample-report/">Sample Report</a><a href="/methodology/">Methodology</a><a href="/blogs/">Blog</a><a href="/faq/" aria-current="page">FAQ</a><a href="/contact/">Contact</a>
+      <a href="/scan/">Verified assessment</a><a href="/capabilities/">Coverage</a><a href="/methodology/">How it works</a><a href="/sample-report/">Sample report</a><a href="/blogs/">Journal</a><a href="/docs/">Desktop sandbox</a>
     </nav>
     <div class="nav-actions">
-      <a class="btn btn-primary btn-sm" href="/demo/"><svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5.5 13h5L10 21l7.5-10h-5L13 3z"/></svg><span>Try the Demo</span></a>
+      <span class="nav-availability"><span class="signal"></span>Private beta · not yet open</span>
+      <a class="btn btn-primary btn-sm" href="/scan/"><svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg><span>Start verified assessment</span></a>
       <button class="nav-toggle" type="button" data-nav-toggle aria-label="Open menu" aria-expanded="false" aria-controls="nav-panel">
         <span data-nav-open><svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></span>
         <span data-nav-close hidden><svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>
@@ -57,84 +59,20 @@
 </header>
 <div class="nav-panel" id="nav-panel" data-nav-panel hidden>
   <nav class="nav-panel-links" aria-label="Mobile">
-    <a href="/">Overview</a><a href="/capabilities/">Capabilities</a><a href="/sample-report/">Sample Report</a><a href="/methodology/">Methodology</a><a href="/blogs/">Blog</a><a href="/faq/" aria-current="page">FAQ</a><a href="/contact/">Contact</a>
+    <a href="/scan/">Verified assessment</a><a href="/capabilities/">Coverage</a><a href="/methodology/">How it works</a><a href="/sample-report/">Sample report</a><a href="/blogs/">Journal</a><a href="/docs/">Desktop sandbox</a>
   </nav>
   <div class="nav-panel-foot">
-    <a class="btn btn-primary" href="/demo/"><svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5.5 13h5L10 21l7.5-10h-5L13 3z"/></svg><span>Try the Demo</span></a>
-    <a class="btn btn-ghost" href="/request-assessment/">Request an assessment</a>
+    <a class="btn btn-primary" href="/scan/"><svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg><span>Start verified assessment</span></a>
+    <a class="btn btn-ghost" href="/docs/">Desktop sandbox download</a>
   </div>
 </div>
 <main id="main">
-<nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><span aria-current="page">FAQ</span></li></ol></nav>
+<nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><span aria-current="page">Questions &amp; Answers | SMB Scanner Lite</span></li></ol></nav>
+<header class="page-head"><div class="wrap">
+<p class="eyebrow">Questions answered</p><h1>Before you scan, know the limits.</h1>
+<p class="lede">Plain answers about authorization, coverage, privacy and the two separate tools.</p>
 
-<div class="page-head">
-  <div class="wrap">
-    <p class="eyebrow">FAQ</p>
-    <h1>Questions people actually ask.</h1>
-    <p class="lede">Short answers, no upsell. Where a question needs the technical version, it links to the methodology page rather than repeating it in vague terms.</p>
-    <div class="hero-actions"><a class="btn btn-primary" href="/methodology/"><svg class="btn-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg><span>Read the methodology</span></a><a class="btn btn-ghost" href="/contact/"><span>Ask something else</span></a></div>
-  </div>
-</div>
-
-<section class="section section--flush">
-  <div class="wrap">
-    <div class="row" style="justify-content:space-between;align-items:flex-end">
-      <div class="chips">
-        <a class="btn btn-subtle btn-sm" href="#faq-product">Product and positioning</a><a class="btn btn-subtle btn-sm" href="#faq-scoring">Scores, grades and evidence</a><a class="btn btn-subtle btn-sm" href="#faq-demo">The restricted demo</a><a class="btn btn-subtle btn-sm" href="#faq-assessment">Assessments and authorisation</a><a class="btn btn-subtle btn-sm" href="#faq-privacy">Privacy and data handling</a><a class="btn btn-subtle btn-sm" href="#faq-limits">Limitations</a><a class="btn btn-subtle btn-sm" href="#faq-acquisition">Project acquisition</a>
-      </div>
-      <div class="row" data-acc-controls="#faq-all">
-        <button class="btn btn-subtle btn-sm" type="button" data-acc-open>Expand all</button>
-        <button class="btn btn-subtle btn-sm" type="button" data-acc-close>Collapse all</button>
-      </div>
-    </div>
-    <div id="faq-all">
-<div class="mt-4" id="faq-product">
-  <h2 style="font-size:1.15rem">Product and positioning</h2>
-  <div class="acc mt-2" style="max-width:52rem"><details class="reveal"><summary>What is SMB Scanner Lite?</summary><div><p>SMB Scanner Lite is an evidence-first external security posture assessment for small and medium businesses. It evaluates 22 publicly observable security controls on a domain, produces a 0&ndash;100 posture score and an A&ndash;F grade, and attaches the observation behind every conclusive finding.</p></div></details><details class="reveal"><summary>Who is it for?</summary><div><p>Small business owners, the IT administrator or managed service provider who looks after their infrastructure, cybersecurity consultants who need a defensible starting point, and defensive security practitioners who want a tool that refuses to overstate what it saw.</p></div></details><details class="reveal"><summary>Is this a vulnerability scanner?</summary><div><p>No. It is a configuration and exposure assessment. It does not run exploit code, it does not authenticate, and it does not enumerate shares or directories. A failed control means a published expectation was not met - not that an exploitable vulnerability was proven.</p></div></details><details class="reveal"><summary>Does it replace a penetration test?</summary><div><p>No. A penetration test tests whether a weakness can actually be exploited, with authorisation to attempt it. SMB Scanner Lite observes what is visible from outside and reports that. The two are complementary, and the assessment page says so plainly.</p></div></details><details class="reveal"><summary>What formats does a report come in?</summary><div><p>HTML for reading and sharing, JSON for machine processing, CSV for spreadsheet review and TXT for pasting into a ticket. A sanitised sample of each format for the recorded example.com assessment is available on the sample report page.</p></div></details><details class="reveal"><summary>Where can I read the technical detail?</summary><div><p>The <a href="/methodology/">methodology page</a> covers measurement, scoring, evidence handling and limitations. The <a href="/capabilities/">capability catalog</a> documents all 22 controls, and the <a href="/validation/">validation page</a> publishes the reproducible test record.</p></div></details></div>
-</div>
-<div class="mt-4" id="faq-scoring">
-  <h2 style="font-size:1.15rem">Scores, grades and evidence</h2>
-  <div class="acc mt-2" style="max-width:52rem"><details class="reveal"><summary>What does the 0&ndash;100 score mean?</summary><div><p>It is a weighted summary of the controls that completed: pass earns full credit, warning partial credit, fail no credit, and inconclusive results are excluded entirely. It exists so an owner and their IT helper can agree on priority. It is a communication aid, not a certificate.</p></div></details><details class="reveal"><summary>What do the letter grades mean?</summary><div><p>A is 90&ndash;100, B is 80&ndash;89, C is 65&ndash;79, D is 50&ndash;64 and F is below 50. The bands are documented on the methodology page and are applied identically to every target.</p></div></details><details class="reveal"><summary>What does inconclusive mean?</summary><div><p>No conclusive answer arrived before the timeout. It is reported separately and excluded from the score, so a silent or filtering target can neither inflate nor deflate a result.</p></div></details></div>
-</div>
-<div class="mt-4" id="faq-demo">
-  <h2 style="font-size:1.15rem">The restricted demo</h2>
-  <div class="acc mt-2" style="max-width:52rem"><details class="reveal"><summary>Can I scan my own domain on this website?</summary><div><p>Not on this public site. The published edition is hard-locked to five free-to-use testing domains - example.com, example.org, example.net, scanme.nmap.org and badssl.com - and every other name is rejected before a network request is made. To assess a domain you own, request an assessment or run the sandbox locally.</p></div></details><details class="reveal"><summary>Why is the public demo restricted?</summary><div><p>Because a scanner that can be pointed at any host is a weapon, not a demo. The allowlist is enforced inside the runtime rather than in the interface, so it cannot be bypassed with a flag, a setting or an edited form field.</p></div></details><details class="reveal"><summary>Is the demo a live scan?</summary><div><p>The demo on this site is a <strong>recorded assessment</strong>: stored output from a genuine run against example.com on 28 October 2026, with the timestamp, report ID, scanner version and consent receipt shown alongside it. Nothing you enter triggers a scan from your browser.</p></div></details></div>
-</div>
-<div class="mt-4" id="faq-assessment">
-  <h2 style="font-size:1.15rem">Assessments and authorisation</h2>
-  <div class="acc mt-2" style="max-width:52rem"><details class="reveal"><summary>What happens after I request an assessment?</summary><div><p>Your request is reviewed manually. Nothing is scanned automatically. If the domain and authorisation check out, you are contacted to agree scope, written authorisation and delivery format before any assessment runs. If it does not check out, you receive a reply saying so.</p></div></details><details class="reveal"><summary>Do I need permission to request an assessment of a domain?</summary><div><p>Yes. You must own the domain or be authorised to request an assessment of it. The request form asks you to confirm this, and authorisation is verified before work starts.</p></div></details></div>
-</div>
-<div class="mt-4" id="faq-privacy">
-  <h2 style="font-size:1.15rem">Privacy and data handling</h2>
-  <div class="acc mt-2" style="max-width:52rem"><details class="reveal"><summary>Do you collect my data?</summary><div><p>This website has no analytics, no advertising pixels and no tracking cookies. It sends no scan data anywhere. If you submit an enquiry form, the fields you type are used to reply to you and nothing else - see the <a href="/privacy/">privacy policy</a> for exactly what is collected and how long it is held.</p></div></details></div>
-</div>
-<div class="mt-4" id="faq-limits">
-  <h2 style="font-size:1.15rem">Limitations</h2>
-  <div class="acc mt-2" style="max-width:52rem"><details class="reveal"><summary>Can it detect a breach or tell me if I have been hacked?</summary><div><p>No. External observation cannot establish compromise. It can show the exposure that often precedes one - missing mail authentication, an open remote-access service, weak transport configuration - and that is the honest limit of what it claims.</p></div></details></div>
-</div>
-<div class="mt-4" id="faq-acquisition">
-  <h2 style="font-size:1.15rem">Project acquisition</h2>
-  <div class="acc mt-2" style="max-width:52rem"><details class="reveal"><summary>Is the whole project for sale?</summary><div><p>The complete project - private engine, source history, documentation and website - is offered for acquisition as a documented software project, not as a revenue-generating business. Details, terms and the price are on the <a href="/acquisition/">acquisition page</a>.</p></div></details></div>
-</div></div>
-  </div>
-</section>
-
-
-<section class="section">
-  <div class="wrap">
-    <div class="cta-band reveal">
-      <div class="cta-band-text">
-        <h2>Still unsure whether this fits your situation?</h2>
-        <p>Ask a direct question. There is no sales sequence and no automatic scan.</p>
-      </div>
-      <div class="cta-band-actions">
-        <a class="btn btn-primary" href="/contact/"><svg class="btn-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 6l6 6-6 6"/></svg><span>Contact the maintainer</span></a>
-        <a class="btn btn-ghost" href="/request-assessment/"><span>Request an assessment</span></a>
-      </div>
-    </div>
-  </div>
-</section>
-
+</div></header><section class="section"><div class="wrap"><h2 class="sr-only">Common questions</h2><div class="acc" style="max-width:860px"><details><summary>What is SMB Scanner Lite?</summary><div><p>An evidence-first external posture assessment. It records selected public DNS and email observations for a domain after ownership verification.</p></div></details><details><summary>Is this a vulnerability scanner?</summary><div><p>No. It assesses selected configuration and exposure signals. It does not exploit, fuzz or attempt logins.</p></div></details><details><summary>Can I scan any domain?</summary><div><p>No. The online service requires a matching DNS TXT ownership challenge and authorization for that domain.</p></div></details><details><summary>Does a good score mean we are secure?</summary><div><p>No. A score summarizes only the controls in the selected profile. It is not a certification or security guarantee.</p></div></details><details><summary>What is outside scope?</summary><div><p>The Basic profile does not test application code, accounts, devices, internal networks, TLS, open ports or exploitability. See Coverage for the published boundary.</p></div></details><details><summary>How do I prove control of a domain?</summary><div><p>The service returns a time-limited TXT value to publish under _smbscanner-verify.yourdomain. It verifies an exact match before making the job eligible to run.</p></div></details><details><summary>What if my DNS change takes time?</summary><div><p>DNS may take time to propagate. The challenge expires after one hour and verification attempts are limited. Avoid repeated attempts while the record has not propagated.</p></div></details><details><summary>How do results stay private?</summary><div><p>Assessment details are served through the private assessment ID and access token. Reports are not published on the website.</p></div></details><details><summary>What is the difference between online service and desktop sandbox?</summary><div><p>The online service requires domain ownership verification. The Desktop sandbox (learning only) is a local Python tool limited to five named test domains.</p></div></details><details><summary>Do you sell or publish scan data?</summary><div><p>No. The service does not sell or publicly publish assessment data. See the Privacy Policy for what the online service stores.</p></div></details><details><summary>Can I rerun a scan automatically?</summary><div><p>No. A submitted job is designed to dispatch once. If its status is uncertain, the service does not silently submit another run.</p></div></details></div></div></section>
 </main>
 
 <footer class="foot">
@@ -145,14 +83,14 @@
           <img src="/logo.svg" width="30" height="30" alt="" />
           <span>SMB Scanner <span class="brand-lite">Lite</span></span>
         </a>
-        <p class="foot-desc">An evidence-first external security posture assessment for small and medium businesses. 22 controls, a 0&ndash;100 score and an A&ndash;F grade &mdash; with the observation behind every conclusive finding. The public edition is restricted to five approved test domains.</p>
-        <p class="foot-meta"><span class="mono">v5.2.0</span> &middot; Public Sandbox Edition</p>
+        <p class="foot-desc">An ownership-verified online review of public DNS and email policy, designed to separate actual observations from assumptions. The restricted desktop sandbox is available separately for learning.</p>
+        <p class="foot-meta">A narrow scan, a clear report, and a stated boundary.</p>
         <div class="foot-mails"><a class="foot-mail" href="mailto:myself.atiff@gmail.com"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M4 8.5l8 5.5 8-5.5"/></svg><span>myself.atiff@gmail.com</span></a></div>
       </div>
-      <div class="foot-col"><h3>Product</h3><ul><li><a href="/">Overview</a></li><li><a href="/capabilities/">Capabilities</a></li><li><a href="/demo/">Recorded Demo</a></li><li><a href="/sample-report/">Sample Report</a></li><li><a href="/methodology/">Methodology</a></li></ul></div><div class="foot-col"><h3>Resources</h3><ul><li><a href="/docs/">Documentation</a></li><li><a href="/blogs/">Blog</a></li><li><a href="/resources/">Knowledge Base</a></li><li><a href="/resources/#guides">Technical Guides</a></li><li><a href="/validation/">Validation Record</a></li><li><a href="https://github.com/muhammad-atif-161/smb-scanner-lite" rel="noopener" target="_blank">GitHub</a></li></ul></div><div class="foot-col"><h3>Legal</h3><ul><li><a href="/privacy/">Privacy Policy</a></li><li><a href="/terms/">Terms of Use</a></li><li><a href="/responsible-use/">Responsible Use</a></li><li><a href="/limitations/">Assessment Limitations</a></li></ul></div><div class="foot-col"><h3>Business</h3><ul><li><a href="/contact/">Contact</a></li><li><a href="/request-assessment/">Request an Assessment</a></li><li><a href="/acquisition/">Project Acquisition</a></li><li><a href="/about/">About the Project</a></li></ul></div>
+      <div class="foot-col"><h3>Online service</h3><ul><li><a href="/scan/">Online scan</a></li><li><a href="/capabilities/">Current coverage</a></li><li><a href="/methodology/">How it works</a></li><li><a href="/sample-report/">Example report</a></li><li><a href="/limitations/">Limitations</a></li></ul></div><div class="foot-col"><h3>Learn</h3><ul><li><a href="/blogs/">Journal</a></li><li><a href="/resources/">Reference library</a></li><li><a href="/demo/">Recorded demonstration</a></li><li><a href="/docs/">Desktop sandbox download</a></li><li><a href="/validation/">Validation record</a></li></ul></div><div class="foot-col"><h3>Company &amp; policies</h3><ul><li><a href="/about/">About</a></li><li><a href="/contact/">Contact</a></li><li><a href="/faq/">Questions</a></li><li><a href="/responsible-use/">Responsible use</a></li><li><a href="/privacy/">Privacy</a></li><li><a href="/terms/">Terms</a></li></ul></div>
     </div>
     <div class="foot-bottom">
-      <p>&copy; <span data-year>2026</span> Muhammad Atif &middot; SMB Scanner Lite &middot; Built in Rawalpindi, Pakistan.</p>
+      <p>&copy; <span data-year>2026</span> Muhammad Atif &middot; SMB Scanner Lite &middot; Independently developed.</p>
       <p class="foot-bottom-links">
         <a href="/privacy/">Privacy</a>
         <a href="/terms/">Terms</a>
@@ -163,7 +101,7 @@
   </div>
 </footer>
 <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="false"></div>
-<script src="/config.js?v=89b4112b" defer></script>
+<script src="/config.js?v=d7eb9433" defer></script>
 <script src="/site.js?v=a379dac5" defer></script>
 </body>
 </html>

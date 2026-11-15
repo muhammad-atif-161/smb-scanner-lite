@@ -56,8 +56,8 @@ def home() -> str:
         ("02", "Verify DNS TXT", "Publish a temporary record at your DNS provider. Exact proof is required."),
         ("03", "Run scan", "The one-time worker reads published DNS and email policy. No intrusive probes."),
         ("04", "Restricted preview", "See the evidence-based score, grade and selected findings at no cost."),
-        ("05", "$19 evidence unlock", "When secure checkout is activated, a single payment unlocks your detailed report."),
-        ("06", "Read full evidence", "After server-verified payment, view and download evidence with your private token."),
+        ("05", "Private report", "A paid profile will include a private evidence report; access rules are still in private beta."),
+        ("06", "Export JSON", "Standard and In-Depth are planned to include JSON download once released."),
     ]
     features = [
         ("01 / DNS", "Start with the records", "Resolve the public DNS posture of your domain. Results depend on what a resolver can actually observe."),
@@ -70,14 +70,12 @@ def home() -> str:
 <section class="hero">
   <div class="wrap hero-grid">
     <div>
-      <p class="home-dateline"><span class="home-mark"></span>External security, explained clearly</p>
+      <p class="home-dateline">Verified domain assessment / Private beta</p>
       {waiting}
       <h1>Understand what your domain <span class="grad">reveals.</span></h1>
-      <p class="lede">A practical security review for the public side of your business.
-      Verify that the domain is yours, inspect DNS and email safeguards, and get
-      a clear, evidence-led account of what needs attention.</p>
-      <div class="hero-actions">{main_button("Explore online scanning")}
-      {secondary("Inspect an example")}</div>
+      <p class="lede">A defined external posture assessment for public DNS and email controls. Verify ownership first, then inspect the recorded observations and their limits.</p>
+      <div class="hero-actions">{main_button("Start verified assessment")}</div>
+      <p class="small muted mt-1">Not a vulnerability scan, penetration test or guarantee. <a href="/sample-report/">Inspect the recorded sample report</a>.</p>
       <div class="hero-meta">
         <span class="meta-item">{icon("shield",16)} Ownership verification first</span>
         <span class="meta-item">{icon("file",16)} Evidence-led reporting</span>
@@ -99,11 +97,21 @@ def home() -> str:
         </ul>
       </div>
       <div class="relaunch-artifact-caption">
-      Recorded sandbox data, not a real-time result or a forecast for your domain.
+      Historical record · Desktop sandbox (learning only) · not a live assessment.
       <a href="/sample-report/">Read full example</a>.</div>
     </div>
   </div>
 </section>
+
+<section class="section section--tight"><div class="wrap">
+  <div class="section-head"><p class="eyebrow">Assessment profiles</p><h2>Three defined levels of coverage.</h2>
+  <p class="section-lede">Only Basic is planned for the public beta. Standard and In-Depth remain private beta. No checkout is available, and no price is implied.</p></div>
+  <div class="relaunch-feature-grid profile-grid">
+    <article class="relaunch-feature"><small>01 / PLANNED FREE</small><h3>Basic</h3><p>Limited DNS and email observations. Ownership verification required; run limits apply.</p><p class="profile-state">Not open yet</p></article>
+    <article class="relaunch-feature"><small>02 / PAID</small><h3>Standard</h3><p>Expanded assessment profile with a private evidence report and JSON download.</p><p class="profile-state">Private beta · details pending</p></article>
+    <article class="relaunch-feature"><small>03 / PAID</small><h3>In-Depth</h3><p>Extended, defined scope with a private evidence report and JSON download.</p><p class="profile-state">Private beta · details pending</p></article>
+  </div>
+</div></section>
 
 <section class="section section--tight"><div class="wrap">
 <div class="home-proof-strip">
@@ -122,9 +130,9 @@ def home() -> str:
 
 <section class="section section--alt"><div class="wrap">
 {section_head("How it works", "Six stages, one carefully scoped assessment.",
-"From proof of DNS control to a free preview and optional $19 full evidence report, each stage has a clear boundary.")}
+"From proof of DNS control to a limited Basic result, each stage has a clear boundary. Paid profiles remain in private beta.")}
 <div class="relaunch-inline-steps">{steps}</div>
-<div class="relaunch-callout mt-3"><p><strong>Service availability:</strong>
+    <div class="relaunch-callout mt-3"><p><strong>Service availability:</strong>
 {"The online flow is in a limited owner-verified beta." if enabled() else "The portal is prepared, but public scan creation remains disabled while the private deployment is finalized."}
 You can explore the recorded example without registering or submitting a domain.</p></div>
 <div class="hero-actions">{main_button("Open assessment portal")}{btn("/demo/","Explore sample findings","ghost")}</div>
@@ -146,7 +154,7 @@ You can explore the recorded example without registering or submitting a domain.
 <div>{section_head("Prefer to learn locally?", "A separate desktop sandbox.",
 "The downloadable public edition is for learning and demonstration. It accepts only five approved test domains and cannot scan arbitrary customer infrastructure.")}
 <div class="hero-actions">{btn("/docs/","Download desktop sandbox","ghost","download")}</div></div>
-<div class="relaunch-feature"><small>NOT THE ONLINE SERVICE</small>
+    <div class="relaunch-feature"><small>DESKTOP SANDBOX (LEARNING ONLY)</small>
 <h3>Practice without a customer job.</h3>
 <p>Install the standalone Python sandbox on your computer, inspect its documentation and run its restrictive, consent-led tests. Real-domain assessments use the separate verified online workflow.</p>
 <a class="tlink mt-2" href="/docs/">Read desktop setup {icon("arrow",16)}</a></div>
@@ -224,7 +232,7 @@ interpreted as a clean result.</p>
 <h2>05. Private results and access</h2>
 <p>The backend records the assessment and stores the callback report in D1. A token bound to
 the request authorizes status and preview access. The detailed report is not published by
-the website. A $19 one-time checkout and detailed evidence unlock are staged behind separate backend release controls. Only a verified provider webhook unlocks a report, and access still requires the private owner token.</p>
+the website. Paid report access is not active in the current private beta. Standard and In-Depth coverage, pricing and delivery terms will be shown before checkout is enabled.</p>
 <h2>06. Reproduce and review</h2>
 <p>The sample report documents a historical demonstration, not the state of any domain today.
 For a current report, compare its timestamp, target, tested controls and observed DNS responses
@@ -291,9 +299,9 @@ def sample_report() -> str:
     <section class="section section--alt"><div class="wrap">
     {section_head("Keep the evidence","Download the recorded report.","These files contain historical sample output only. They do not expose a real customer assessment.")}
     <div class="download-grid">{cards}</div>
-    <div class="relaunch-callout mt-3"><p><strong>What changes in the online service?</strong> The live workflow
-    performs the narrower DNS/email scan profile, not the full catalog represented in the historic example.
-    The $19 evidence unlock is staged and unavailable until secure payment verification is activated.</p></div>
+    <div class="relaunch-callout mt-3"><p><strong>What changes in the online service?</strong> The Basic workflow
+    performs the narrower DNS/email profile, not the full catalog represented in the historic example.
+    Standard and In-Depth paid profiles are still in private beta; no checkout is available.</p></div>
     </div></section>"""
     return frame("/sample-report/","Example Security Report | SMB Scanner Lite",
       "Inspect a real historical security report with observed evidence, grade and downloadable examples in four formats.",body,active="report")

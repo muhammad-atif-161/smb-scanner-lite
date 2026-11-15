@@ -6,20 +6,21 @@ from . import pages_relaunch as P
 
 def faq() -> str:
     qa = [
-     ("Can I scan a domain I do not own?", "No. An online assessment requires explicit authorization and a matching DNS TXT challenge for the exact domain. Do not use the service for unsolicited scans."),
-     ("Is online scanning available today?", "The backend and customer interface have been built. Public requests remain disabled until credentials, operational safeguards and one authorized end-to-end test are complete. The portal shows its current availability."),
-     ("What does the online scan actually check?", "Public DNS and email-authentication controls: selected DNS observations, SPF, DMARC and limited DKIM selector discovery. No port scanning, exploitation, TLS probing or web vulnerability testing."),
-     ("Does a passing score mean the business is secure?", "No. It summarizes a narrow set of observed controls. Staff accounts, applications, internal networks, devices and business processes are outside this profile."),
+     ("What is SMB Scanner Lite?", "An evidence-first external posture assessment. It records selected public DNS and email observations for a domain after ownership verification."),
+     ("Is this a vulnerability scanner?", "No. It assesses selected configuration and exposure signals. It does not exploit, fuzz or attempt logins."),
+     ("Can I scan any domain?", "No. The online service requires a matching DNS TXT ownership challenge and authorization for that domain."),
+     ("Does a good score mean we are secure?", "No. A score summarizes only the controls in the selected profile. It is not a certification or security guarantee."),
+     ("What is outside scope?", "The Basic profile does not test application code, accounts, devices, internal networks, TLS, open ports or exploitability. See Coverage for the published boundary."),
      ("How do I prove control of a domain?", "The service returns a time-limited TXT value to publish under _smbscanner-verify.yourdomain. It verifies an exact match before making the job eligible to run."),
      ("What if my DNS change takes time?", "DNS may take time to propagate. The challenge expires after one hour and verification attempts are limited. Avoid repeated attempts while the record has not propagated."),
-     ("Why can't I access every detail of the report?", "The backend currently stores detailed evidence privately and exposes only an authorized preview. Payment handling and full report delivery have not been launched. No purchase is taken by the portal today."),
+     ("How do results stay private?", "Assessment details are served through the private assessment ID and access token. Reports are not published on the website."),
+     ("What is the difference between online service and desktop sandbox?", "The online service requires domain ownership verification. The Desktop sandbox (learning only) is a local Python tool limited to five named test domains."),
+     ("Do you sell or publish scan data?", "No. The service does not sell or publicly publish assessment data. See the Privacy Policy for what the online service stores."),
      ("Can I rerun a scan automatically?", "No. A submitted job is designed to dispatch once. If its status is uncertain, the service does not silently submit another run."),
-     ("Is the desktop download the same product?", "No. The desktop public sandbox is an educational Python package with a hard-coded five-domain allowlist. Business-domain scans use the separate owner-verified online backend."),
-     ("Does the site sell my scan data?", "No data sale is part of the product. The backend stores the contact details, domain, verification state and private report needed to serve assessments. See the privacy policy for the stated processing and limits."),
     ]
     items="".join(f'<details><summary>{e(q)}</summary><div><p>{e(a)}</p></div></details>' for q,a in qa)
     body=P.head("Questions answered","Before you scan, know the limits.",
-      "Plain answers about authorization, coverage, release status and access to results.")
+      "Plain answers about authorization, coverage, privacy and the two separate tools.")
     body+=f'<section class="section"><div class="wrap"><h2 class="sr-only">Common questions</h2><div class="acc" style="max-width:860px">{items}</div></div></section>'
     return P.frame("/faq/","Questions & Answers | SMB Scanner Lite",
       "Common questions about the online DNS/email scanner, domain verification, availability, report privacy and the separate desktop sandbox.",body)
@@ -215,14 +216,11 @@ access token authorizes report preview and status; the token is given to the cus
 IP addresses may be converted to keyed hashes for basic abuse limiting.</p>
 <h2>How results are accessed</h2>
 <p>The browser stores a private recovery token in session storage for the active tab. Only a
-holder of that token can request the free preview or full report. The full report is protected
-by a separate payment-verification check; returning from checkout never by itself unlocks it.</p>
+holder of that token can request the preview or report. Results are not published on the
+website. Do not share the token; anyone who has it may be able to access the assessment.</p>
 <h2>Payment processing</h2>
-<p>When paid report access is activated, a $19 one-time report purchase is processed by Stripe
-on its own secure checkout site. Stripe receives the contact email and report reference needed
-to process and match the payment. Card details are not submitted to or stored by this website.
-The backend stores the payment session identifier, payment state and confirmation time.
-Checkout remains disabled until the operator completes payment-provider setup.</p>
+<p>Checkout is not active in the current private beta. No payment is collected. Before paid
+profiles launch, the page will state the price and what is included before any checkout begins.</p>
 <h2>Enquiries</h2>
 <p>The manual form uses your mail application unless a dedicated contact endpoint is configured.
 A composed email is only delivered after you send it. Avoid including passwords or sensitive
@@ -232,8 +230,9 @@ business records in an enquiry.</p>
 and output files are not automatically uploaded to the SaaS backend. The desktop runtime has
 a separate five-domain testing restriction.</p>
 <h2>Retention, access and deletion</h2>
-<p>Operational report retention and deletion rules must be finalized before public online
-assessment onboarding. No indefinite retention promise or automatic purge is claimed here.
+<p>Reports are stored privately to serve assessment status and results. Operational report
+retention and deletion rules must be finalized before public online assessment onboarding.
+No indefinite retention promise or automatic purge is claimed here.
 Contact us about access or deletion of assessment records; requests are reviewed against
 available records and applicable obligations.</p>
 <h2>Changes</h2>
@@ -268,13 +267,10 @@ without the domain owner's permission.</p>
 <p>The public sandbox is available under the license published in the public repository and
 is restricted by its intended educational scope. Review its license before installation.</p>
 <h2>Payments, report delivery and refunds</h2>
-<p>The Basic scan offers a free restricted preview. When securely activated, a one-time
-$19 USD purchase for a completed assessment unlocks the full DNS/email evidence report,
-not an additional scan. Stripe processes the payment separately. A valid server-side payment
-confirmation and the assessment's private access token are required for delivery.
-Checkout is disabled until the provider account and operational conditions are ready.
-Applicable taxes, refunds, disputes and support procedures must be displayed and agreed
-before live charges are accepted. There is no active checkout while the payment release switch is disabled. No card payment is collected by the website while disabled.</p>
+<p>Basic is planned as a free, limited profile. Standard and In-Depth are paid profiles
+planned to include a private evidence report and JSON download. They remain in private beta;
+prices, payment handling, taxes, refunds, disputes and support procedures will be displayed
+before checkout is enabled. No card payment is collected by the website today.</p>
 <h2>No guarantee</h2>
 <p>We work to present accurately observed findings, but do not warrant that an assessment
 detects every security risk or that a passing grade proves a system secure. The service

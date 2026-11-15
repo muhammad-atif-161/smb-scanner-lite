@@ -95,6 +95,7 @@ REDIRECTS = {
 def write(rel: str, content: str) -> Path:
     path = OUT / rel
     path.parent.mkdir(parents=True, exist_ok=True)
+    content = "\n".join(line.rstrip() for line in content.splitlines()) + "\n"
     path.write_text(content, encoding="utf-8")
     return path
 

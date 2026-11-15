@@ -214,15 +214,15 @@ function startPortal() {
       item.append(title,detail);
       list.appendChild(item);
     }
-    text("#scan-report-notice","The preview is free. The complete DNS/email evidence report is available with one verified $19 payment.");
+    text("#scan-report-notice","Basic preview is free within the beta limits. Paid profile availability and price will be shown before any checkout is enabled.");
   }
   function renderPaywall(state) {
     step("#scan-paywall",!state.report_unlocked);
     const pay=$("#scan-pay-button");
     if(pay) pay.disabled=state.checkout_available!==true;
     text("#scan-pay-status",state.checkout_available===true
-      ? "Pay $19 securely through Stripe. Your full evidence report unlocks only after the payment is verified."
-      : "Secure checkout is not active yet. Your free preview remains available; no payment can be taken here.");
+      ? "Checkout is available for this assessment. Review the displayed profile and final amount before continuing."
+      : "Private beta. Checkout is not active; no payment can be taken here.");
     root.querySelectorAll("[data-scan-stage]").forEach(el=>{
       const i=Number(el.dataset.scanStage);
       el.classList.toggle("is-active",i===4);
@@ -343,7 +343,7 @@ function startPortal() {
         } else if(checkoutResult==="cancelled") {
           showMessage("Checkout was cancelled. Your free preview is unchanged.");
         } else {
-          showMessage("Assessment complete. View the free preview or unlock full evidence for $19.","success");
+          showMessage("Assessment complete. The limited Basic preview is available; paid profiles remain in private beta.","success");
         }
       }
     } else if(["failed","dispatch_failed"].includes(state.status)) {

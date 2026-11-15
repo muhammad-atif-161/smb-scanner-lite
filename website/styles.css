@@ -3408,6 +3408,78 @@ table caption {
 }
 
 /* --------------------------------------------------------------------------
+   Evidence Desk / Field Notebook visual system
+   -------------------------------------------------------------------------- */
+:root {
+  --bg: #f3efe3;
+  --bg-secondary: #ebe6d8;
+  --card: #fbf9f2;
+  --card-raised: #fffdf7;
+  --inset: #eee9dc;
+  --accent: #245c5b;
+  --accent-hover: #347372;
+  --accent-deep: #184847;
+  --cyan: #476967;
+  --accent-soft: rgba(36, 92, 91, .10);
+  --accent-softer: rgba(36, 92, 91, .055);
+  --cyan-soft: rgba(71, 105, 103, .09);
+  --text: #222520;
+  --text-secondary: #55584f;
+  --text-muted: #77796f;
+  --border: #c9c5b8;
+  --border-soft: #dedacd;
+  --border-strong: #a6a293;
+  --pass: #376a56;
+  --pass-soft: rgba(55, 106, 86, .10);
+  --warn: #977642;
+  --warn-soft: rgba(151, 118, 66, .12);
+  --fail: #9a5148;
+  --fail-soft: rgba(154, 81, 72, .10);
+  --info: #35696a;
+  --info-soft: rgba(53, 105, 106, .09);
+  --font-head: Georgia, "Times New Roman", serif;
+  --font-body: "Inter", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "Courier New", monospace;
+  color-scheme: light;
+}
+html { background: var(--bg); scroll-behavior: smooth; }
+body { color: var(--text); background: var(--bg); }
+h1,h2,h3,h4,.brand-text,.relaunch-artifact-score strong,.scan-grade b { font-family: var(--font-head); font-weight: 500; letter-spacing: -.025em; }
+h1 { line-height: 1.06; }
+.grad { color: var(--accent); background: none; -webkit-text-fill-color: currentColor; }
+.nav { background: rgba(243,239,227,.96); border-bottom: 1px solid var(--border); box-shadow: none; backdrop-filter: none; }
+.nav.is-scrolled { background: rgba(243,239,227,.98); box-shadow: 0 1px 0 rgba(34,37,32,.04); }
+.brand img { filter: grayscale(1) sepia(.2); }
+.nav-links a,.nav-panel-links a { color: var(--text-secondary); }
+.btn,.card,.panel,.relaunch-feature,.relaunch-hero-artifact,.scan-panel,.download-card,.resource-card,.domain-card,.control-card,.cta-band,.notice,.table-wrap { border-radius: 2px; box-shadow: none; }
+.btn { font-weight: 600; }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: #fbf9f2; }
+.btn-primary:hover { background: var(--accent-deep); border-color: var(--accent-deep); }
+.btn-ghost { border-color: var(--border-strong); color: var(--text); }
+.card,.panel,.relaunch-feature,.relaunch-hero-artifact,.scan-panel,.download-card,.resource-card,.domain-card,.control-card { background: var(--card); border-color: var(--border); }
+.section--alt { background: var(--bg-secondary); border-block: 1px solid var(--border-soft); }
+.hero { background: var(--bg); }
+.hero::before,.hero::after,.home-mark { display: none !important; }
+.eyebrow,.tag,.component-tag,.mono,.scan-code,.hero-score-num,.score-num,.grade-badge,.relaunch-artifact-top,.relaunch-artifact-list b,.status-badge,.meta-list dt,.report-meta dt,.report-meta dd,.foot-meta { font-family: var(--font-mono); letter-spacing: .02em; }
+.eyebrow { color: var(--accent); }
+.hero-score-num,.score-num,.relaunch-artifact-score strong { color: var(--text); }
+.grade-badge,.relaunch-artifact-grade { background: #e9dfc8; color: #755b2e; border: 1px solid #c8b78f; }
+.pill,.status-badge { border-radius: 2px; }
+.bar-track,.progress-track,.scan-progress-track { background: #dedacd; border-radius: 0; }
+.bar-fill,.progress-track i { background: var(--accent); }
+.bar-fill--warn { background: #a68750; }
+.evidence,.scan-evidence,.scan-evidence-body,.relaunch-callout { background: var(--inset); border-color: var(--border); border-radius: 2px; }
+.evidence .val,.scan-evidence-body pre { color: #30342e; }
+.recorded-banner { border-radius: 2px; background: #ebe6d8; color: var(--text); }
+.toast { border-radius: 2px; background: var(--card); color: var(--text); border-color: var(--border); }
+.reveal { transform: translateY(8px); }
+.hero-rise { animation: none; opacity: 1; transform: none; }
+.card:hover,.resource-card:hover,.download-card:hover,.domain-card:hover,.relaunch-feature:hover { transform: none; box-shadow: none; }
+::selection { background: rgba(36,92,91,.18); color: var(--text); }
+:focus-visible { outline-color: var(--accent); }
+@media (prefers-reduced-motion: reduce) { .reveal { transform: none; } }
+
+/* --------------------------------------------------------------------------
    Blog
    --------------------------------------------------------------------------
    `.card-title` exists for card headings that appear before the first section

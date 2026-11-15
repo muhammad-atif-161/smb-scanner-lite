@@ -192,8 +192,8 @@ def nav_html(active: str) -> str:
         current = ' aria-current="page"' if key == active else ""
         panel_links.append(f'<a href="{href}"{current}>{e(label)}</a>')
     primary_href = "/scan/"
-    primary_label = "Start scan" if C.SAAS["enabled"] else "Check availability"
-    availability = "DNS & email assessments" if C.SAAS["enabled"] else "Online scans opening soon"
+    primary_label = "Start verified assessment"
+    availability = "Verified DNS and email assessment" if C.SAAS["enabled"] else "Private beta · not yet open"
     return f"""
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="nav" data-nav>

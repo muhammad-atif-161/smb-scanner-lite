@@ -3,7 +3,7 @@
   "version": "5.2.0",
   "edition": "Public Sandbox Edition",
   "policy_version": "2026.10-sandbox-v2",
-  "generated": "2026-10-31",
+  "generated": "2026-11-15",
   "default": "example.com",
   "allowed_domains": [
     "example.com",
