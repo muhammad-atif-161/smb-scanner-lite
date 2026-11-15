@@ -29,7 +29,7 @@ from pathlib import Path as _Path
 CONTACT_FILE = _Path(__file__).resolve().parents[2] / "site.contact.json"
 
 _CONTACT_DEFAULTS = {
-    "primary_email": "myself.atiff@gmail.com",
+    "primary_email": "",
     "additional_emails": [],
     "form_endpoint": "",
 }
