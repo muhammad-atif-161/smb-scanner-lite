@@ -1,8 +1,8 @@
-name: Change contact email
+name: Change legacy Pages contact email
 
-# Change the address published across the whole website without editing code.
+# Change the address published in the legacy Pages copy without editing code.
 #
-# Actions tab -> "Change contact email" -> Run workflow -> type the address.
+# Actions tab -> "Change legacy Pages contact email" -> Run workflow -> type the address.
 # The workflow updates site.contact.json, rebuilds every page and
 # website/config.js, commits the result, and then triggers the Pages deploy
 # (a push made with GITHUB_TOKEN does not fire `on: push` workflows, so the
@@ -68,11 +68,11 @@ jobs:
           set -e
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -A
+          git add site.contact.json website/
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "Update contact email to ${NEW_EMAIL} and rebuild site"
+            git commit -m "Update legacy Pages contact details"
             git push
           fi
 
